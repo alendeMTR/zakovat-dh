@@ -76,16 +76,33 @@ Report each problem as: what you did, what you expected, what happened, and the 
 
 ### 4.1 Update Codex (F8): about 5 minutes
 
-The installed Codex CLI (0.142.0, installed by the Codex app) is too old for your account's model. Update the Codex
-app (its own updater; if it offers none, reinstall the latest version from OpenAI). Then check the version
-(0.167 or newer was current on 2026-11-11):
+The installed Codex CLI (0.142.0, a standalone `codex.exe` in `AppData\Local\Programs\OpenAI\Codex\bin`) is too old for
+your account's model. It updates itself. *(Corrected 2026-11-11: an earlier version of this section said to update
+through the Codex app.)*
+
+1. Open a terminal: PowerShell, or the Terminal tab in the Claude desktop app.
+2. Update:
+
+```bash
+codex update
+```
+
+3. Check the version (0.167 or newer was current on 2026-11-11):
 
 ```bash
 codex --version
 ```
 
-Then review each milestone commit, oldest first. Each command prints findings; paste them to Claude or add them to
-`docs/fixlist.md`:
+4. If Codex asks you to sign in: run `codex login`, choose **Sign in with ChatGPT**, and sign in with your ChatGPT
+   Pro account in the browser window that opens. Do not use an API key here: an API key bills API rates (D1).
+5. If `codex update` fails, copy its error to Claude.
+
+Then review each milestone commit, oldest first, from the project folder. Each command prints findings; paste them
+to Claude or add them to `docs/fixlist.md`:
+
+```bash
+cd C:\Users\Spectre\Desktop\zakovat-progect-dh
+```
 
 ```bash
 codex review --commit eb3154c
