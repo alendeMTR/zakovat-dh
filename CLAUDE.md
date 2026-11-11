@@ -46,6 +46,7 @@ Before you change scope, milestones or tests, read `docs/plan.md`.
 - **Secrets:** API keys live in Vercel env and `.env.local`, never in the repo or the client bundle.
 - **Git:** commit at the end of each milestone. Push and deploy only with the owner's OK; Production only after the
   owner has checked a preview.
-- **Codex** reviews each milestone (`codex review --uncommitted`, before the commit). Its findings go into
-  `docs/fixlist.md`; it never edits the repo.
+- **Claude and Codex both build** (D61, 2026-11-11). The other model reviews: when Claude builds, run
+  `codex review --uncommitted` before the milestone commit; when Codex builds, Claude or the owner checks its UI
+  changes on screenshots. Review findings go into `docs/fixlist.md`.
 - **Before every commit:** `npm run check` passes (i18n, lint, tests, build), and UI changes were looked at in the browser.

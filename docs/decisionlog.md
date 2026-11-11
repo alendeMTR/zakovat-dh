@@ -289,6 +289,15 @@ get tighter, so eight teams and the buttons fit a 720-high screen. Scores always
 - Questions never played are counted in a note, not listed.
 - It prints on A4 landscape, without the buttons.
 
+## 2026-11-11 — Codex joins the build
+
+**D61. Codex may edit files, run commands and commit locally; it continues the build from M5.** *owner* — changes D1
+The owner updated Codex (CLI 0.167.1) and said: "It now can edit files". D1 had Codex as a read-only reviewer.
+Rules for both models stay in `CLAUDE.md` (via `AGENTS.md` for Codex). Push and deploy stay with the owner.
+The brief keeps design decisions and visual review with the main model, so a UI change from Codex is not "verified"
+until someone has looked at it at 1920×1080, 1366×768 and 1280×720. If Codex cannot take screenshots, it leaves a
+"visual check pending" row in `docs/fixlist.md`.
+
 **D60. The main page shows the last finished game (when it ended, the winner or winners, a link to its results).** *agent*
 It stays until a new game replaces it. Why: a teacher who leaves the results by mistake can get back to them.
 Keeping more than one past game is M6 (accounts).

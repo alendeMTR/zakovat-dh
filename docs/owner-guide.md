@@ -168,7 +168,8 @@ VITE_FIREBASE_APP_ID=...
 - **Codex:** it cannot see this chat, but it can continue from the repository, which holds everything: all work is
   committed, and the docs record the state, the decisions (D1–D60) and the open items. Two things first:
   1. Update Codex (4.1); the installed version cannot run your model.
-  2. `AGENTS.md` makes Codex a **read-only reviewer** (D1). To let it build, say so in your prompt, for example:
+  2. **Updated 2026-11-11:** the owner updated Codex and allowed it to build (D61); `AGENTS.md` now says so, and the
+     "overrides the read-only line" sentence below is no longer needed. Example prompt:
 
 ```text
 You are taking over the build of this repository. For this task the owner allows you to edit files and commit

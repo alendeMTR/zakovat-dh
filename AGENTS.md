@@ -1,4 +1,5 @@
 # AGENTS.md
 
 Read `CLAUDE.md` in this folder and follow it. It is the single set of rules for every agent in this repo.
-Codex here is a read-only reviewer (`docs/decisionlog.md` D1): report findings, do not edit files.
+Codex may edit files, run commands and commit locally (owner, 2026-11-11, `docs/decisionlog.md` D61).
+Never push or deploy: the owner does that.
