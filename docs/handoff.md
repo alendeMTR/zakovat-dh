@@ -11,6 +11,9 @@
 - **Next is blocked on the owner's accounts:** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2 (Firebase),
   M7 needs F3 (API key). The agent can do F14 (flag long questions) meanwhile.
 - Decisions: `docs/decisionlog.md` D1–D60. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- **`docs/owner-guide.md`** (2026-11-11): what the owner tests, what not to flag yet (placeholders, planned work),
+  the manual setup steps (Codex, GitHub and Vercel, Firebase, API key), and how Codex can take over.
+  `vercel.json` added the same day (page addresses rewrite to the app; check it on the first preview).
 - The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
   - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
   - F1: OK to download the interim logo files.
