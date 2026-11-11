@@ -13,11 +13,14 @@
   (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
   the agent took both as far as it can and wrote what it found in their rows.
 - Decisions: `docs/decisionlog.md` D1–D71. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
-- **`docs/owner-guide.md`** (2026-11-11): what the owner tests, what not to flag yet (placeholders, planned work),
-  the manual setup steps (Codex, GitHub and Vercel, Firebase, API key), and how Codex can take over.
-  `vercel.json` added the same day (page addresses rewrite to the app; check it on the first preview).
+- **`docs/owner-guide.md`** (written 2026-11-11, **brought up to date 2026-11-12 for the deploy**): what the owner
+  tests — including §2C, one line per fix from the two bug commits, in his terms — what not to flag yet, the
+  manual setup steps, and how Codex can take over. §4.2 is now a step-by-step Vercel checklist (Vite preset,
+  `dist`, Node 22.x, no environment variable yet, and the deep-link reload check against `vercel.json`).
 - The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
-  - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
+  - F8: run the Codex reviews. **Corrected 2026-11-12:** Codex is *already* updated (0.167.1, D61) — the line
+    here used to say it still had to be. Nothing is blocked by tooling; the reviews have simply not been run,
+    so every commit so far is unreviewed by Codex.
   - F1: OK to download the interim logo files.
   - F9: approve the sample sets and the Russian type names. F10: approve the interface text.
   - F2 (Firebase, by M6), F3 (API key, by M7), F4 (GitHub and Vercel, by Preview 1).
@@ -64,8 +67,9 @@ Actions: `OPEN_QUESTION {pocketNo}`, `CLOSE_QUESTION {now}`, `START_TIMER {now}`
 - **Test games without clicking through setup:** in the dev server's page console,
   `const {createGame, reduce} = await import('/src/game/game.js')`, build a game (sample questions from
   `/src/game/sampleSets.js`), `saveGame` it from `/src/game/storage.js`, then open `/game`. Used for the 10/20/30-pocket checks.
-- Milestone review: `codex review --uncommitted` before the milestone commit (D1). It does not accept custom
-  instructions together with `--uncommitted` (CLI 0.142.0); it reads `AGENTS.md` → `CLAUDE.md` instead.
+- Milestone review: `codex review --uncommitted` before the milestone commit (D1), or `--commit <sha>` afterwards.
+  The installed CLI is **0.167.1** (updated by the owner on 2026-11-11, D61). The note that `--uncommitted` refuses
+  custom instructions and reads `AGENTS.md` → `CLAUDE.md` instead was observed on 0.142.0; re-check it on 0.167.1.
 
 ## 2b. Layout rule for game screens
 
@@ -88,9 +92,45 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 
 ## 4. Session Log
 
+### 2026-11-12 (later) — owner guide brought up to date for the deploy
+
+Documentation only; no code touched. The owner is about to commit, push and deploy from
+`docs/owner-guide.md`, which still described M5 (`bb393c9`).
+
+- **§1** now states where things actually stand: the two commits since M5 in plain terms, the eight fixed items
+  waiting for his test (F14, F18–F24), the fact that the review found no fault in the game rules, the current
+  counts (175 keys, 111 tests), and the "Port 5180 is already in use" fallback.
+- **§2 has a new section C**, "New since you last looked": one numbered line per fix, in his test terms rather
+  than F-numbers — the long-question flag, the refusal at Start with the step-link bypass, Escape inside a
+  confirmation, the clock after zero, the two set-aside promises, and the wheel pointer after a reload. The old
+  §2C (text to approve) became §2D.
+- **§3 went through line by line.** The row telling him not to flag long questions was wrong now that F14 is
+  built — it would have cost him a real test — and was rewritten to cover only the scrolling that is still by
+  design (D51). Six rows were added for behaviour that looks like a bug and is not: Pause gone at 0:00, the clock
+  counting past a frozen 0:00, Space pressing a focused button instead of spinning, the step link staying open,
+  and the two `.unreadable` storage keys.
+- **§4.2 is now a deploy checklist he can follow signed in to Vercel:** no environment variable yet and why,
+  the Vite preset with `npm run build` and `dist`, Node 22.x to match `engines`, what `vercel.json` already does,
+  and the deep-link reload check (`/game`, `/game/results`, F5) as the first thing to try — with a note that a
+  redirect is the app working and only a 404 is a failure. §4.3 and §4.4 now say plainly that Firebase and the
+  API key belong to M6 and M7.
+- **Two documents disagreed, and the guide was the stale one.** D61 says the owner updated Codex to 0.167.1 on
+  11 Nov; F8, this handoff and guide §4.1 all still said the CLI was 0.142.0 and too old to run. The install
+  settles it — `~/.codex/packages/standalone/current` points at the 0.167.1 release, with 0.142.0 kept as the
+  previous one. **D61 was right; F8, handoff §1 and guide §4.1 were corrected.** Codex is not blocked by tooling:
+  the reviews have simply never been run, and that alone is what keeps F8 open. (No Codex command was run here.)
+- Smaller corrections: the review backlog in §4.1 now lists `4395de5` and `9e87a90` too; §5 says D1–D71, not
+  D1–D60; the Codex hand-over prompt no longer tells him to override a read-only line that `AGENTS.md` stopped
+  having at D61; §4.5 gained F5 and F7 with what closes each. In `fixlist.md`, eight rows that said "Fixed
+  locally" in words now use the 🔧 the file's own legend defines. In `decisionlog.md`, D1 gained the
+  "superseded by D61" line it was missing (the way D43 carries one); its text is otherwise untouched. In this
+  file, §2's `codex review` note now says which CLI the `--uncommitted` limitation was seen on.
+- **Checks:** `npm run check` passes: 175 keys, 111 tests, lint, build. `git status` shows only the three docs.
+- **Next:** unchanged — the owner pushes and deploys (F4), then M6 (F2), M7 (F3), and the Codex reviews (F8).
+
 ### 2026-11-12 — stand-in review of M0–M5 and `4395de5`
 
-Codex still cannot run (F8), so the agent reviewed every milestone commit as an outsider trying to break it,
+No commit had been reviewed by Codex (F8), so the agent reviewed every milestone commit as an outsider trying to break it,
 concentrating where a failure costs a lesson. **F8 stays open regardless: this does not replace the Codex pass,
 it covers the gap until the owner updates the CLI.** Nothing pushed, nothing deployed, no accounts.
 
@@ -243,30 +283,3 @@ and screenshots at 1920×1080, 1366×768 and 1280×720 (the scratch driver lives
 - **Not verified:** the Codex review (F8); tone volume in a classroom (F15); the interface text (F10).
 - **Next:** M5: End game opens the leaderboard (shared places), the breakdown with corrections, and the way back to
   the main page; the full flow script (plan §7.4).
-
-### 2026-11-11 (late) — M3: the wheel
-
-- **Built (`src/play/`):**
-  - `GamePage` (`/game`): top bar with progress, scores and sound switches, language, End game with a confirmation.
-  - `Wheel`: an SVG with a rim, pockets, bowl and hub; pocket numbers and type icons; played pockets grey and
-    reopenable; the pointer.
-  - `wheelGeometry.js`: tested; it includes the one-question ring.
-  - `Legend` with how many of each type are left; `RankingPanel` with shared places, hidden with the scores.
-  - A first `QuestionCard`: type band, number, question, back to the wheel.
-  - `useGame`: the game in state, saved after every action, with `now` stamped on each action.
-  - Setup's Start and the main page's Continue now open `/game`.
-- **Decided:** D44–D49.
-- **Verified in the browser:**
-  - A real spin: the hub reads "Aylanmoqda" and is locked; it lands on the pocket the engine chose (pocket under
-    the pointer = the opened card, checked by rotation maths); the card opens with focus.
-  - Escape closes the card, and the pocket turns grey. Space spins. A reload with a card open reopens the same card,
-    with the wheel resting on its pocket.
-  - Scores hide and show. Clicking a grey pocket reopens it.
-  - All played: "Savollar tugadi" (disabled), End game turns primary, and the hint says so.
-  - End game: confirmation with focus on Cancel; the game ends; the main page shows no Continue.
-  - Screenshots of 10, 20 and 30 pockets at 1920×1080, 1366×768 and 1280×720; uz and ru; 3 to 8 teams. No scrolling at any size.
-  - A one-question wheel draws a full ring.
-  - Fixed on the way: a bowl too large for the pocket ring; the pointer covering pocket numbers; icons too close to numbers.
-- **Checks:** `npm run check` passes: 119 keys, 92 tests, lint, build.
-- **Not verified:** the Codex review (F8); 30-pocket numbers from the back of a real classroom (F13); the interface text (F10).
-- **Next:** M4, the full card: timer in three colours and the tone, reveal, hand-ins, verdicts with the extra suggestion, live scores.

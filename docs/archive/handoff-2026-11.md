@@ -2,6 +2,33 @@
 
 > Session Log entries moved out of `docs/handoff.md` (newest five stay there). Newest first, unedited.
 
+### 2026-11-11 (late) — M3: the wheel
+
+- **Built (`src/play/`):**
+  - `GamePage` (`/game`): top bar with progress, scores and sound switches, language, End game with a confirmation.
+  - `Wheel`: an SVG with a rim, pockets, bowl and hub; pocket numbers and type icons; played pockets grey and
+    reopenable; the pointer.
+  - `wheelGeometry.js`: tested; it includes the one-question ring.
+  - `Legend` with how many of each type are left; `RankingPanel` with shared places, hidden with the scores.
+  - A first `QuestionCard`: type band, number, question, back to the wheel.
+  - `useGame`: the game in state, saved after every action, with `now` stamped on each action.
+  - Setup's Start and the main page's Continue now open `/game`.
+- **Decided:** D44–D49.
+- **Verified in the browser:**
+  - A real spin: the hub reads "Aylanmoqda" and is locked; it lands on the pocket the engine chose (pocket under
+    the pointer = the opened card, checked by rotation maths); the card opens with focus.
+  - Escape closes the card, and the pocket turns grey. Space spins. A reload with a card open reopens the same card,
+    with the wheel resting on its pocket.
+  - Scores hide and show. Clicking a grey pocket reopens it.
+  - All played: "Savollar tugadi" (disabled), End game turns primary, and the hint says so.
+  - End game: confirmation with focus on Cancel; the game ends; the main page shows no Continue.
+  - Screenshots of 10, 20 and 30 pockets at 1920×1080, 1366×768 and 1280×720; uz and ru; 3 to 8 teams. No scrolling at any size.
+  - A one-question wheel draws a full ring.
+  - Fixed on the way: a bowl too large for the pocket ring; the pointer covering pocket numbers; icons too close to numbers.
+- **Checks:** `npm run check` passes: 119 keys, 92 tests, lint, build.
+- **Not verified:** the Codex review (F8); 30-pocket numbers from the back of a real classroom (F13); the interface text (F10).
+- **Next:** M4, the full card: timer in three colours and the tone, reveal, hand-ins, verdicts with the extra suggestion, live scores.
+
 ### 2026-11-11 (night) — M2: main page, setup, questions
 
 - **Built:**

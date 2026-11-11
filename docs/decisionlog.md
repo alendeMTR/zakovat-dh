@@ -15,6 +15,8 @@
 ### Process and tooling
 
 **D1. Claude builds alone; Codex only reviews.** *owner*
+**Superseded 2026-11-11 by D61** (Codex may edit files and commit). The CLI version below was the one installed
+when this was written; the owner updated it to 0.167.1 the same day.
 Codex runs `codex review` (CLI 0.142.0, installed locally) at the end of each milestone, read-only.
 Its findings go into `docs/fixlist.md`; the agent sorts them and fixes the valid ones.
 Why: a small app; design and visual review stay with the main model under the brief's own rules;
