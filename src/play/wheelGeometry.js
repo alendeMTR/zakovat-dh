@@ -68,6 +68,14 @@ export function numberSize(count) {
 export const restingRotation = (index, count) => -pocketAngle(index, count);
 
 /**
+ * The pocket the wheel rests on when the game screen opens: the one whose card is open, or
+ * else the last one played. Before this it was always the last played, so after a reload with a
+ * reopened pocket (D34) the pointer sat on one pocket while the card and the highlight were on
+ * another (fixlist F23). Null when nothing has been played yet.
+ */
+export const restingPocket = (game) => game?.current ?? game?.played?.at(-1) ?? null;
+
+/**
  * The next rotation for a spin that ends with pocket `index` under the pointer.
  * Always turns forward, at least `turns` full turns, and stops at a random spot inside the
  * pocket (never on its edge), so the landing looks natural. `rng` returns [0, 1).

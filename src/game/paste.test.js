@@ -101,3 +101,40 @@ describe("formatPaste", () => {
     });
   }
 });
+
+// F24 regression: the type lookup must not depend on the device's locale. On a Turkish or
+// Azerbaijani machine "DIREKTOR".toLocaleLowerCase() is "dırektor" with a dotless i, which is not
+// a type name, so the question used to come back with no type at all and blank the questions page.
+describe("type names on a device with Turkish case rules", () => {
+  const withTurkishLocale = (run) => {
+    const real = String.prototype.toLocaleLowerCase;
+    String.prototype.toLocaleLowerCase = function turkish(...args) {
+      return real.call(this, args.length > 0 ? args[0] : "tr");
+    };
+    try {
+      return run();
+    } finally {
+      String.prototype.toLocaleLowerCase = real;
+    }
+  };
+
+  it("still reads an upper-case type name", () => {
+    expect("DIREKTOR".toLocaleLowerCase("tr")).toBe("dırektor"); // the mechanism, spelled out
+    withTurkishLocale(() => {
+      for (const [word, type] of [
+        ["DIREKTOR", "direktor"],
+        ["ODDIY", "oddiy"],
+        ["SANDIQCHA", "sandiqcha"],
+        ["ORDINARY", "oddiy"],
+        ["DIRECTOR", "direktor"],
+      ]) {
+        const { questions, errors } = parsePaste(`${word}: Savol?\nJavob: Javob`);
+        expect(errors).toEqual([]);
+        expect(questions[0].type).toBe(type);
+      }
+      // A type word on its own line takes the same path.
+      const { questions } = parsePaste("DIREKTOR\nSavol?\nJavob: Javob");
+      expect(questions[0].type).toBe("direktor");
+    });
+  });
+});

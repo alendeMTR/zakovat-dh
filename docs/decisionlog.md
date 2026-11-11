@@ -344,3 +344,40 @@ Why 250: a 372-character question did not fit at 1280×720, and the longest samp
 **D67. Confirmation dialogs take their heading id from React's `useId`.** *agent* (fixlist F20)
 Two mounted `ConfirmDialog`s shared the id `confirm-title`, so End game was announced as the timer-reset question and
 Replace game as Clear list. One id per instance; nothing else changes.
+
+## 2026-11-12 — the stand-in review of M0–M5
+
+The Codex review is still blocked (F8), so the agent reviewed its own and the earlier milestones as an outsider.
+All *agent* decisions; the owner can overrule any of them. The review did not change a single game rule.
+
+**D68. The draft is validated as deeply as the saved game, and an unusable one is set aside.** *agent*
+(fixlist F22; extends D37 and D38)
+`isDraftShape` now checks every question (a non-empty id, a type the icons know, string text and answer), the team
+names, the team count and the list length. A draft that fails goes to `zakovat.draft.unreadable` and the teacher gets
+an empty one. Why: before this, one question with an unknown type blanked the Questions step on *every* visit, with
+nothing in the UI to clear it — the one place in the app where bad stored data could lock a teacher out for good.
+Number fields stay loose on purpose: they hold `null` while the teacher is still typing, and `validateSetup` reports
+those. **This adds one storage key** (`zakovat.draft.unreadable`), which mirrors D37's key for the game rather than
+inventing a new idea; the owner can veto it, in which case the fallback is to drop the bad draft silently and lose
+whatever was typed.
+
+**D69. The wheel rests on the pocket whose card is open, not on the last one played.** *agent* (fixlist F23; builds D34, D46)
+`restingPocket(game)` in `wheelGeometry.js`, used by `GamePage`'s initial rotation. Why: after reopening an earlier
+pocket and reloading, the pointer named one pocket while the card and the highlight named another — on a projector
+that is the screen contradicting itself in front of the class.
+
+**D70. Keyword lookups use plain `toLowerCase`, never the device's locale.** *agent* (fixlist F24)
+In `paste.js`'s `typeOf` only: the type words are an ASCII keyword list, and on a Turkish or Azerbaijani machine
+`toLocaleLowerCase()` turns "DIREKTOR" into "dırektor", so the type was lost. Team-name comparison in `createGame`
+and `validateSetup` keeps `toLocaleLowerCase`: those are people's names, locale folding is the right rule there, and
+both sides use the same function so they cannot drift apart.
+
+**D71. The engine is checked by a randomised sweep as well as by examples.** *agent*
+A scratch harness (kept outside the repo, `%TEMP%\zakovat-check\`) drives `reduce` through 3000 random sequences of
+legal and illegal actions and asserts the invariants a teacher depends on: one round per played pocket, no verdict
+before the reveal, hand-in stamps that never move on their own, the clock never running backwards or on a closed
+card, totals that always match the verdicts, shared places for ties, and — the one that guards D64 — that no state
+reachable by legal actions is ever set aside by the loader. A second harness throws 20000 malformed pastes at
+`parsePaste` and checks that anything it accepts, `createGame` accepts too. Both pass. Why keep them out of the repo:
+they are slow and they are a review tool, not a specification; the behaviours they pinned down that matter are in
+the committed tests.

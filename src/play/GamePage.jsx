@@ -9,17 +9,17 @@ import Legend from "./Legend.jsx";
 import QuestionCard from "./QuestionCard.jsx";
 import RankingPanel from "./RankingPanel.jsx";
 import Wheel from "./Wheel.jsx";
-import { restingRotation, spinRotation } from "./wheelGeometry.js";
+import { restingPocket, restingRotation, spinRotation } from "./wheelGeometry.js";
 import { useGame } from "./useGame.js";
 import "./game.css";
 
 const SPIN_MS = 4200; // matches .wheel__disc--spinning in wheel.css
 const PAUSE_MS = 500; // the landed pocket stays lit this long before the card opens
 
-/** Where the wheel rests when the page opens: the last question played sits under the pointer. */
+/** Where the wheel rests when the page opens: the open card's pocket, else the last one played. */
 function initialRotation(game) {
-  const last = game?.played.at(-1);
-  return last ? restingRotation(last - 1, game.pockets.length) : 0;
+  const resting = restingPocket(game);
+  return resting ? restingRotation(resting - 1, game.pockets.length) : 0;
 }
 
 export default function GamePage() {

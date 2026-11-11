@@ -35,8 +35,11 @@ const TYPE_ONLY = new RegExp(`^(${Object.values(TYPE_WORDS).flat().sort(byLength
 const ANSWER_PREFIX = new RegExp(`^(${ANSWER_WORDS.map(escape).join("|")})${SEP}(.*)$`, "iu");
 const NUMBERING = /^\s*\d{1,2}\s*[.)]\s*/u;
 
+// Plain `toLowerCase`, never the device's locale: on a Turkish or Azerbaijani machine
+// "DIREKTOR".toLocaleLowerCase() is "dırektor", which is not in the list, and the question would
+// come back with no type at all (fixlist F24). The regex above already matches case-insensitively.
 const typeOf = (word) =>
-  Object.keys(TYPE_WORDS).find((type) => TYPE_WORDS[type].includes(word.toLocaleLowerCase()));
+  Object.keys(TYPE_WORDS).find((type) => TYPE_WORDS[type].includes(word.toLowerCase()));
 
 /** Uzbek uses the ASCII apostrophe (D21): ʻ ʼ ‘ ’ ` ´ become '. */
 export function normalizeUz(text) {

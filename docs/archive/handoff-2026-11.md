@@ -2,6 +2,33 @@
 
 > Session Log entries moved out of `docs/handoff.md` (newest five stay there). Newest first, unedited.
 
+### 2026-11-11 (night) — M2: main page, setup, questions
+
+- **Built:**
+  - Main page: tagline, "Yangi o'yin", and a "Continue" block for an unfinished game.
+  - Setup `/new`: teams 2–8 with names, time, extra window, scores and sound switches, points (collapsed).
+  - Questions `/new/questions`: set language; three ways to add (paste, one by one, sample set); the list with
+    counts per type, boxes to prepare, edit, delete and clear; Start, with a replace-game confirmation.
+  - The draft lives in `localStorage` (`zakovat.draft`; `src/setup/draft.js`).
+  - Shared pieces: `ConfirmDialog` (`<dialog>`), `NumberField`, `TypeChip` / `TypePicker` / `TypeIcon`, `WizardSteps`,
+    and `styles/forms.css`.
+- **Decided:** D38–D43.
+- **Verified in the browser (real clicks and typing):**
+  - Setup: the duplicate-name error on both fields; the extra-window error with the limit in the text; Next locked
+    until both are fixed; names and settings survive a reload.
+  - Uzbek paste: an error block was reported by line and nothing was added; after the fix, 3 questions were added,
+    numbering stripped, the type read from its own line, `‘` converted to `'`.
+  - Manual entry: the box-object label for sandiqcha; the "write both" error; the type kept after adding.
+  - Edit and delete. Start: a uz game was saved with the default "3-jamoa" and 45/15 s, and the main page shows it.
+  - Russian run: the set language switched; the clear-list dialog (focus on Cancel); a Russian paste with
+    "Чёрный ящик" / "Ответ"; the replace-game dialog; a ru game saved.
+  - The 30-question limit refuses a set that does not fit and names how many still fit.
+  - Layout at 1920×1080, 1366×768 and 1280×720: no horizontal scroll, nothing outside the column; screenshots in uz and ru.
+  - Fixed on the way: the native fieldset border; misaligned time fields; a weak selected state in the segmented control.
+- **Checks:** `npm run check` passes: 99 keys, 86 tests, lint, build.
+- **Not verified:** the Codex review (F8); the interface text (F10). "Continue" opens the not-found page until M3 (F11).
+- **Next:** M3, the wheel: 10–30 pockets, spin, used pockets grey, legend, ranking panel.
+
 ### 2026-11-11 (evening) — M1: game engine
 
 - **Built:** `src/game/`, as mapped in §1b: rules, timer, scoring and ranking, paste import and export, storage with

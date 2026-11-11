@@ -5,6 +5,7 @@
 import { DEFAULT_SETTINGS, LIMITS, QUESTION_TYPES } from "../game/constants.js";
 
 export const DRAFT_KEY = "zakovat.draft";
+export const DRAFT_BACKUP_KEY = "zakovat.draft.unreadable";
 export const DEFAULT_TEAM_COUNT = 4;
 export const POINTS_MAX = LIMITS.points.max;
 
@@ -34,14 +35,35 @@ export function newDraft(lang) {
 }
 
 export function loadDraft(lang, storage = defaultStorage()) {
+  let raw;
   try {
-    const raw = storage?.getItem(DRAFT_KEY);
-    if (!raw) return newDraft(lang);
-    const draft = JSON.parse(raw);
-    return isDraftShape(draft) ? draft : newDraft(lang);
+    raw = storage?.getItem(DRAFT_KEY);
   } catch {
-    return newDraft(lang);
+    return newDraft(lang); // storage is blocked; this visit starts fresh
   }
+  if (!raw) return newDraft(lang);
+  let draft;
+  try {
+    draft = JSON.parse(raw);
+  } catch {
+    return setAside(raw, storage, lang);
+  }
+  return isDraftShape(draft) ? draft : setAside(raw, storage, lang);
+}
+
+/**
+ * A draft that cannot be used is moved to DRAFT_BACKUP_KEY and the teacher gets an empty one,
+ * the same way an unreadable game is kept (D37). Before this, a single broken question left the
+ * Questions step blank on every visit, with no way out of it (fixlist F22).
+ */
+function setAside(raw, storage, lang) {
+  try {
+    storage?.setItem(DRAFT_BACKUP_KEY, raw);
+    storage?.removeItem(DRAFT_KEY);
+  } catch {
+    // Storage refused; the next save overwrites the bad draft anyway.
+  }
+  return newDraft(lang);
 }
 
 export function saveDraft(draft, storage = defaultStorage()) {
@@ -53,17 +75,38 @@ export function saveDraft(draft, storage = defaultStorage()) {
   }
 }
 
+/**
+ * A question the setup screens can render. The text and the answer may be empty — the teacher is
+ * told at Start — but the type has to be one the icons and labels know, or the page cannot draw it.
+ */
+const isQuestionShape = (q) =>
+  q !== null &&
+  typeof q === "object" &&
+  !Array.isArray(q) &&
+  typeof q.id === "string" &&
+  q.id !== "" &&
+  QUESTION_TYPES.includes(q.type) &&
+  typeof q.text === "string" &&
+  typeof q.answer === "string";
+
 function isDraftShape(d) {
   return (
     d !== null &&
     typeof d === "object" &&
+    !Array.isArray(d) &&
     Number.isInteger(d.teamCount) &&
+    d.teamCount >= LIMITS.teams.min &&
+    d.teamCount <= LIMITS.teams.max &&
     Array.isArray(d.teamNames) &&
     d.teamNames.length === LIMITS.teams.max &&
+    d.teamNames.every((name) => typeof name === "string") &&
     typeof d.settings === "object" &&
     d.settings !== null &&
-    QUESTION_TYPES.every((type) => typeof d.settings.points?.[type] === "object") &&
+    // Number fields may hold null while the teacher is still typing; validateSetup reports those.
+    QUESTION_TYPES.every((type) => typeof d.settings.points?.[type] === "object" && d.settings.points[type] !== null) &&
     Array.isArray(d.questions) &&
+    d.questions.length <= LIMITS.questions.max &&
+    d.questions.every(isQuestionShape) &&
     (d.lang === "uz" || d.lang === "ru")
   );
 }

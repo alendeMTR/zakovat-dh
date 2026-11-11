@@ -4,6 +4,7 @@ import {
   numberSize,
   pocketAngle,
   pocketAtPointer,
+  restingPocket,
   restingRotation,
   sectorPath,
   spinRotation,
@@ -62,5 +63,24 @@ describe("spinning", () => {
         rotation = next;
       }
     }
+  });
+});
+
+// F23 regression: the pointer must agree with the card and the highlight after a reload.
+describe("where the wheel rests when the game screen opens", () => {
+  it("rests on the open card's pocket, even when an older one was reopened (D34)", () => {
+    expect(restingPocket({ current: 1, played: [1, 2, 3] })).toBe(1);
+    expect(restingPocket({ current: 3, played: [1, 2, 3] })).toBe(3);
+  });
+
+  it("rests on the last pocket played when no card is open, and nowhere before the first spin", () => {
+    expect(restingPocket({ current: null, played: [4, 2] })).toBe(2);
+    expect(restingPocket({ current: null, played: [] })).toBe(null);
+    expect(restingPocket(null)).toBe(null);
+  });
+
+  it("puts that pocket under the pointer", () => {
+    const game = { current: 1, played: [1, 2, 3] };
+    expect(pocketAtPointer(restingRotation(restingPocket(game) - 1, 6), 6)).toBe(0);
   });
 });

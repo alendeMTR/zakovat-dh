@@ -8,10 +8,11 @@
 ## 1. Where it stands
 
 - **M0–M5 are done and committed: the core game works end to end in the browser, with no accounts.** The plan is approved (D27).
-- **F14 and F17–F21 are fixed and committed** (2026-11-11, see the newest Session Log entry). Nothing is pushed or deployed.
-- **Next is blocked on the owner's accounts:** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2 (Firebase),
-  M7 needs F3 (API key). Only F5 and F7 are left for the agent, and both are low priority.
-- Decisions: `docs/decisionlog.md` D1–D67. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- **F14, F17–F21 (2026-11-11) and F22–F24 (2026-11-12) are fixed and committed.** Nothing is pushed or deployed.
+- **Nothing substantial is left on the agent's side.** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2
+  (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
+  the agent took both as far as it can and wrote what it found in their rows.
+- Decisions: `docs/decisionlog.md` D1–D71. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (2026-11-11): what the owner tests, what not to flag yet (placeholders, planned work),
   the manual setup steps (Codex, GitHub and Vercel, Firebase, API key), and how Codex can take over.
   `vercel.json` added the same day (page addresses rewrite to the app; check it on the first preview).
@@ -29,7 +30,7 @@
 | `game.js` | `createGame` (validation, shuffled numbered pockets), `reduce(game, action)`, `pickPocket` |
 | `timer.js` | Elapsed / remaining from timestamps, `timerPhase` (colours), `handInStatus`, clock text |
 | `scoring.js` | `pointsFor`, `teamTotals`, `ranking` (shared places), `breakdownRows` |
-| `paste.js` | `parsePaste` → `{ questions, errors }`, `formatPaste`, `normalizeUz` |
+| `paste.js` | `parsePaste` → `{ questions, errors }`, `formatPaste`, `normalizeUz` (ASCII case folding, D70) |
 | `storage.js` | `saveGame` / `loadGame` / `clearGame` in `localStorage`; unreadable or broken data set aside (D64) |
 | `sampleSets.js` | The uz and ru sample sets (draft, F9) |
 | `testHelpers.js` | Test builders only; the app never imports it |
@@ -86,6 +87,52 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-12 — stand-in review of M0–M5 and `4395de5`
+
+Codex still cannot run (F8), so the agent reviewed every milestone commit as an outsider trying to break it,
+concentrating where a failure costs a lesson. **F8 stays open regardless: this does not replace the Codex pass,
+it covers the gap until the owner updates the CLI.** Nothing pushed, nothing deployed, no accounts.
+
+- **How it was reviewed.** Read every engine and screen file against the decisions on its subject, then two
+  randomised sweeps (scratch harnesses outside the repo, D71): 3000 random action sequences through `reduce`
+  checking the invariants a teacher depends on, and 20000 malformed pastes checking the parser's contract with
+  `createGame`. Then browser probes for each suspicion the reading raised.
+- **The engine held.** No invariant broke in the 3000 sequences (coverage: 4853 verdict changes, 6985 hand-ins,
+  2305 reveals, 1640 resets, 788 reopened pockets, 8503 ties observed, 12713 late and 29765 extra hand-ins).
+  Totals always matched the verdicts, ties always shared a place, no verdict ever existed before its reveal, no
+  hand-in stamp moved on its own, no clock ran backwards or kept running on a closed card, and **no state reachable
+  by legal play was ever set aside by the loader** — the invariant that guards the F21 work. The parser never threw,
+  never returned a question `createGame` would refuse, and round-tripped through `formatPaste` every time.
+  Spot checks of the logged decisions against the code (D9, D13, D14, D16, D17, D22, D24, D33, D35, D45, D46,
+  D51, D53, D54, D58, D59) found no drift.
+- **Three findings, all fixed, each with a test that was mutation-checked (the old line put back, the test fails):**
+  - **F22 (D68) — the worst of them.** One question with an unknown type, or a `null` entry, in the saved draft
+    blanked the Questions step on every visit, permanently, with nothing in the UI to clear it. The draft had no
+    schema and its questions were never checked. Now validated as deeply as a saved game, and an unusable draft is
+    set aside under `zakovat.draft.unreadable` (this adds one storage key — the owner can veto it).
+  - **F23 (D69).** After reopening an earlier pocket and reloading, the wheel rested on the last pocket played, so
+    the pointer named one pocket while the card and the highlight named another. Now `restingPocket(game)`.
+  - **F24 (D70).** `typeOf` in the paste parser lowercased with the device's locale, so on a Turkish or Azerbaijani
+    machine an upper-case "DIREKTOR" lost its type entirely (and then hit F22). Now plain `toLowerCase`.
+- **Verified in the browser** (headless Chrome over the DevTools protocol, real clicks and keys, 1366×768):
+  - F22 before: three visits, blank each time, bad draft still in storage, React throwing "Element type is invalid".
+    After: the step opens, the draft is under the backup key, and the teacher adds the sample set, starts the game
+    and plays a question — clicked through end to end.
+  - F23 before: `current: 1`, `played: [1,2,3]`, pointer on pocket 3. After: pointer and highlight both on 1,
+    before and after closing the card.
+  - F19, F20, F21, F18, F14 and F17 suites all re-run green after these changes.
+- **Only tested, not clicked:** F24 — the host locale here is ru-RU, so the Turkish case rule cannot be reproduced
+  in this browser. It is pinned by a test that stubs `toLocaleLowerCase`, and the mechanism is shown in the test
+  itself. Also only tested: the randomised sweeps, and the deeper draft and loader rejections.
+- **F5 and F7 closed out as far as the agent can take them** — both now ⏸ for the owner.
+  F5: the sandiqcha reference image is genuinely absent and in no commit; the recommendation is to close it as not
+  needed, since D11 already rules its content out. F7: a second attempt failed for a structural reason — Telegram's
+  public web preview never serves file attachments, and `telemetr.io` returns 403. The row says exactly what to open
+  in the Telegram app.
+- **Checks:** `npm run check` passes: 175 keys, 111 tests, lint, build.
+- **Next:** nothing substantial is left on the agent's side. Preview 1 (F4), M6 (F2), M7 (F3) and the Codex review
+  (F8) all wait on the owner.
 
 ### 2026-11-11 (after M5) — the fix round: F19, F21, F18, F20, F14
 
@@ -223,31 +270,3 @@ and screenshots at 1920×1080, 1366×768 and 1280×720 (the scratch driver lives
 - **Checks:** `npm run check` passes: 119 keys, 92 tests, lint, build.
 - **Not verified:** the Codex review (F8); 30-pocket numbers from the back of a real classroom (F13); the interface text (F10).
 - **Next:** M4, the full card: timer in three colours and the tone, reveal, hand-ins, verdicts with the extra suggestion, live scores.
-
-### 2026-11-11 (night) — M2: main page, setup, questions
-
-- **Built:**
-  - Main page: tagline, "Yangi o'yin", and a "Continue" block for an unfinished game.
-  - Setup `/new`: teams 2–8 with names, time, extra window, scores and sound switches, points (collapsed).
-  - Questions `/new/questions`: set language; three ways to add (paste, one by one, sample set); the list with
-    counts per type, boxes to prepare, edit, delete and clear; Start, with a replace-game confirmation.
-  - The draft lives in `localStorage` (`zakovat.draft`; `src/setup/draft.js`).
-  - Shared pieces: `ConfirmDialog` (`<dialog>`), `NumberField`, `TypeChip` / `TypePicker` / `TypeIcon`, `WizardSteps`,
-    and `styles/forms.css`.
-- **Decided:** D38–D43.
-- **Verified in the browser (real clicks and typing):**
-  - Setup: the duplicate-name error on both fields; the extra-window error with the limit in the text; Next locked
-    until both are fixed; names and settings survive a reload.
-  - Uzbek paste: an error block was reported by line and nothing was added; after the fix, 3 questions were added,
-    numbering stripped, the type read from its own line, `‘` converted to `'`.
-  - Manual entry: the box-object label for sandiqcha; the "write both" error; the type kept after adding.
-  - Edit and delete. Start: a uz game was saved with the default "3-jamoa" and 45/15 s, and the main page shows it.
-  - Russian run: the set language switched; the clear-list dialog (focus on Cancel); a Russian paste with
-    "Чёрный ящик" / "Ответ"; the replace-game dialog; a ru game saved.
-  - The 30-question limit refuses a set that does not fit and names how many still fit.
-  - Layout at 1920×1080, 1366×768 and 1280×720: no horizontal scroll, nothing outside the column; screenshots in uz and ru.
-  - Fixed on the way: the native fieldset border; misaligned time fields; a weak selected state in the segmented control.
-- **Checks:** `npm run check` passes: 99 keys, 86 tests, lint, build.
-- **Not verified:** the Codex review (F8); the interface text (F10). "Continue" opens the not-found page until M3 (F11).
-- **Next:** M3, the wheel: 10–30 pockets, spin, used pockets grey, legend, ranking panel.
-
