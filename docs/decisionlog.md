@@ -159,3 +159,39 @@ makes the check repeatable.
 Why: `npm audit` on the planned versions found 5 advisories. React Router 6 has an open redirect in `<Link>` and
 `useNavigate`. Vitest 3 pulls a tinypool version with a critical advisory (dev-only). After the upgrade, the audit
 reports 0. React 18 and Vite 6 stay: React Router 7 supports React 18; Vitest 5 supports Vite 6.4.
+
+## 2026-11-11 — M1 (game engine)
+
+These settle details that D6–D17 left open. All of them are *agent* decisions; the owner can overrule any of them.
+
+**D31. The extra pre-selection is a suggestion; only the teacher's tap scores.** *agent* (how D7 is built)
+The engine computes each hand-in's status: extra, in time, or late. The card (M4) highlights "correct + extra" for teams
+inside the window. No points are given until the teacher taps a verdict.
+Why: an automatic verdict would score a wrong answer that was simply handed in early.
+
+**D32. A hand-in needs a started timer; Reset clears the hand-ins.** *agent*
+Before Start, a tap on a team does nothing. Reset (a restart of the question) clears the timer and the hand-ins,
+because their times were measured from the old start. The reveal and the verdicts stay.
+
+**D33. The clock keeps counting past zero; the display stops at 0:00.** *agent*
+Why: a slip that arrives after zero is recorded as late (D14), and the teacher still judges it.
+An extra window of 0 seconds turns the bonus off. If the extra window runs into the warning time, the extra colour shows.
+
+**D34. A played pocket can be reopened to fix a mistake.** *agent*
+Its round (time, hand-ins, verdicts) is kept. Closing the card stops its timer.
+Why: the teacher may close a card before judging every team.
+
+**D35. Team names: 1–40 characters, unique (ignoring case and spaces).** *agent*
+Why: two teams with the same name would be impossible to tell apart on the card and the leaderboard.
+
+**D36. Paste format details.** *agent* (extends D19)
+- The type prefix is optional; a block without one is an Oddiy savol.
+- The type may stand on its own line. Numbering ("1.", "2)") is ignored.
+- Type names and the answer label are accepted in Uzbek (Latin and Cyrillic), Russian and English, in any letter case.
+- A colon inside the question text stays text unless the word before it is a type name.
+- When the set is copied back out as text, Russian uses "Обычный / Директор / Ящик" and "Ответ".
+  These Russian names are placeholders: the owner chooses the Russian names of the three types (fixlist F9).
+
+**D37. An unreadable saved game is set aside, not deleted.** *agent*
+It is moved to `zakovat.game.unreadable`, so nothing is lost silently. Older schemas are upgraded through a migration
+table; none exist yet (schema 1).

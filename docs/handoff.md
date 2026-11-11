@@ -7,10 +7,30 @@
 
 ## 1. Where it stands
 
-- **M0 (foundations) is done and committed; M1 (game engine) is next.** The plan is approved (D27).
-- Decisions: `docs/decisionlog.md` D1–D30.
-- Owner to-dos: F8 (update Codex so milestone reviews run), F1 (OK to download the interim logo files),
-  F2 (Firebase project, by M6), F3 (API credits and key, by M7), F4 (GitHub repo and Vercel project, by Preview 1).
+- **M0 and M1 are done and committed; M2 (main page, setup, questions) is next.** The plan is approved (D27).
+- Decisions: `docs/decisionlog.md` D1–D37.
+- The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
+  - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
+  - F1: OK to download the interim logo files.
+  - F9: approve the sample sets and the Russian type names.
+  - F2 (Firebase, by M6), F3 (API key, by M7), F4 (GitHub and Vercel, by Preview 1).
+
+## 1b. Game engine map (`src/game/`, pure JS, no React)
+
+| File | Holds |
+|---|---|
+| `constants.js` | Types, verdicts, limits, default settings and points (D9, D14, D17) |
+| `game.js` | `createGame` (validation, shuffled numbered pockets), `reduce(game, action)`, `pickPocket` |
+| `timer.js` | Elapsed / remaining from timestamps, `timerPhase` (colours), `handInStatus`, clock text |
+| `scoring.js` | `pointsFor`, `teamTotals`, `ranking` (shared places), `breakdownRows` |
+| `paste.js` | `parsePaste` → `{ questions, errors }`, `formatPaste`, `normalizeUz` |
+| `storage.js` | `saveGame` / `loadGame` / `clearGame` in `localStorage`; unreadable data set aside |
+| `sampleSets.js` | The uz and ru sample sets (draft, F9) |
+| `testHelpers.js` | Test builders only; the app never imports it |
+
+Actions: `OPEN_QUESTION {pocketNo}`, `CLOSE_QUESTION {now}`, `START_TIMER {now}`, `PAUSE_TIMER {now}`, `RESET_TIMER`,
+`HAND_IN {teamId, now}`, `REVEAL`, `SET_VERDICT {pocketNo, teamId, verdict}`, `TOGGLE_SCORES`, `TOGGLE_SOUND`,
+`END_GAME {now}`. An action that is not allowed returns the same object.
 
 ## 2. Stack and commands
 
@@ -45,6 +65,20 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-11 (evening) — M1: game engine
+
+- **Built:** `src/game/`, as mapped in §1b: rules, timer, scoring and ranking, paste import and export, storage with
+  resume, and sample sets (10 per language). No UI.
+- **Decided:** D31–D37. They cover the extra suggestion, hand-in and reset rules, the clock after zero, reopening a pocket,
+  team names, paste format details, and unreadable saves.
+- **Verified:**
+  - `npm run check` passes: 77 tests in 7 files, lint, i18n, build.
+  - Mutation check: three rules were broken on purpose and each was caught by its own test, then restored and
+    re-run green. The three were the extra boundary (≤ → <), shared places (1, 1, 3 → 1, 1, 2) and the verdict lock before the reveal.
+  - Both sample sets survive a round trip through `formatPaste` → `parsePaste` and start a game.
+- **Not verified:** the Codex review (F8). The sample-set wording is a draft until the owner approves it (F9).
+- **Next:** M2, the main page, setup and the questions step (paste, type, sample set) in uz and ru.
 
 ### 2026-11-11 (later) — M0: foundations
 
