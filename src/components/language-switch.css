@@ -1,0 +1,29 @@
+.lang-switch {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+}
+
+.lang-switch__option {
+  min-width: 44px;
+  min-height: 36px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  transition: background-color var(--t-fast) ease, color var(--t-fast) ease;
+}
+
+.lang-switch__option:hover {
+  color: var(--ink);
+}
+
+.lang-switch__option[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--surface);
+}

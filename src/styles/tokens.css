@@ -1,0 +1,88 @@
+/* Design tokens. Components use these names only, never raw hex (CLAUDE.md §4).
+   Colours come from PDP School's palette (school.pdp.uz), darkened where text or a white
+   card needs contrast. Contrast was measured 2026-11-11 (docs/plan.md §5). */
+
+:root {
+  /* ── Neutrals ───────────────────────────────────────────── */
+  --ink: #0b1a66;            /* PDP navy. Text, neutral timer. 15.5:1 on white */
+  --ink-muted: #5a6290;      /* Secondary text. 5.9:1 on white, 5.3:1 on --page */
+  --page: #f3f4f9;           /* Page background */
+  --surface: #ffffff;        /* Cards, panels */
+  --surface-alt: #f7f8fb;    /* Rows, inputs */
+  --line: #dadded;           /* Dividers (decorative) */
+  --line-strong: #8a90b4;    /* Input and control borders. 3.1:1 on white */
+
+  /* ── Actions ────────────────────────────────────────────── */
+  --primary: #2040ff;        /* PDP blue. White on it 6.5:1 */
+  --primary-hover: #1a30d0;  /* White on it 8.8:1 */
+  --on-primary: #ffffff;
+  --focus-ring: 0 0 0 3px rgba(32, 64, 255, 0.35);
+
+  /* ── Question types: colour + icon + name, never colour alone (D24) ── */
+  --type-oddiy: #2040ff;     /* from PDP blue. White on it 6.5:1 */
+  --type-oddiy-tint: #e9ecff;
+  --type-direktor: #9a5f00;  /* from PDP amber #fee2a8. White on it 5.2:1 */
+  --type-direktor-tint: #fbf1e1;
+  --type-sandiqcha: #8a3fc7; /* from PDP lilac #c586e9. White on it 5.8:1 */
+  --type-sandiqcha-tint: #f3eafa;
+
+  /* ── Timer states and verdicts ──────────────────────────── */
+  --good: #0f7f4a;           /* from PDP green #3ee08f. Extra window, correct. 5.1:1 on white */
+  --good-tint: #e5f4ec;
+  --bad: #d6004f;            /* from PDP pink #ff0165. Little time left, wrong. 5.3:1 on white */
+  --bad-tint: #fde6ee;
+  --timer-extra: var(--good);
+  --timer-neutral: var(--ink);
+  --timer-warn: var(--bad);
+
+  /* ── Wheel ──────────────────────────────────────────────── */
+  --pocket-used: #c9ccdd;    /* Played pocket. Ink on it 9.7:1 */
+
+  /* ── Type ───────────────────────────────────────────────────
+     One family for every role (the Axeno rule): titles are bigger, not bolder; nothing above 600. */
+  --font: "Onest Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-strong: 600;
+
+  /* UI screens (main, setup, questions): rem, on a root that grows on large screens (base.css). */
+  --fs-label: 0.875rem;      /* the floor */
+  --fs-ui: 1rem;
+  --fs-body: 1.0625rem;
+  --fs-h3: 1.25rem;
+  --fs-h2: 1.5rem;
+  --fs-h1: 2rem;
+  --fs-display: 3rem;
+
+  /* Game screens (wheel, card, results) scale with the stage: the largest 16:9 box that fits.
+     1 --u is 1% of the stage height: 10.8px at 1920×1080, 7.68px at 1366×768, 7.2px at 1280×720.
+     A projected 768-high image then reads like a 1080-high one: size is a share of the screen. */
+  --u: min(1vh, 0.5625vw);
+  --st-label: calc(var(--u) * 2);        /* 22px at 1080 */
+  --st-team: calc(var(--u) * 2.6);       /* 28px at 1080: team names (plan §5 floor) */
+  --st-score: calc(var(--u) * 3.2);
+  --st-question-min: calc(var(--u) * 3.7); /* 40px at 1080: question text floor (plan §5) */
+  --st-question-max: calc(var(--u) * 6.6); /* 72px at 1080 */
+  --st-timer: calc(var(--u) * 11);       /* timer digits */
+
+  /* ── Space, shape, depth ────────────────────────────────── */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+  --shadow-card: 0 12px 48px rgba(11, 26, 102, 0.16);
+  --shadow-panel: 0 2px 10px rgba(11, 26, 102, 0.06);
+
+  /* ── Motion ─────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);  /* PDP's own easing */
+  --t-fast: 120ms;
+  --t-card: 200ms;
+}
