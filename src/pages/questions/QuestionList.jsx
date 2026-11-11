@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, TriangleAlert } from "lucide-react";
 import { TypeChip } from "../../components/QuestionType.jsx";
 import { QUESTION_TYPES } from "../../game/constants.js";
 import { useI18n } from "../../i18n/I18nProvider.jsx";
+import { isLongQuestion } from "../../setup/draft.js";
 import QuestionEditor from "./QuestionEditor.jsx";
 
 /** The questions of this game: counts per type, the boxes to prepare, and each question with edit and delete. */
@@ -62,6 +63,12 @@ export default function QuestionList({ questions, onEdit, onDelete, onClear }) {
                     <div className="q-list__body">
                       <TypeChip type={q.type} />
                       <p className="q-list__text">{q.text}</p>
+                      {isLongQuestion(q.text) && (
+                        <p className="q-list__flag">
+                          <TriangleAlert aria-hidden="true" className="q-list__flag-icon" />
+                          {t("questions.long", { n: q.text.trim().length })}
+                        </p>
+                      )}
                       <p className="q-list__answer">
                         <span className="q-list__answer-label">{t("questions.answer")}:</span> {q.answer}
                       </p>

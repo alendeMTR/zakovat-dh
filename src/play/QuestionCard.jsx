@@ -7,6 +7,7 @@ import { hasStarted, isRunning, remainingMs } from "../game/timer.js";
 import { useI18n } from "../i18n/I18nProvider.jsx";
 import TeamRow from "./TeamRow.jsx";
 import Timer from "./Timer.jsx";
+import { cardKeyAction } from "./cardKeys.js";
 import { playTone, primeAudio } from "./tone.js";
 import { useFitText } from "./useFitText.js";
 import { useNow } from "./useNow.js";
@@ -62,24 +63,29 @@ export default function QuestionCard({ game, dispatch, onClose }) {
 
   useEffect(() => {
     const onKey = (event) => {
-      if (confirmReset) return;
+      const target = event.target;
+      // Any open modal — this card's reset question or End game in the top bar — owns the keyboard (F19).
+      const inModal =
+        confirmReset || document.querySelector("dialog[open]") !== null || Boolean(target.closest?.("dialog"));
+      const inField = Boolean(target.closest?.("input, textarea, select"));
+      const { action, teamIndex, preventDefault } = cardKeyAction(
+        {
+          key: event.key,
+          code: event.code,
+          repeat: event.repeat,
+          inModal,
+          inField,
+          onButton: Boolean(target.closest?.("button")),
+        },
+        { running, remaining, teamCount: teams.length },
+      );
+      if (preventDefault) event.preventDefault();
+      if (inModal || inField) return;
       primeAudio(); // a key press also counts as the gesture that allows sound
-      if (event.key === "Escape") {
-        onClose();
-        return;
-      }
-      if (event.target.closest?.("input, textarea, select, dialog")) return;
-      if (event.code === "Space" && !event.target.closest?.("button")) {
-        event.preventDefault();
-        if (event.repeat) return;
-        if (running) pause();
-        else if (remaining > 0) start();
-        return;
-      }
-      const n = Number(event.key);
-      if (Number.isInteger(n) && n >= 1 && n <= teams.length && !event.repeat) {
-        handIn(teams[n - 1].id);
-      }
+      if (action === "close") onClose();
+      else if (action === "start") start();
+      else if (action === "pause") pause();
+      else if (action === "handIn") handIn(teams[teamIndex].id);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -156,7 +162,8 @@ export default function QuestionCard({ game, dispatch, onClose }) {
           </ol>
         </section>
 
-        <p className="qcard__keys">{t("card.keys", { n: teams.length })}</p>
+        {/* At zero Space no longer starts or pauses (F19), so the line stops naming it. */}
+        <p className="qcard__keys">{t(remaining > 0 ? "card.keys" : "card.keysDone", { n: teams.length })}</p>
       </section>
 
       <ConfirmDialog

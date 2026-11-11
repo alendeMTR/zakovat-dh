@@ -21,7 +21,8 @@ export default function QuestionEditor({ initial, submitLabel, onSubmit, onCance
       return;
     }
     setMissing(false);
-    onSubmit({ type, text: text.trim(), answer: answer.trim() });
+    const accepted = onSubmit({ type, text: text.trim(), answer: answer.trim() });
+    if (accepted === false) return;
     if (keepTypeAfterSubmit) {
       setText("");
       setAnswer("");

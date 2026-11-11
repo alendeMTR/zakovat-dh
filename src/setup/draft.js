@@ -6,7 +6,14 @@ import { DEFAULT_SETTINGS, LIMITS, QUESTION_TYPES } from "../game/constants.js";
 
 export const DRAFT_KEY = "zakovat.draft";
 export const DEFAULT_TEAM_COUNT = 4;
-export const POINTS_MAX = 20;
+export const POINTS_MAX = LIMITS.points.max;
+
+// Longer than this and the card may not fit the question on a 1280x720 screen: its box scrolls
+// instead of clipping the text (D51). The list says so before the lesson, where it can still be
+// shortened (fixlist F14). The card's own behaviour is unchanged.
+export const LONG_QUESTION_CHARS = 250;
+
+export const isLongQuestion = (text) => String(text ?? "").trim().length > LONG_QUESTION_CHARS;
 
 const defaultStorage = () => (typeof localStorage === "undefined" ? null : localStorage);
 

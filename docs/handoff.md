@@ -8,9 +8,10 @@
 ## 1. Where it stands
 
 - **M0–M5 are done and committed: the core game works end to end in the browser, with no accounts.** The plan is approved (D27).
+- **F14 and F17–F21 are fixed and committed** (2026-11-11, see the newest Session Log entry). Nothing is pushed or deployed.
 - **Next is blocked on the owner's accounts:** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2 (Firebase),
-  M7 needs F3 (API key). The agent can do F14 (flag long questions) meanwhile.
-- Decisions: `docs/decisionlog.md` D1–D60. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+  M7 needs F3 (API key). Only F5 and F7 are left for the agent, and both are low priority.
+- Decisions: `docs/decisionlog.md` D1–D67. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (2026-11-11): what the owner tests, what not to flag yet (placeholders, planned work),
   the manual setup steps (Codex, GitHub and Vercel, Firebase, API key), and how Codex can take over.
   `vercel.json` added the same day (page addresses rewrite to the app; check it on the first preview).
@@ -29,7 +30,7 @@
 | `timer.js` | Elapsed / remaining from timestamps, `timerPhase` (colours), `handInStatus`, clock text |
 | `scoring.js` | `pointsFor`, `teamTotals`, `ranking` (shared places), `breakdownRows` |
 | `paste.js` | `parsePaste` → `{ questions, errors }`, `formatPaste`, `normalizeUz` |
-| `storage.js` | `saveGame` / `loadGame` / `clearGame` in `localStorage`; unreadable data set aside |
+| `storage.js` | `saveGame` / `loadGame` / `clearGame` in `localStorage`; unreadable or broken data set aside (D64) |
 | `sampleSets.js` | The uz and ru sample sets (draft, F9) |
 | `testHelpers.js` | Test builders only; the app never imports it |
 
@@ -43,6 +44,13 @@ Actions: `OPEN_QUESTION {pocketNo}`, `CLOSE_QUESTION {now}`, `START_TIMER {now}`
   Onest bundled via `@fontsource-variable/onest` (D28). Tests: Vitest 5. Node 22.x.
   Later: Firebase Auth + Firestore (M6), one Vercel JS function for AI (M7).
 - `npm run dev`: dev server on **http://localhost:5180** (`.claude/launch.json` → `zakovat-dev` for the browser pane).
+  If 5180 is taken by another project on this machine, `npm run dev -- --port 5181` and check there.
+- **If the browser pane will not connect:** drive headless Chrome over the DevTools protocol instead — launch
+  `chrome.exe --headless=new --remote-debugging-port=…`, then `Input.dispatchMouseEvent` / `Input.dispatchKeyEvent`
+  for real clicks and keys, `Emulation.setDeviceMetricsOverride` for the three sizes and `Page.captureScreenshot`.
+  There is a worked example in the owner's Axeno repo (`.axeno-docs/research/phone-harness/cdp.mjs`, read only).
+  Keep the driver outside this repo. Note that `<input type="number">` ignores half-typed values like "-", so set
+  those fields with `Input.insertText` over a selection rather than key by key.
 - `npm run check`: i18n check, lint, tests, build (all four; run it before every commit).
 - `npm run check:i18n`: uz and ru have the same keys, no empty values, ASCII apostrophes in uz, no unknown `t("key")`.
 - `/dev/tokens` (dev server only, D29): every token on one screen; the fixture for screenshots at the three sizes.
@@ -78,6 +86,57 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-11 (after M5) — the fix round: F19, F21, F18, F20, F14
+
+Five open items that needed no account and no owner action. **Nothing was pushed, deployed or reviewed with Codex.**
+
+- **F19 — card shortcuts bypassed the control locks** (D62, D63). The key rule moved out of `QuestionCard` into
+  `src/play/cardKeys.js` (`cardKeyAction`): pure, so the locks have their own tests. Any open `<dialog>` now makes the
+  card — and the wheel's Space — ignore every key, and after zero Space does nothing (it is still swallowed so it
+  cannot scroll). The keys line at the foot of the card drops the Space half at zero (`card.keysDone`).
+- **F21 — structurally broken saves passed the loader** (D64). `loadGame` puts the saved teams, questions and
+  settings back through `createGame`, then checks what `createGame` cannot see, then checks the stored settings for
+  themselves — a game saved with `points: null` passed the boundary, because `createGame` fills missing values from
+  the defaults. The `localStorage` getter is now inside a try.
+- **F18 — invalid settings bypassed setup validation** (D65). `createGame` requires whole numbers in range for time,
+  bonus and all six points fields; the Questions step maps the new `points` error to the settings error it already
+  shows. The wizard step link stays open by design: the refusal belongs at Start.
+- **F20 — two confirmations shared the heading id `confirm-title`** (D67). It comes from `useId` now.
+- **F14 — very long questions are flagged** (D66). `isLongQuestion` (over 250 characters) marks a question in the
+  list with its length and "may need scrolling on a small screen". The card itself is unchanged (D51).
+- **Decided:** D62–D67. **Draft text touched (F10):** `questions.startError.settings` now says time *and* points;
+  new `card.keysDone`, `questions.long`.
+
+**Verified in the browser** — headless Chrome over the DevTools protocol, with real mouse clicks, real key events
+and screenshots at 1920×1080, 1366×768 and 1280×720 (the scratch driver lives outside the repo, in
+`%TEMP%\zakovat-check\`; it was needed because the browser pane could not connect this session):
+
+- F19, 1366×768: spun the wheel by clicking the hub, started the clock with Space, handed in with "2". Opened
+  End game from the top bar and pressed Escape — only the dialog closed; the card stayed open, its timer kept
+  running and the game did not end. At 0:00 Pause was gone, Space left the timer untouched, and "3" nineteen
+  seconds in was stamped "0:19 · kech". The card at zero with 8 teams fits all three sizes with no scrolling.
+- F21: `current: 99`, a missing round, a null timer, `points: null` and a missing `timeSec` each landed on a clean
+  main page with the raw data under `zakovat.game.unreadable`; a running game resumed on its own pocket (clock
+  0:07); a finished game still opened its leaderboard. No uncaught exceptions in the whole run.
+- F18: typed -1 into Ordinary · correct, saw the range error and Next locked, used the step link to Questions,
+  added the sample set, and Start was refused with "Sozlamalardagi vaqt va ballarni tekshiring." linking back to
+  `/new`, with nothing saved. Put the value back to 2 and the same Start opened the game.
+- F20: with a card open, the two mounted dialogs have different ids and each is announced as its own title
+  (End game, Reset, Clear list, Replace game).
+- F14: a 360-character question is flagged, a short one beside it is not; the line fits at all three sizes with no
+  horizontal scroll, in Uzbek and Russian.
+- F17 (already fixed) re-checked: with 30 in the list a typed question is refused and both fields keep their text.
+
+- **Checks:** `npm run check` passes: 175 keys, 104 tests, lint, build. New tests: `src/play/cardKeys.test.js`
+  (F19), 25 corruptions and a full-flight round trip in `storage.test.js` (F21), engine range tests in
+  `game.test.js` (F18), the 250-character boundary in `draft.test.js` (F14).
+- **Not verified:** the Codex review (F8); the interface text (F10); the printed breakdown (F16); anything needing
+  a projector, a classroom or an account.
+- **Note for the next session:** port 5180 was taken by another project on this machine, so the dev server ran on
+  **5181** (`npm run dev -- --port 5181`). `vite.config.js` still says 5180 with `strictPort`.
+- **Next:** everything else is still blocked on the owner: Preview 1 (F4), M6 (F2), M7 (F3), reviews (F8).
+  Remaining agent-side items are small: F5 and F7, both low priority.
 
 ### 2026-11-11 (night, later) — M5: end of game
 
@@ -191,18 +250,4 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 - **Checks:** `npm run check` passes: 99 keys, 86 tests, lint, build.
 - **Not verified:** the Codex review (F8); the interface text (F10). "Continue" opens the not-found page until M3 (F11).
 - **Next:** M3, the wheel: 10–30 pockets, spin, used pockets grey, legend, ranking panel.
-
-### 2026-11-11 (evening) — M1: game engine
-
-- **Built:** `src/game/`, as mapped in §1b: rules, timer, scoring and ranking, paste import and export, storage with
-  resume, and sample sets (10 per language). No UI.
-- **Decided:** D31–D37. They cover the extra suggestion, hand-in and reset rules, the clock after zero, reopening a pocket,
-  team names, paste format details, and unreadable saves.
-- **Verified:**
-  - `npm run check` passes: 77 tests in 7 files, lint, i18n, build.
-  - Mutation check: three rules were broken on purpose and each was caught by its own test, then restored and
-    re-run green. The three were the extra boundary (≤ → <), shared places (1, 1, 3 → 1, 1, 2) and the verdict lock before the reveal.
-  - Both sample sets survive a round trip through `formatPaste` → `parsePaste` and start a game.
-- **Not verified:** the Codex review (F8). The sample-set wording is a draft until the owner approves it (F9).
-- **Next:** M2, the main page, setup and the questions step (paste, type, sample set) in uz and ru.
 

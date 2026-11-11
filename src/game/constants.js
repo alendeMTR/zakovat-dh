@@ -11,6 +11,7 @@ export const LIMITS = {
   teams: { min: 2, max: 8 }, // D17
   questions: { min: 1, max: 30 }, // brief: up to 30 per game
   timeSec: { min: 10, max: 600 },
+  points: { min: 0, max: 20 }, // existing setup range, also enforced when a game starts
   teamName: { max: 40 },
 };
 

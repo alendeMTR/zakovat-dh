@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { DRAFT_KEY, effectiveTeamNames, hasErrors, loadDraft, newDraft, validateSetup } from "./draft.js";
+import { SAMPLE_SETS } from "../game/sampleSets.js";
+import {
+  DRAFT_KEY,
+  LONG_QUESTION_CHARS,
+  effectiveTeamNames,
+  hasErrors,
+  isLongQuestion,
+  loadDraft,
+  newDraft,
+  validateSetup,
+} from "./draft.js";
 
 const name = (n) => `${n}-jamoa`;
 const withNames = (names, count = names.length) => {
@@ -54,6 +64,23 @@ describe("settings", () => {
     d.settings.points.direktor.extra = 21;
     d.settings.points.oddiy.correct = null;
     expect(validateSetup(d, name).points).toEqual({ "oddiy.correct": "pointsRange", "direktor.extra": "pointsRange" });
+  });
+});
+
+describe("long questions (F14)", () => {
+  it("flags a question past 250 characters, counted without the padding", () => {
+    expect(isLongQuestion("x".repeat(250))).toBe(false);
+    expect(isLongQuestion("x".repeat(251))).toBe(true);
+    expect(isLongQuestion(`  ${"x".repeat(250)}  `)).toBe(false);
+    expect(isLongQuestion("")).toBe(false);
+    expect(isLongQuestion(undefined)).toBe(false);
+    expect(LONG_QUESTION_CHARS).toBe(250);
+  });
+
+  it("leaves every sample question unflagged", () => {
+    for (const set of Object.values(SAMPLE_SETS)) {
+      for (const q of set.questions) expect(isLongQuestion(q.text)).toBe(false);
+    }
   });
 });
 

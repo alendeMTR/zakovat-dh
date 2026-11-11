@@ -25,6 +25,7 @@ const START_ERROR = {
   timeSec: "questions.startError.settings",
   extraSec: "questions.startError.settings",
   warnSec: "questions.startError.settings",
+  points: "questions.startError.settings",
   questionCount: "questions.startError.questions",
   questionType: "questions.startError.questions",
   questionEmpty: "questions.startError.questions",

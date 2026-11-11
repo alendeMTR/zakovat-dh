@@ -2,6 +2,20 @@
 
 > Session Log entries moved out of `docs/handoff.md` (newest five stay there). Newest first, unedited.
 
+### 2026-11-11 (evening) — M1: game engine
+
+- **Built:** `src/game/`, as mapped in §1b: rules, timer, scoring and ranking, paste import and export, storage with
+  resume, and sample sets (10 per language). No UI.
+- **Decided:** D31–D37. They cover the extra suggestion, hand-in and reset rules, the clock after zero, reopening a pocket,
+  team names, paste format details, and unreadable saves.
+- **Verified:**
+  - `npm run check` passes: 77 tests in 7 files, lint, i18n, build.
+  - Mutation check: three rules were broken on purpose and each was caught by its own test, then restored and
+    re-run green. The three were the extra boundary (≤ → <), shared places (1, 1, 3 → 1, 1, 2) and the verdict lock before the reveal.
+  - Both sample sets survive a round trip through `formatPaste` → `parsePaste` and start a game.
+- **Not verified:** the Codex review (F8). The sample-set wording is a draft until the owner approves it (F9).
+- **Next:** M2, the main page, setup and the questions step (paste, type, sample set) in uz and ru.
+
 ### 2026-11-11 (later) — M0: foundations
 
 - **Built:**

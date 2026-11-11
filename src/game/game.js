@@ -34,10 +34,17 @@ export function createGame({ teamNames, questions, lang, settings = {}, now, rng
   });
 
   const merged = mergeSettings(settings);
-  if (merged.timeSec < LIMITS.timeSec.min || merged.timeSec > LIMITS.timeSec.max)
+  const whole = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
+  if (!whole(merged.timeSec, LIMITS.timeSec.min, LIMITS.timeSec.max))
     throw new GameError("timeSec");
-  if (merged.extraSec < 0 || merged.extraSec > merged.timeSec) throw new GameError("extraSec");
-  if (merged.warnSec < 0 || merged.warnSec > merged.timeSec) throw new GameError("warnSec");
+  if (!whole(merged.extraSec, 0, merged.timeSec)) throw new GameError("extraSec");
+  if (!whole(merged.warnSec, 0, merged.timeSec)) throw new GameError("warnSec");
+  for (const type of QUESTION_TYPES) {
+    for (const field of ["correct", "extra"]) {
+      if (!whole(merged.points[type][field], LIMITS.points.min, LIMITS.points.max))
+        throw new GameError("points");
+    }
+  }
 
   const shuffled = shuffle(
     list.map((q, i) => ({ id: q.id ?? `q${i + 1}`, type: q.type, text: q.text.trim(), answer: q.answer.trim() })),

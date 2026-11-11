@@ -162,6 +162,22 @@
   color: var(--ink-muted);
 }
 
+/* F14: a question long enough that the card may have to scroll on a small screen (D51). */
+.q-list__flag {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
+}
+
+.q-list__flag-icon {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  margin-top: 0.1em;
+}
+
 .q-list__answer-label {
   font-weight: var(--fw-medium);
 }

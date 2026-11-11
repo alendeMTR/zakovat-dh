@@ -301,3 +301,46 @@ until someone has looked at it at 1920×1080, 1366×768 and 1280×720. If Codex 
 **D60. The main page shows the last finished game (when it ended, the winner or winners, a link to its results).** *agent*
 It stays until a new game replaces it. Why: a teacher who leaves the results by mistake can get back to them.
 Keeping more than one past game is M6 (accounts).
+
+## 2026-11-11 — the F18–F21 and F14 round
+
+All *agent* decisions, under "decide, log, keep going". The owner can overrule any of them.
+
+**D62. An open modal owns the keyboard, and the card's keys are a pure rule.** *agent* (fixlist F19; builds D52)
+While any `<dialog open>` is on screen, the question card ignores every key, so Escape in the End game or the
+reset confirmation closes only that confirmation. The wheel's Space does the same. The rule itself moved to
+`src/play/cardKeys.js` (`cardKeyAction`), which is pure and tested; the card only translates the result into actions.
+Why: the bug was invisible in a lesson — Escape closed the card under the dialog and stopped that question's timer,
+and every later hand-in was then measured against a stopped clock.
+
+**D63. After zero, Space does nothing, and the keys line stops naming it.** *agent* (fixlist F19; builds D33, D53)
+At zero the display holds 0:00 but the clock keeps counting, so a late slip still gets a real time (D33). Pause is
+hidden there (D53), and Space must not pause either: a pause freezes the elapsed time and stamps every later hand-in
+with the same wrong moment. Space is still swallowed at zero so it cannot scroll the page. The line at the foot of
+the card then reads "1–{n} — jamoa javob topshirdi" alone (new draft key `card.keysDone`, F10).
+Space on a focused button stays that button's own key, as D47 and D52 intend.
+
+**D64. A saved game is checked against the engine's own boundary and against what is actually stored.** *agent*
+(fixlist F21; builds D37)
+`loadGame` runs the saved teams, questions and settings back through `createGame`, and then checks the parts
+`createGame` cannot see: the ids, the language, `current` against `played`, one round per played pocket, and each
+round's timer, hand-ins and verdicts. Settings are checked twice over, because `createGame` fills missing values from
+the defaults: a game stored with `points: null` passed the boundary and then broke scoring. Anything that fails goes
+to `zakovat.game.unreadable` (D37) and the teacher gets a clean main page instead of a blank one.
+Reading the browser storage property itself is now inside a try, since a locked-down browser throws on the getter.
+
+**D65. `createGame` enforces whole numbers in range for time, bonus and points.** *agent* (fixlist F18)
+The same ranges setup uses (`LIMITS.points`, now shared with `POINTS_MAX`). Fractional, `null`, `NaN`, `Infinity` and
+string values are refused, not silently compared. The Questions step maps the new `points` error to the settings
+error it already shows, which links back to setup.
+The wizard step link stays open: moving between the two steps is useful, and the refusal belongs at Start, where the
+teacher is told which setting is wrong. The draft text of `questions.startError.settings` now says time **and** points.
+
+**D66. The questions list flags a question over 250 characters.** *agent* (fixlist F14; does not change D51)
+`isLongQuestion` in `src/setup/draft.js`. The line under the question names its length and says it may have to be
+scrolled on a small screen. The card is untouched: it still fits the text and scrolls as a last resort (D51).
+Why 250: a 372-character question did not fit at 1280×720, and the longest sample question is 124.
+
+**D67. Confirmation dialogs take their heading id from React's `useId`.** *agent* (fixlist F20)
+Two mounted `ConfirmDialog`s shared the id `confirm-title`, so End game was announced as the timer-reset question and
+Replace game as Clear list. One id per instance; nothing else changes.

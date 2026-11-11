@@ -70,6 +70,7 @@ export default function GamePage() {
     const onKey = (event) => {
       if (event.code !== "Space" || event.repeat) return;
       if (game?.current !== null) return; // the open card uses Space for its timer
+      if (document.querySelector("dialog[open]") !== null) return; // a modal owns the keyboard (F19)
       const target = event.target;
       if (target.closest?.("button, input, textarea, select, [role='button'], dialog")) return;
       event.preventDefault();

@@ -45,6 +45,25 @@ describe("createGame", () => {
     expect(game.settings.timeSec).toBe(60);
   });
 
+  it("rejects incomplete and non-whole timer settings at the engine boundary", () => {
+    for (const field of ["timeSec", "extraSec", "warnSec"]) {
+      for (const value of [null, NaN, Infinity, 10.5, "20"]) {
+        expect(codeOf(() => newGame({ settings: { [field]: value } }))).toBe(field);
+      }
+    }
+  });
+
+  it("rejects invalid points even when setup navigation was bypassed", () => {
+    for (const type of ["oddiy", "direktor", "sandiqcha"]) {
+      for (const field of ["correct", "extra"]) {
+        for (const value of [-1, 21, null, NaN, Infinity, 1.5, "2"]) {
+          expect(codeOf(() => newGame({ settings: { points: { [type]: { [field]: value } } } }))).toBe("points");
+        }
+      }
+    }
+    expect(codeOf(() => newGame({ settings: { extraSec: 0, points: { oddiy: { correct: 0, extra: 20 } } } }))).toBe("no error");
+  });
+
   it("puts every question in a numbered pocket, in a repeatable random order", () => {
     const game = newGame();
     expect(game.pockets.map((p) => p.no)).toEqual([1, 2, 3]);
