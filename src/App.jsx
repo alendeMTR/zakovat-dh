@@ -4,7 +4,9 @@ import HomePage from "./pages/HomePage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import QuestionsPage from "./pages/QuestionsPage.jsx";
 import SetupPage from "./pages/SetupPage.jsx";
+import BreakdownPage from "./play/BreakdownPage.jsx";
 import GamePage from "./play/GamePage.jsx";
+import ResultsPage from "./play/ResultsPage.jsx";
 
 // Dev-only fixture for visual checks (docs/decisionlog.md D29). The import sits behind
 // import.meta.env.DEV, so production builds leave it out.
@@ -17,6 +19,8 @@ export default function App() {
       <Route path="/new" element={<SetupPage />} />
       <Route path="/new/questions" element={<QuestionsPage />} />
       <Route path="/game" element={<GamePage />} />
+      <Route path="/game/results" element={<ResultsPage />} />
+      <Route path="/game/breakdown" element={<BreakdownPage />} />
       {TokenSheet && (
         <Route
           path="/dev/tokens"

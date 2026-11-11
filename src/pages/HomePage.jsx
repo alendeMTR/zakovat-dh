@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Plus } from "lucide-react";
 import AppHeader from "../components/AppHeader.jsx";
+import { ranking } from "../game/scoring.js";
 import { loadGame } from "../game/storage.js";
 import { formatWhen } from "../i18n/format.js";
 import { useI18n } from "../i18n/I18nProvider.jsx";
@@ -13,6 +14,13 @@ export default function HomePage() {
   const { t } = useI18n();
   const [game] = useState(() => loadGame());
   const unfinished = game && game.endedAt === null ? game : null;
+  const finished = game && game.endedAt !== null ? game : null;
+  const winners = finished
+    ? ranking(finished)
+        .filter((row) => row.place === 1)
+        .map((row) => row.team.name)
+        .join(", ")
+    : "";
 
   return (
     <div className="page">
@@ -44,6 +52,21 @@ export default function HomePage() {
             </div>
             <Link to="/game" className="btn btn--secondary">
               {t("home.continue.button")}
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          </section>
+        )}
+
+        {finished && (
+          <section className="home-continue" aria-labelledby="last-title">
+            <div>
+              <h2 id="last-title" className="home-continue__title">{t("home.last.title")}</h2>
+              <p className="home-continue__meta">
+                {t("home.last.meta", { when: formatWhen(finished.endedAt), winner: winners })}
+              </p>
+            </div>
+            <Link to="/game/results" className="btn btn--secondary">
+              {t("home.last.button")}
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
           </section>

@@ -1,13 +1,8 @@
-import { Check, CheckCheck, Circle, CircleCheck, X } from "lucide-react";
+import { Circle, CircleCheck } from "lucide-react";
 import { pointsFor } from "../game/scoring.js";
 import { formatElapsed, handInStatus } from "../game/timer.js";
 import { useI18n } from "../i18n/I18nProvider.jsx";
-
-const VERDICTS = [
-  { key: "extra", Icon: CheckCheck },
-  { key: "correct", Icon: Check },
-  { key: "wrong", Icon: X },
-];
+import { VERDICT_ICONS as VERDICTS } from "./verdictIcons.js";
 
 /**
  * One team on the card (brief): name, answered or not, three verdict buttons as icons, points.

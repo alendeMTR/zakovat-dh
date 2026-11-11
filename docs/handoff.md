@@ -7,8 +7,10 @@
 
 ## 1. Where it stands
 
-- **M0–M4 are done and committed; M5 (end of game: leaderboard, breakdown) is next.** The plan is approved (D27).
-- Decisions: `docs/decisionlog.md` D1–D56. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- **M0–M5 are done and committed: the core game works end to end in the browser, with no accounts.** The plan is approved (D27).
+- **Next is blocked on the owner's accounts:** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2 (Firebase),
+  M7 needs F3 (API key). The agent can do F14 (flag long questions) meanwhile.
+- Decisions: `docs/decisionlog.md` D1–D60. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
   - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
   - F1: OK to download the interim logo files.
@@ -73,6 +75,35 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-11 (night, later) — M5: end of game
+
+- **Built (`src/play/`):**
+  - `ResultsPage` (`/game/results`): the leaderboard with shared places, counts and scores; compact rows above five teams.
+  - `BreakdownPage` (`/game/breakdown`): the graded sheet; `VerdictDialog` for corrections; print styles (A4 landscape).
+  - `verdictIcons.js`, shared by the card and the breakdown. `styles/stage.css`: the stage buttons, now shared.
+  - End game opens the leaderboard; the main page shows "Oxirgi o'yin" for a finished game.
+- **Decided:** D57–D60.
+- **Verified: the full flow script (plan §7.4), from an empty browser at 1366×768.**
+  - Real clicks and typing: setup with 3 teams, 10 s, extra 4 s; pasting the 10 sample questions by typing; Start.
+  - Each round: spin with Space; Start with Space; hand-ins with number keys. Reveal and verdicts used scripted DOM
+    clicks on the real buttons.
+  - Round 1: team 3's hand-in undone with a second "3"; ✓✓ suggested for teams 1 and 2.
+  - Round 2: a reload mid-timer resumed (0:08 → 0:07), with the card and hand-in kept.
+  - Round 3: scores hidden and shown again with real clicks on "Ballar", card totals included.
+  - Every verdict type used. All 10 played: hub "Savollar tugadi"; ranking 22 / 22 / 17.
+  - End game with real clicks: the leaderboard shows places 1, 1, 3.
+  - Breakdown, with real clicks: Burgutlar's mark on question 6 changed from ✕ to ✓ in the dialog; total 17 → 20;
+    the leaderboard agrees.
+  - Main page with real clicks: "Oxirgi o'yin … g'olib: Bilimdonlar, Yulduzlar".
+  - Layout: the leaderboard with 8 teams fits one screen at 1280×720 and 1920×1080; the breakdown with 8 team
+    columns has no horizontal scroll at 1280 or 1920.
+  - Fixed on the way: a seam in leaderboard rows (`display: grid` on a table cell); 8 teams overflowing 720 px;
+    the compact sizes enlarging the column headers.
+- **Checks:** `npm run check` passes: 173 keys, 92 tests, lint, build.
+- **Not verified:** the printed breakdown (F16); the Codex review (F8); the interface text (F10).
+- **Next:** everything after M5 needs the owner's accounts: Preview 1 (F4: GitHub and Vercel), M6 (F2: Firebase),
+  M7 (F3: API key). Without them the agent can do F14 (flag long questions).
 
 ### 2026-11-11 (late night) — M4: the question card
 
@@ -171,27 +202,4 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
   - Both sample sets survive a round trip through `formatPaste` → `parsePaste` and start a game.
 - **Not verified:** the Codex review (F8). The sample-set wording is a draft until the owner approves it (F9).
 - **Next:** M2, the main page, setup and the questions step (paste, type, sample set) in uz and ru.
-
-### 2026-11-11 (later) — M0: foundations
-
-- **Built:**
-  - a Vite + React app;
-  - tokens (`src/styles/tokens.css`): PDP colours, Onest, the UI and stage type scales, space, shape and motion;
-  - i18n: `uz.js`, `ru.js`, `translate.js`, `I18nProvider`, and `scripts/check-i18n.mjs`;
-  - ESLint and Vitest;
-  - a header with the language switch, a stub main page, a not-found page, and the dev token sheet `/dev/tokens`.
-- **Decided:** D28 (Onest bundled), D29 (dev token sheet), D30 (React Router 7 and Vitest 5: the audit found
-  advisories in 6 and 3; the audit is now 0). Direktor amber darkened to `#9a5f00` (white on it 5.2:1; plan §5 updated).
-- **Verified:**
-  - `npm run check` passes (9 keys, lint clean, 5 tests, build).
-  - The token sheet is absent from the production bundle (grep).
-  - Loaded in the browser at 1920×1080, 1366×768 and 1280×720: the main page in uz and ru, and the token sheet.
-  - Measured at 1920×1080: question text 40–71 px, team names 28 px, timer 119 px, root font 18.9 px.
-  - Measured at 1280×720: question floor 26.6 px (3.69% of the height, the same share as at 1080); no horizontal scroll.
-  - Onest's Latin and Cyrillic faces are loaded.
-  - Tabular figures: proportional `1111`/`0000` measure 93/170 px; with `tabular-nums`, 172/172.
-  - The language switch updates `<html lang>` and is remembered in `localStorage`.
-- **Not verified:** the Codex review. CLI 0.142.0 is too old for the account's model (F8); the review runs after the owner updates Codex.
-  The logo is not in place yet (F1).
-- **Next:** M1, the game engine, plus the sample question sets (uz and ru) as a draft for the owner.
 

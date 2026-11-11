@@ -39,45 +39,6 @@
   gap: calc(var(--u) * 1);
 }
 
-/* Buttons on the game screens: sized for the projector, never under 40px. */
-.stage-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--u) * 0.8);
-  min-height: max(40px, calc(var(--u) * 4.6));
-  padding: 0 calc(var(--u) * 1.6);
-  border: 1px solid var(--line-strong);
-  border-radius: calc(var(--u) * 1);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: max(14px, var(--st-label));
-  font-weight: var(--fw-medium);
-  white-space: nowrap;
-}
-
-.stage-btn:hover {
-  border-color: var(--ink);
-}
-
-.stage-btn[aria-pressed="false"] {
-  color: var(--ink-muted);
-}
-
-.stage-btn--primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--on-primary);
-}
-
-.stage-btn--primary:hover {
-  background: var(--primary-hover);
-}
-
-.stage-btn__icon {
-  width: max(18px, calc(var(--u) * 2.4));
-  height: max(18px, calc(var(--u) * 2.4));
-}
-
 .game__stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);

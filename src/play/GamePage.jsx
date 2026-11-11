@@ -82,8 +82,7 @@ export default function GamePage() {
   const closeCard = useCallback(() => dispatch({ type: "CLOSE_QUESTION" }), [dispatch]);
 
   if (!game) return <Navigate to="/" replace />;
-  // M5 shows the results here; until then an ended game leads home (fixlist F12).
-  if (game.endedAt !== null) return <Navigate to="/" replace />;
+  if (game.endedAt !== null) return <Navigate to="/game/results" replace />;
 
   const cardOpen = currentQuestion(game) !== null;
   const allPlayed = left === 0;
@@ -181,7 +180,7 @@ export default function GamePage() {
         onConfirm={() => {
           setConfirmEnd(false);
           dispatch({ type: "END_GAME" });
-          navigate("/"); // M5: the leaderboard
+          navigate("/game/results");
         }}
       />
     </div>

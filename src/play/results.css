@@ -1,0 +1,148 @@
+/* Leaderboard: read from the back of the room, so it is sized in --u like the game screens. */
+
+.results-page .stage-btn {
+  text-decoration: none;
+}
+
+.results {
+  flex: 1;
+  width: min(calc(var(--u) * 120), 100%);
+  margin: 0 auto;
+  padding: calc(var(--u) * 1) calc(var(--u) * 3) calc(var(--u) * 2);
+  display: grid;
+  align-content: start;
+  gap: calc(var(--u) * 2.4);
+}
+
+.results__head {
+  display: grid;
+  gap: calc(var(--u) * 0.8);
+}
+
+.results__title {
+  font-size: calc(var(--u) * 5.6);
+  font-weight: var(--fw-medium);
+  line-height: 1.1;
+}
+
+.results__meta {
+  font-size: var(--st-label);
+  color: var(--ink-muted);
+}
+
+.board {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 calc(var(--u) * 0.8);
+}
+
+.board thead th {
+  font-size: calc(var(--u) * 1.7);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+  text-align: left;
+  padding: 0 calc(var(--u) * 2);
+}
+
+.board__row td,
+.board__row th {
+  background: var(--surface);
+  padding: calc(var(--u) * 1.4) calc(var(--u) * 2);
+  vertical-align: middle;
+  text-align: left;
+}
+
+.board__row td:first-child {
+  border-radius: calc(var(--u) * 1.2) 0 0 calc(var(--u) * 1.2);
+}
+
+.board__row td:last-child {
+  border-radius: 0 calc(var(--u) * 1.2) calc(var(--u) * 1.2) 0;
+}
+
+/* First place, shared on a tie: a tinted row with a blue edge, no decoration beyond that. */
+.board__row--first td,
+.board__row--first th {
+  background: var(--primary-tint);
+}
+
+.board__row--first td:first-child {
+  box-shadow: inset calc(var(--u) * 0.6) 0 0 var(--primary);
+}
+
+.board__place {
+  width: calc(var(--u) * 10);
+  font-size: calc(var(--u) * 4.4);
+  font-weight: var(--fw-strong);
+  text-align: center !important;
+}
+
+thead .board__place {
+  font-size: calc(var(--u) * 1.7);
+}
+
+.board__team {
+  font-weight: var(--fw-regular);
+}
+
+/* The grid lives inside the cell: a table cell with display:grid stops being a cell. */
+.board__team-inner {
+  display: grid;
+  gap: calc(var(--u) * 0.4);
+}
+
+.board__name {
+  font-size: calc(var(--u) * 3.4);
+  font-weight: var(--fw-medium);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.board__counts {
+  font-size: calc(var(--u) * 1.8);
+  color: var(--ink-muted);
+}
+
+.board__score {
+  width: calc(var(--u) * 14);
+  font-size: calc(var(--u) * 5);
+  font-weight: var(--fw-strong);
+  text-align: right !important;
+}
+
+thead .board__score {
+  font-size: calc(var(--u) * 1.7);
+}
+
+.board--compact {
+  border-spacing: 0 calc(var(--u) * 0.5);
+}
+
+.board--compact .board__row td,
+.board--compact .board__row th {
+  padding-top: calc(var(--u) * 0.6);
+  padding-bottom: calc(var(--u) * 0.6);
+}
+
+.board--compact tbody .board__place {
+  font-size: calc(var(--u) * 3.4);
+}
+
+.board--compact .board__name {
+  font-size: calc(var(--u) * 2.8);
+}
+
+.board--compact .board__counts {
+  font-size: calc(var(--u) * 1.5);
+}
+
+.board--compact tbody .board__score {
+  font-size: calc(var(--u) * 3.8);
+}
+
+.results__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 1.6);
+}

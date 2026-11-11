@@ -1,6 +1,7 @@
 @import "@fontsource-variable/onest";
 @import "./tokens.css";
 @import "./forms.css";
+@import "./stage.css";
 
 *,
 *::before,

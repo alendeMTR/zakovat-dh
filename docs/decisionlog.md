@@ -274,3 +274,21 @@ The row shows this question's points (when above 0) and the team's total; both h
 **D56. The timer bar fills with elapsed time; the extra window is a green stretch at its start.** *agent*
 A line under the digits names the phase ("Qo'shimcha ball vaqti", "Vaqt tugayapti", "Vaqt tugadi", "Pauza"…),
 so colour is not the only signal (D24).
+
+## 2026-11-11 — M5 (end of game)
+
+**D57. "End game" opens the leaderboard. Opening the game screen after the end leads there too.** *agent* (closes F12)
+
+**D58. The leaderboard is read from the back row: sized in --u, first place tinted, one screen at any team count.** *agent*
+Each row: place (shared on ties, D16), team, "To'g'ri: 9 · qo'shimcha ball bilan: 1", score. Above five teams the rows
+get tighter, so eight teams and the buttons fit a 720-high screen. Scores always show here, even if hidden during the game (D22).
+
+**D59. The breakdown is a document page: one row per question in the order played, a column per team.** *agent*
+- Each mark shows its icon and points, with the hand-in time under it.
+- A click on a mark opens a small dialog: the three verdicts, "remove the mark", and Cancel. Totals update at once (D15).
+- Questions never played are counted in a note, not listed.
+- It prints on A4 landscape, without the buttons.
+
+**D60. The main page shows the last finished game (when it ended, the winner or winners, a link to its results).** *agent*
+It stays until a new game replaces it. Why: a teacher who leaves the results by mistake can get back to them.
+Keeping more than one past game is M6 (accounts).

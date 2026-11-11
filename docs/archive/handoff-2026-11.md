@@ -2,6 +2,29 @@
 
 > Session Log entries moved out of `docs/handoff.md` (newest five stay there). Newest first, unedited.
 
+### 2026-11-11 (later) — M0: foundations
+
+- **Built:**
+  - a Vite + React app;
+  - tokens (`src/styles/tokens.css`): PDP colours, Onest, the UI and stage type scales, space, shape and motion;
+  - i18n: `uz.js`, `ru.js`, `translate.js`, `I18nProvider`, and `scripts/check-i18n.mjs`;
+  - ESLint and Vitest;
+  - a header with the language switch, a stub main page, a not-found page, and the dev token sheet `/dev/tokens`.
+- **Decided:** D28 (Onest bundled), D29 (dev token sheet), D30 (React Router 7 and Vitest 5: the audit found
+  advisories in 6 and 3; the audit is now 0). Direktor amber darkened to `#9a5f00` (white on it 5.2:1; plan §5 updated).
+- **Verified:**
+  - `npm run check` passes (9 keys, lint clean, 5 tests, build).
+  - The token sheet is absent from the production bundle (grep).
+  - Loaded in the browser at 1920×1080, 1366×768 and 1280×720: the main page in uz and ru, and the token sheet.
+  - Measured at 1920×1080: question text 40–71 px, team names 28 px, timer 119 px, root font 18.9 px.
+  - Measured at 1280×720: question floor 26.6 px (3.69% of the height, the same share as at 1080); no horizontal scroll.
+  - Onest's Latin and Cyrillic faces are loaded.
+  - Tabular figures: proportional `1111`/`0000` measure 93/170 px; with `tabular-nums`, 172/172.
+  - The language switch updates `<html lang>` and is remembered in `localStorage`.
+- **Not verified:** the Codex review. CLI 0.142.0 is too old for the account's model (F8); the review runs after the owner updates Codex.
+  The logo is not in place yet (F1).
+- **Next:** M1, the game engine, plus the sample question sets (uz and ru) as a draft for the owner.
+
 ### 2026-11-11 — Research, phase-2 questions answered, plan drafted
 
 - **Changed:** created the project's own git repo (`main`, D3); wrote `CLAUDE.md`, `AGENTS.md`, and `docs/`
