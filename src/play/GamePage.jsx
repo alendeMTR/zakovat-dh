@@ -69,6 +69,7 @@ export default function GamePage() {
   useEffect(() => {
     const onKey = (event) => {
       if (event.code !== "Space" || event.repeat) return;
+      if (game?.current !== null) return; // the open card uses Space for its timer
       const target = event.target;
       if (target.closest?.("button, input, textarea, select, [role='button'], dialog")) return;
       event.preventDefault();
@@ -76,7 +77,7 @@ export default function GamePage() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [spin]);
+  }, [spin, game]);
 
   const closeCard = useCallback(() => dispatch({ type: "CLOSE_QUESTION" }), [dispatch]);
 
@@ -84,7 +85,7 @@ export default function GamePage() {
   // M5 shows the results here; until then an ended game leads home (fixlist F12).
   if (game.endedAt !== null) return <Navigate to="/" replace />;
 
-  const question = currentQuestion(game);
+  const cardOpen = currentQuestion(game) !== null;
   const allPlayed = left === 0;
   const pockets = game.pockets.map((p) => ({
     no: p.no,
@@ -169,7 +170,7 @@ export default function GamePage() {
         </div>
       </main>
 
-      {question && <QuestionCard pocketNo={game.current} question={question} onClose={closeCard} />}
+      {cardOpen && <QuestionCard game={game} dispatch={dispatch} onClose={closeCard} />}
 
       <ConfirmDialog
         open={confirmEnd}

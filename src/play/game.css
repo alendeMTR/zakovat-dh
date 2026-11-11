@@ -2,6 +2,7 @@
    image reads like a 1080-high one (handoff §2b). One screen, no scrolling. */
 
 .game {
+  --bar-h: max(56px, calc(var(--u) * 8));
   --wheel-size: min(calc(var(--u) * 80), calc(100vw - 2 * var(--u) * 3));
   height: 100vh;
   display: grid;
@@ -11,11 +12,12 @@
 }
 
 .game__bar {
+  height: var(--bar-h);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: calc(var(--u) * 2);
-  padding: calc(var(--u) * 1.6) calc(var(--u) * 3);
+  padding: 0 calc(var(--u) * 3);
   font-size: var(--st-label);
 }
 

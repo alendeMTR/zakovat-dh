@@ -7,8 +7,8 @@
 
 ## 1. Where it stands
 
-- **M0–M3 are done and committed; M4 (the full question card) is next.** The plan is approved (D27).
-- Decisions: `docs/decisionlog.md` D1–D49.
+- **M0–M4 are done and committed; M5 (end of game: leaderboard, breakdown) is next.** The plan is approved (D27).
+- Decisions: `docs/decisionlog.md` D1–D56. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
   - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
   - F1: OK to download the interim logo files.
@@ -73,6 +73,36 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-11 (late night) — M4: the question card
+
+- **Built (`src/play/`):**
+  - `QuestionCard`: type band with the way back; `Timer`; the question fitted to its space (`useFitText`); the answer
+    and its reveal; team rows (`TeamRow`); a keys line.
+  - `Timer`: clock icon, digits, an elapsed bar with the extra window marked, a phase line, Start / Pause / Resume / Reset.
+  - `tone.js`: two Web Audio beeps at zero. `useNow`: ticks while the clock runs.
+  - The card now covers the stage only; the top bar stays usable.
+- **Decided:** D50–D56.
+- **Verified in the browser (real clicks and keys):**
+  - 2-team round at 1920×1080 (30 s, extra 10 s): phases green → navy → red, each with its phase line.
+    Key "2" at 3 s showed "0:03 · qo'shimcha"; key "1" at 17 s showed "0:17". At zero: "Vaqt tugadi", only Reset left.
+    Reveal: "Javob: Kolibri"; verdicts unlocked; ✓✓ suggested only for the extra-window team. Verdicts gave +3 and +2;
+    changing a verdict to ✕ took the total back to 0.
+  - 8-team round at 1366×768 (14 s): Space started the timer and key "3" recorded a hand-in. A **reload mid-timer**
+    resumed (0:12 → 0:10 a second and a half later; card open; hand-in kept). The tone fired once at zero after the
+    reload (two oscillators counted). Late hand-ins read "kech"; a second "6" removed team 6's hand-in. Reveal showed
+    "Qutida: Taroq"; sandiqcha points 3 and 4.
+  - The longest sample question (124 characters) fits at every size with 8 teams: 46 px at 1366, 45.6 at 1280,
+    71 (the maximum) at 1920. The card stays inside the screen.
+  - Scores hidden from the top bar while the card is open: totals disappear, then come back.
+  - Russian interface: labels and keys line; the question keeps its set's language.
+  - Fixed on the way: Pause still showing at 0:00; "+0" for wrong verdicts; team names cut by long status text at
+    1280; a 372-character question clipped at top and bottom (it now scrolls, F14); sound after a reload
+    (any tap or key now unlocks it).
+- **Checks:** `npm run check` passes: 148 keys, 92 tests, lint, build.
+- **Not verified:** the Codex review (F8); tone volume in a classroom (F15); the interface text (F10).
+- **Next:** M5: End game opens the leaderboard (shared places), the breakdown with corrections, and the way back to
+  the main page; the full flow script (plan §7.4).
 
 ### 2026-11-11 (late) — M3: the wheel
 
@@ -165,14 +195,3 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
   The logo is not in place yet (F1).
 - **Next:** M1, the game engine, plus the sample question sets (uz and ru) as a draft for the owner.
 
-### 2026-11-11 — Research, phase-2 questions answered, plan drafted
-
-- **Changed:** created the project's own git repo (`main`, D3); wrote `CLAUDE.md`, `AGENTS.md`, and `docs/`
-  `decisionlog.md`, `fixlist.md`, `plan.md` and this file. Nothing committed.
-- **Decided:** D1–D26. The owner approved every phase-2 recommendation. Additions from the owner: points shown as
-  editable defaults, collapsed (D9); paper slips with a tap when each slip arrives (D6); the sandiqcha answer is the object,
-  and AI writes the question from it (D11).
-- **Verified:** the palette contrast and colour-blind separation, by script (numbers in `plan.md` §5).
-  Codex CLI 0.142.0 is installed and has `codex review`.
-- **Not verified:** everything in the plan; nothing is built.
-- **Next:** the owner approves or changes `docs/plan.md`; then M0.

@@ -1,34 +1,34 @@
+/* The card covers the stage but not the top bar, so scores, sound and End game stay within reach. */
 .card-layer {
   position: fixed;
-  inset: 0;
+  inset: var(--bar-h) 0 0 0;
   z-index: 10;
   display: grid;
   place-items: center;
-  padding: calc(var(--u) * 3);
+  padding: calc(var(--u) * 1.5) calc(var(--u) * 3);
   background: var(--scrim);
 }
 
+/* A fixed height, so the question takes whatever the timer, answer and team rows leave (D25). */
 .qcard {
   width: min(calc(var(--u) * 150), 100%);
-  max-height: 100%;
-  overflow: auto;
+  height: 100%;
   display: grid;
-  gap: calc(var(--u) * 3);
-  padding: 0 0 calc(var(--u) * 3);
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
   border-radius: calc(var(--u) * 2);
   background: var(--surface);
   box-shadow: var(--shadow-card);
   outline: none;
+  overflow: hidden;
 }
 
-/* The type band: the card carries its type's colour (brief), with icon and name (D24). */
+/* Type band: colour, icon and name (D24), the pocket number, and the way back. */
 .qcard__band {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--u) * 2);
-  padding: calc(var(--u) * 1.6) calc(var(--u) * 4);
-  border-radius: calc(var(--u) * 2) calc(var(--u) * 2) 0 0;
+  padding: calc(var(--u) * 1) calc(var(--u) * 1.6) calc(var(--u) * 1) calc(var(--u) * 4);
   color: var(--surface);
   font-size: var(--st-label);
   font-weight: var(--fw-medium);
@@ -49,16 +49,360 @@
   height: calc(var(--u) * 3);
 }
 
+.qcard__no {
+  font-weight: var(--fw-regular);
+}
+
+.qcard__back {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.8);
+  min-height: max(40px, calc(var(--u) * 4.4));
+  padding: 0 calc(var(--u) * 1.6);
+  border: 1px solid color-mix(in srgb, var(--surface) 65%, transparent);
+  border-radius: calc(var(--u) * 1);
+  color: var(--surface);
+  font-size: max(14px, var(--st-label));
+  font-weight: var(--fw-medium);
+}
+
+.qcard__back:hover {
+  background: color-mix(in srgb, var(--surface) 15%, transparent);
+}
+
+/* Timer: about a fifth of the card (brief: 20–30%). */
+.timer {
+  --phase: var(--timer-neutral);
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--u) * 0.8);
+  padding: calc(var(--u) * 1.4) calc(var(--u) * 4) calc(var(--u) * 1.4);
+  border-bottom: 1px solid var(--line);
+}
+
+.timer--idle { --phase: var(--ink-muted); }
+.timer--extra { --phase: var(--timer-extra); }
+.timer--neutral { --phase: var(--timer-neutral); }
+.timer--warn,
+.timer--done { --phase: var(--timer-warn); }
+
+.timer__face {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.6);
+  color: var(--phase);
+}
+
+.timer__icon {
+  width: calc(var(--u) * 7);
+  height: calc(var(--u) * 7);
+  stroke-width: 1.8;
+}
+
+.timer__digits {
+  font-size: var(--st-timer);
+  font-weight: var(--fw-strong);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Elapsed time fills from the left; the green stretch is the extra-point window. */
+.timer__bar {
+  position: relative;
+  width: min(calc(var(--u) * 70), 100%);
+  height: calc(var(--u) * 0.9);
+  border-radius: var(--r-pill);
+  background: var(--line);
+  overflow: hidden;
+}
+
+.timer__bar-extra {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--good-tint);
+}
+
+.timer__bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--phase);
+  transition: width 0.2s linear;
+}
+
+.timer__bar-mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--good);
+}
+
+.timer__phase {
+  font-size: var(--st-label);
+  font-weight: var(--fw-medium);
+  color: var(--phase);
+}
+
+.timer__controls {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--u) * 3);
+  transform: translateY(-50%);
+  display: grid;
+  gap: calc(var(--u) * 0.8);
+}
+
+.timer__controls .stage-btn {
+  justify-content: center;
+}
+
+.stage-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The question, centred in whatever space is left. */
+.qcard__question {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--u) * 1.6) calc(var(--u) * 4);
+  overflow: hidden;
+}
+
+.qcard__question.is-scrolling {
+  align-items: flex-start;
+  overflow-y: auto;
+}
+
 .qcard__text {
-  padding: 0 calc(var(--u) * 4);
+  width: 100%;
   line-height: 1.25;
   font-weight: var(--fw-medium);
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
 
-.qcard__footer {
+.qcard__answer {
   display: flex;
+  align-items: center;
+  min-height: calc(var(--u) * 6.4);
+  padding: 0 calc(var(--u) * 4) calc(var(--u) * 1);
+}
+
+.qcard__answer-text {
+  font-size: calc(var(--u) * 3.4);
+  font-weight: var(--fw-strong);
+  line-height: 1.2;
+}
+
+.qcard__answer-label {
+  color: var(--ink-muted);
+  font-weight: var(--fw-medium);
+}
+
+/* Team rows at the bottom (brief); two columns above four teams (plan §5 known risk). */
+.qcard__teams {
+  padding: calc(var(--u) * 1) calc(var(--u) * 4) calc(var(--u) * 0.6);
+  border-top: 1px solid var(--line);
+  background: var(--surface-alt);
+}
+
+.qcard__locked {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.8);
+  margin-bottom: calc(var(--u) * 0.6);
+  font-size: calc(var(--u) * 1.7);
+  color: var(--ink-muted);
+}
+
+.qcard__locked-icon {
+  width: calc(var(--u) * 2);
+  height: calc(var(--u) * 2);
+}
+
+.team-rows {
+  list-style: none;
+  display: grid;
+  gap: calc(var(--u) * 0.6) calc(var(--u) * 4);
+}
+
+.team-rows--two {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.team-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
+}
+
+.team-row__handin {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1);
+  min-width: 0;
+  min-height: max(44px, calc(var(--u) * 5.2));
+  padding: 0 calc(var(--u) * 1);
+  border: 1px solid transparent;
+  border-radius: calc(var(--u) * 1);
+  text-align: left;
+  font-size: var(--st-team);
+}
+
+.team-row__handin:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--line-strong);
+}
+
+.team-row__handin:disabled {
+  cursor: default;
+}
+
+.team-row__handin--done {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+.team-row__key {
+  flex: none;
+  width: calc(var(--u) * 2.4);
+  font-size: calc(var(--u) * 1.6);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.team-row__mark {
+  flex: none;
+  width: calc(var(--u) * 2.8);
+  height: calc(var(--u) * 2.8);
+  color: var(--line-strong);
+}
+
+.team-row__handin--done .team-row__mark {
+  color: var(--ink);
+}
+
+.team-row__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  line-height: 1.15;
+  padding: calc(var(--u) * 0.4) 0;
+}
+
+.team-row__name {
+  min-width: 0;
+  font-weight: var(--fw-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-row__time {
+  font-size: max(13px, calc(var(--u) * 1.7));
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-row__time--extra {
+  color: var(--good);
+  font-weight: var(--fw-medium);
+}
+
+.team-row__time--late {
+  color: var(--bad);
+  font-weight: var(--fw-medium);
+}
+
+.team-row__time--inTime {
+  color: var(--ink);
+}
+
+.team-row__verdicts {
+  display: flex;
+  gap: calc(var(--u) * 0.6);
+}
+
+.verdict {
+  display: grid;
+  place-items: center;
+  width: max(44px, calc(var(--u) * 5.2));
+  height: max(44px, calc(var(--u) * 5.2));
+  border: 1px solid var(--line-strong);
+  border-radius: calc(var(--u) * 1);
+  background: var(--surface);
+  color: var(--ink-muted);
+}
+
+.verdict__icon {
+  width: calc(var(--u) * 2.8);
+  height: calc(var(--u) * 2.8);
+  stroke-width: 2.4;
+}
+
+.verdict:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.verdict:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Suggested from the hand-in time, not set (D31). */
+.verdict--suggested {
+  border: 2px dashed var(--good);
+  color: var(--good);
+}
+
+.verdict--extra.verdict--on {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--surface);
+}
+
+.verdict--correct.verdict--on {
+  background: var(--good-tint);
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.verdict--wrong.verdict--on {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: var(--surface);
+}
+
+.team-row__score {
+  display: flex;
+  align-items: baseline;
   justify-content: flex-end;
-  padding: 0 calc(var(--u) * 4);
+  gap: calc(var(--u) * 1);
+  min-width: calc(var(--u) * 9);
+}
+
+.team-row__points {
+  font-size: var(--st-label);
+  color: var(--good);
+  font-weight: var(--fw-medium);
+}
+
+.team-row__total {
+  font-size: var(--st-score);
+  font-weight: var(--fw-strong);
+}
+
+.qcard__keys {
+  padding: calc(var(--u) * 0.6) calc(var(--u) * 4) calc(var(--u) * 1);
+  background: var(--surface-alt);
+  font-size: max(12px, calc(var(--u) * 1.4));
+  color: var(--ink-muted);
 }

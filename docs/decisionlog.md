@@ -244,3 +244,33 @@ to avoid accidental spins; this can be added if teachers ask for it.
 Why: a teacher in a mixed class may switch mid-game. The switch changes only the interface, never the questions (D21).
 
 **D49. Until M5, "End game" (after its confirmation) opens the main page.** *agent* (fixlist F12)
+
+## 2026-11-11 — M4 (the question card)
+
+**D50. The card covers the wheel area but not the top bar.** *agent*
+Why: scores, sound and End game stay within reach while a question is open (D22: scores can be switched mid-game).
+
+**D51. The card has a fixed height; the question gets the space the rest leaves, at the largest size that fits.** *agent* (builds D25)
+Order: type band → timer (about a fifth of the card) → question → answer → team rows. The question is sized between
+3.7u and 6.6u (40–71 px at 1080). If even 3.7u does not fit, the question starts at the top and its box scrolls; the text is never clipped.
+
+**D52. Keys on the card: Space starts or pauses the timer; 1–8 record a team's hand-in; Escape returns to the wheel.** *agent*
+Why: the teacher stands with slips in hand; one key per slip is faster than aiming at a row. A line at the
+bottom of the card names the keys. A tap on the team's row does the same.
+
+**D53. The zero tone is two short beeps (Web Audio, no file). At zero, Start and Pause disappear; Reset stays.** *agent*
+Browsers allow sound only after a gesture; any tap or key press on the card counts, so the tone also works after a
+reload. It plays once, when the card sees the time run out, not again after a reload past zero.
+Reset asks first when hand-ins would be lost (D32).
+
+**D54. Team rows: two columns above four teams; the hand-in status sits under the team name.** *agent*
+(Settles the plan §5 risk.) Why: eight rows in one column leave too little room for the question on a 768-high screen.
+The status moved to its own line after a long status cut "Burgutlar" to "Burgutl…" at 1280×720.
+
+**D55. Verdict buttons: ✓✓ correct + extra (solid green), ✓ correct (green outline), ✕ wrong (solid red-pink).** *agent*
+Each has a spoken name and a tooltip. The suggestion (D31) is a dashed green outline on ✓✓ for teams inside the extra window.
+The row shows this question's points (when above 0) and the team's total; both hide with the scores (D22).
+
+**D56. The timer bar fills with elapsed time; the extra window is a green stretch at its start.** *agent*
+A line under the digits names the phase ("Qo'shimcha ball vaqti", "Vaqt tugayapti", "Vaqt tugadi", "Pauza"…),
+so colour is not the only signal (D24).
