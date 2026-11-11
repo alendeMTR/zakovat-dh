@@ -1,0 +1,184 @@
+/* Tabs for the three ways to add questions. */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--sp-5);
+}
+
+.tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  padding: var(--sp-2) var(--sp-4);
+  margin-bottom: -1px;
+  border-bottom: 3px solid transparent;
+  color: var(--ink-muted);
+  font-weight: var(--fw-medium);
+}
+
+.tabs__tab:hover {
+  color: var(--ink);
+}
+
+.tabs__tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--primary);
+}
+
+.tabs__panel {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+/* Paste: the text box and the format example side by side when there is room. */
+.paste {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--sp-4) var(--sp-5);
+}
+
+.paste__input {
+  min-height: 14rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.paste__example {
+  align-self: start;
+  margin-top: calc(var(--fs-ui) * 1.5 + var(--sp-2));
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--surface-alt);
+  border: 1px dashed var(--line-strong);
+}
+
+.paste__example pre {
+  margin-top: var(--sp-2);
+  font-family: var(--font);
+  font-size: var(--fs-label);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.paste__actions {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .paste {
+    grid-template-columns: 1fr;
+  }
+
+  .paste__example {
+    margin-top: 0;
+  }
+}
+
+/* Editor for one question. */
+.q-editor {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.q-editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+/* The list. */
+.list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.list-head__count {
+  color: var(--ink-muted);
+  font-weight: var(--fw-regular);
+}
+
+.list-empty {
+  font-size: var(--fs-ui);
+}
+
+.list-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.list-boxes {
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-ui);
+}
+
+.list-boxes__label {
+  font-weight: var(--fw-medium);
+}
+
+.q-list {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.q-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.q-list__no {
+  flex: none;
+  width: 2rem;
+  padding-top: 2px;
+  text-align: right;
+  color: var(--ink-muted);
+  font-weight: var(--fw-medium);
+}
+
+.q-list__body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: start;
+}
+
+.q-list__text {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.q-list__answer {
+  font-size: var(--fs-ui);
+  color: var(--ink-muted);
+}
+
+.q-list__answer-label {
+  font-weight: var(--fw-medium);
+}
+
+.q-list__actions {
+  flex: none;
+  display: flex;
+  gap: var(--sp-1);
+}
+
+/* Start: the error sits above the button. */
+.start {
+  display: grid;
+  justify-items: end;
+  gap: var(--sp-2);
+}
+
+.start .field__error a {
+  color: inherit;
+}

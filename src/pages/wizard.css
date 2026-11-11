@@ -1,0 +1,165 @@
+/* Setup and Questions: one centred column of panels. */
+
+.wizard {
+  display: grid;
+  gap: var(--sp-5);
+  width: min(880px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--sp-4) var(--sp-8);
+}
+
+.wizard__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-medium);
+}
+
+.wizard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.wizard__footer--split {
+  justify-content: space-between;
+}
+
+.panel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sp-5);
+}
+
+.panel__stack {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+/* Collapsible panel (points). */
+.panel--details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.panel--details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.panel__summary {
+  display: grid;
+  gap: var(--sp-1);
+  min-height: 44px;
+  position: relative;
+  padding-right: var(--sp-6);
+}
+
+.panel__summary::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--ink-muted);
+  border-bottom: 2px solid var(--ink-muted);
+  transform: rotate(45deg);
+  transition: transform var(--t-fast) ease;
+}
+
+.panel--details[open] .panel__summary::after {
+  transform: rotate(-135deg);
+  top: 16px;
+}
+
+.panel__title--inline {
+  margin-bottom: 0;
+}
+
+/* Team count stepper. */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.stepper__btn {
+  border: 1px solid var(--line-strong);
+}
+
+.stepper__value {
+  min-width: 2.5rem;
+  text-align: center;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-medium);
+}
+
+.stepper .field__hint {
+  margin-left: var(--sp-3);
+}
+
+/* Team names: two columns when there is room. */
+.team-names {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sp-3) var(--sp-5);
+  margin: var(--sp-5) 0 var(--sp-3);
+  list-style: none;
+}
+
+.team-names__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.team-names__no {
+  flex: none;
+  width: 2rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--ink-muted);
+  font-weight: var(--fw-medium);
+}
+
+.team-names__field {
+  flex: 1;
+  display: grid;
+  gap: var(--sp-1);
+}
+
+/* Points table. */
+.points {
+  margin-top: var(--sp-4);
+  border-collapse: collapse;
+}
+
+.points th,
+.points td {
+  padding: var(--sp-2) var(--sp-4) var(--sp-2) 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.points thead th {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+}
+
+.points tbody th {
+  padding-top: calc(var(--sp-2) + 10px);
+}
+
+@media (max-width: 600px) {
+  .panel {
+    padding: var(--sp-4);
+  }
+
+  .points th,
+  .points td {
+    padding-right: var(--sp-2);
+  }
+}

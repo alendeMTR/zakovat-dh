@@ -1,0 +1,28 @@
+.type-icon--oddiy { color: var(--type-oddiy); }
+.type-icon--direktor { color: var(--type-direktor); }
+.type-icon--sandiqcha { color: var(--type-sandiqcha); }
+
+.type-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 2px var(--sp-3) 2px var(--sp-2);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.type-chip--oddiy { background: var(--type-oddiy-tint); }
+.type-chip--direktor { background: var(--type-direktor-tint); }
+.type-chip--sandiqcha { background: var(--type-sandiqcha-tint); }
+
+.type-chip__count {
+  font-weight: var(--fw-strong);
+}
+
+/* In the type picker, the selected type takes its own colour for the border. */
+.segmented__option input:checked + .type-face--oddiy { border-color: var(--type-oddiy); box-shadow: inset 0 0 0 1px var(--type-oddiy); background: var(--type-oddiy-tint); }
+.segmented__option input:checked + .type-face--direktor { border-color: var(--type-direktor); box-shadow: inset 0 0 0 1px var(--type-direktor); background: var(--type-direktor-tint); }
+.segmented__option input:checked + .type-face--sandiqcha { border-color: var(--type-sandiqcha); box-shadow: inset 0 0 0 1px var(--type-sandiqcha); background: var(--type-sandiqcha-tint); }

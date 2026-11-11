@@ -1,0 +1,41 @@
+.confirm {
+  margin: auto;
+  width: min(480px, calc(100vw - 2 * var(--sp-4)));
+  padding: var(--sp-6);
+  border: 0;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+}
+
+.confirm::backdrop {
+  background: rgba(11, 26, 102, 0.35);
+}
+
+.confirm__title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-medium);
+  margin-bottom: var(--sp-3);
+}
+
+.confirm__text {
+  color: var(--ink-muted);
+  margin-bottom: var(--sp-5);
+}
+
+.confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.btn--danger {
+  background: var(--bad);
+  color: var(--on-primary);
+}
+
+.btn--danger:hover {
+  background: var(--bad-hover);
+}

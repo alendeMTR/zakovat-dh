@@ -1,5 +1,6 @@
 @import "@fontsource-variable/onest";
 @import "./tokens.css";
+@import "./forms.css";
 
 *,
 *::before,
@@ -53,6 +54,15 @@ button {
   cursor: pointer;
   background: none;
   border: 0;
+}
+
+fieldset {
+  border: 0;
+  min-width: 0;
+}
+
+legend {
+  padding: 0;
 }
 
 :focus-visible {

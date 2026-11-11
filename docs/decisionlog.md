@@ -195,3 +195,27 @@ Why: two teams with the same name would be impossible to tell apart on the card 
 **D37. An unreadable saved game is set aside, not deleted.** *agent*
 It is moved to `zakovat.game.unreadable`, so nothing is lost silently. Older schemas are upgraded through a migration
 table; none exist yet (schema 1).
+
+## 2026-11-11 — M2 (main page, setup, questions)
+
+**D38. The game being prepared (the draft) is kept in the browser, and stays after the game starts.** *agent*
+Setup and questions are saved after every change, so a reload does not lose typed questions. After a game starts,
+the same set can be played again with another class. "Clear list" empties it, after a confirmation.
+
+**D39. Setup defaults: 4 teams; an empty name becomes "3-jamoa" / "Команда 3".** *agent*
+The default follows the interface language. The warning time (10 s) is not a setup field: one setting less.
+
+**D40. A paste with any error adds nothing.** *agent*
+The teacher sees each broken block with its line number, fixes it, and adds again.
+Why: a half-added set is harder to fix than an unchanged text box. Adding beyond 30 questions is refused the same way,
+with the number that still fits.
+
+**D41. Starting a game over an unfinished one asks first; a finished one is replaced without asking.** *agent*
+Why: an unfinished game may be a reload away from being lost. A finished game's results were already shown; keeping
+finished games is M6, for signed-in teachers.
+
+**D42. Russian type names in the interface are placeholders: "Обычный вопрос / Вопрос директора / Чёрный ящик".** *agent*
+"Чёрный ящик" is the name Russian speakers know from "Что? Где? Когда?". The owner chooses the final names (fixlist F9).
+
+**D43. Until M3, "Start game" opens the main page, where the new game shows under "Continue".** *agent*
+"Continue" links to `/game`, which M3 builds. Until then it opens the not-found page.

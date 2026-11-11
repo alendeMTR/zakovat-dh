@@ -15,6 +15,7 @@
   /* ── Actions ────────────────────────────────────────────── */
   --primary: #2040ff;        /* PDP blue. White on it 6.5:1 */
   --primary-hover: #1a30d0;  /* White on it 8.8:1 */
+  --primary-tint: #e9ecff;   /* Selected option background */
   --on-primary: #ffffff;
   --focus-ring: 0 0 0 3px rgba(32, 64, 255, 0.35);
 
@@ -31,6 +32,7 @@
   --good-tint: #e5f4ec;
   --bad: #d6004f;            /* from PDP pink #ff0165. Little time left, wrong. 5.3:1 on white */
   --bad-tint: #fde6ee;
+  --bad-hover: #b40042;      /* Danger button hover */
   --timer-extra: var(--good);
   --timer-neutral: var(--ink);
   --timer-warn: var(--bad);

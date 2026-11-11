@@ -15,8 +15,44 @@
   text-align: center;
 }
 
+.home__intro {
+  display: grid;
+  gap: var(--sp-3);
+}
+
 .home__title {
   font-size: var(--fs-display);
   font-weight: var(--fw-medium);
   letter-spacing: -0.01em;
+}
+
+.home__tagline {
+  font-size: var(--fs-h3);
+  color: var(--ink-muted);
+}
+
+.home-continue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-6);
+  width: min(560px, 100%);
+  margin-top: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  text-align: left;
+}
+
+.home-continue__title {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-strong);
+  margin-bottom: var(--sp-1);
+}
+
+.home-continue__meta {
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
 }
