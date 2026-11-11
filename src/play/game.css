@@ -1,0 +1,213 @@
+/* The game screen: everything sized in --u (1% of the largest 16:9 box), so a 768-high projector
+   image reads like a 1080-high one (handoff §2b). One screen, no scrolling. */
+
+.game {
+  --wheel-size: min(calc(var(--u) * 80), calc(100vw - 2 * var(--u) * 3));
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--page);
+}
+
+.game__bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: calc(var(--u) * 2);
+  padding: calc(var(--u) * 1.6) calc(var(--u) * 3);
+  font-size: var(--st-label);
+}
+
+.game__brand {
+  justify-self: start;
+  font-weight: var(--fw-strong);
+  text-decoration: none;
+}
+
+.game__progress {
+  font-weight: var(--fw-medium);
+  font-size: var(--st-team);
+}
+
+.game__controls {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1);
+}
+
+/* Buttons on the game screens: sized for the projector, never under 40px. */
+.stage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.8);
+  min-height: max(40px, calc(var(--u) * 4.6));
+  padding: 0 calc(var(--u) * 1.6);
+  border: 1px solid var(--line-strong);
+  border-radius: calc(var(--u) * 1);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: max(14px, var(--st-label));
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.stage-btn:hover {
+  border-color: var(--ink);
+}
+
+.stage-btn[aria-pressed="false"] {
+  color: var(--ink-muted);
+}
+
+.stage-btn--primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.stage-btn--primary:hover {
+  background: var(--primary-hover);
+}
+
+.stage-btn__icon {
+  width: max(18px, calc(var(--u) * 2.4));
+  height: max(18px, calc(var(--u) * 2.4));
+}
+
+.game__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(var(--u) * 3);
+  padding: 0 calc(var(--u) * 3) calc(var(--u) * 2);
+  min-height: 0;
+}
+
+.game__center {
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--u) * 1.6);
+}
+
+.game__hint {
+  font-size: var(--st-label);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.game__side {
+  align-self: center;
+  min-width: 0;
+}
+
+.game__side--left {
+  justify-self: end;
+}
+
+.game__side--right {
+  justify-self: start;
+}
+
+.stage-panel__title {
+  font-size: var(--st-label);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+  margin-bottom: calc(var(--u) * 1.6);
+}
+
+/* Legend. */
+.legend__list {
+  list-style: none;
+  display: grid;
+  gap: calc(var(--u) * 1.6);
+}
+
+.legend__row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.4);
+}
+
+.legend__swatch {
+  flex: none;
+  width: calc(var(--u) * 4.4);
+  height: calc(var(--u) * 4.4);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--surface);
+}
+
+.legend__swatch--oddiy { background: var(--type-oddiy); }
+.legend__swatch--direktor { background: var(--type-direktor); }
+.legend__swatch--sandiqcha { background: var(--type-sandiqcha); }
+.legend__swatch--played { background: var(--pocket-used); }
+
+.legend__icon {
+  width: 58%;
+  height: 58%;
+}
+
+.legend__text {
+  display: grid;
+}
+
+.legend__name {
+  font-size: var(--st-label);
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+}
+
+.legend__count {
+  font-size: calc(var(--u) * 1.7);
+  color: var(--ink-muted);
+}
+
+/* Ranking. */
+.ranking {
+  width: min(calc(var(--u) * 42), 100%);
+  padding: calc(var(--u) * 2.4) calc(var(--u) * 2.6);
+  border-radius: calc(var(--u) * 1.6);
+  background: var(--surface);
+  box-shadow: var(--shadow-panel);
+}
+
+.ranking__list {
+  list-style: none;
+  display: grid;
+  gap: calc(var(--u) * 0.6);
+}
+
+.ranking__row {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 3.6) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
+  padding: calc(var(--u) * 0.8) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ranking__row:last-child {
+  border-bottom: 0;
+}
+
+.ranking__place {
+  font-size: var(--st-label);
+  color: var(--ink-muted);
+  font-weight: var(--fw-medium);
+}
+
+.ranking__name {
+  font-size: var(--st-team);
+  font-weight: var(--fw-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking__score {
+  font-size: var(--st-score);
+  font-weight: var(--fw-strong);
+}

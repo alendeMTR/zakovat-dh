@@ -1,0 +1,146 @@
+.wheel {
+  position: relative;
+  width: var(--wheel-size);
+  aspect-ratio: 1;
+}
+
+.wheel__disc,
+.wheel__pointer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel__disc {
+  transform-origin: 50% 50%;
+}
+
+/* One long ease-out: fast start, slow settle on the chosen pocket. */
+.wheel__disc--spinning {
+  transition: transform 4.2s cubic-bezier(0.12, 0.62, 0.1, 1);
+}
+
+.wheel__rim {
+  fill: var(--ink);
+}
+
+.wheel__sector {
+  fill-rule: evenodd; /* the one-question ring has a hole */
+  stroke: var(--surface);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.wheel__pocket--oddiy .wheel__sector { fill: var(--type-oddiy); }
+.wheel__pocket--direktor .wheel__sector { fill: var(--type-direktor); }
+.wheel__pocket--sandiqcha .wheel__sector { fill: var(--type-sandiqcha); }
+.wheel__pocket--played .wheel__sector { fill: var(--pocket-used); }
+
+.wheel__sector[role="button"] {
+  cursor: pointer;
+}
+
+.wheel__sector[role="button"]:hover {
+  fill: var(--line-strong);
+}
+
+.wheel__sector[role="button"]:focus-visible {
+  outline: none;
+  stroke: var(--primary);
+  stroke-width: 8;
+}
+
+.wheel__label {
+  pointer-events: none;
+}
+
+.wheel__number {
+  fill: var(--surface);
+  font-family: var(--font);
+  font-weight: var(--fw-strong);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.wheel__icon {
+  color: var(--surface);
+}
+
+.wheel__pocket--played .wheel__number {
+  fill: var(--ink);
+}
+
+.wheel__pocket--played .wheel__icon {
+  color: var(--ink);
+}
+
+/* The pocket the pointer landed on, and the open question. */
+.wheel__highlight {
+  fill: none;
+  stroke: var(--surface);
+  stroke-width: 12;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.wheel__bowl {
+  fill: var(--surface);
+  stroke: var(--line);
+  stroke-width: 4;
+}
+
+.wheel__pointer path {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.wheel__pointer {
+  pointer-events: none;
+}
+
+/* The hub is the spin button: 23.6% of the wheel, like the hub in references/03. */
+.wheel__hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 23.6%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 0.6);
+  padding: calc(var(--u) * 1);
+  background: var(--ink);
+  color: var(--surface);
+  font-size: max(14px, calc(var(--u) * 1.9));
+  font-weight: var(--fw-medium);
+  line-height: 1.15;
+  text-align: center;
+  box-shadow: 0 0 0 calc(var(--u) * 0.5) var(--surface);
+  transition: background-color var(--t-fast) ease;
+}
+
+.wheel__hub:hover:not(:disabled) {
+  background: var(--primary);
+}
+
+.wheel__hub:focus-visible {
+  box-shadow: 0 0 0 calc(var(--u) * 0.5) var(--surface), var(--focus-ring);
+}
+
+.wheel__hub:disabled {
+  cursor: default;
+  background: var(--ink-muted);
+}
+
+.wheel__hub-icon {
+  width: calc(var(--u) * 3.6);
+  height: calc(var(--u) * 3.6);
+  stroke-width: 2.2;
+}

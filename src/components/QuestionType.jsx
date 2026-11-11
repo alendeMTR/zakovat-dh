@@ -1,11 +1,9 @@
-import { CircleQuestionMark, Package, Star } from "lucide-react";
 import { QUESTION_TYPES } from "../game/constants.js";
 import { useI18n } from "../i18n/I18nProvider.jsx";
+import { TYPE_ICONS } from "./typeIcons.js";
 import "./question-type.css";
 
 // Each type has a colour, an icon and a name; colour never stands alone (D24).
-// The star for Direktor savoli follows the reference wheel (references/02).
-const TYPE_ICONS = { oddiy: CircleQuestionMark, direktor: Star, sandiqcha: Package };
 
 export function TypeIcon({ type, size = 18 }) {
   const Icon = TYPE_ICONS[type];

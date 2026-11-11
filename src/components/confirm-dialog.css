@@ -10,7 +10,7 @@
 }
 
 .confirm::backdrop {
-  background: rgba(11, 26, 102, 0.35);
+  background: var(--scrim);
 }
 
 .confirm__title {

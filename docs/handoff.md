@@ -7,8 +7,8 @@
 
 ## 1. Where it stands
 
-- **M0, M1 and M2 are done and committed; M3 (the wheel) is next.** The plan is approved (D27).
-- Decisions: `docs/decisionlog.md` D1–D43.
+- **M0–M3 are done and committed; M4 (the full question card) is next.** The plan is approved (D27).
+- Decisions: `docs/decisionlog.md` D1–D49.
 - The owner will do the account and tool to-dos later (2026-11-11: "I will do everything manual later"):
   - F8: update Codex. Milestones are committed unreviewed until then, and reviewed afterwards.
   - F1: OK to download the interim logo files.
@@ -43,9 +43,13 @@ Actions: `OPEN_QUESTION {pocketNo}`, `CLOSE_QUESTION {now}`, `START_TIMER {now}`
 - `/dev/tokens` (dev server only, D29): every token on one screen; the fixture for screenshots at the three sizes.
 - Visual check sizes: 1920×1080, 1366×768, 1280×720, set with the browser pane's `resize_window`.
 - **Browser pane trap (2026-11-11):** while the pane is hidden, screenshots of an emulated 1920×1080 or 1366×768
-  viewport come back cropped to the top-left corner, and can be stale after typing. Check `tabs_context` first.
-  If the pane is hidden, verify state and layout with JS (bounding boxes, `scrollWidth`, `localStorage`) and take the
-  visual screenshots once the pane is shown.
+  viewport can come back cropped to the top-left 1280×720 or stale (an earlier frame). Wait about 3 s and take the
+  screenshot again: it usually repaints in full. Verify state and layout with JS too (bounding boxes, `scrollWidth`,
+  `localStorage`). Do not scale the page with a CSS transform to fit it: once the pane repaints, the screenshot
+  shows the scaled page.
+- **Test games without clicking through setup:** in the dev server's page console,
+  `const {createGame, reduce} = await import('/src/game/game.js')`, build a game (sample questions from
+  `/src/game/sampleSets.js`), `saveGame` it from `/src/game/storage.js`, then open `/game`. Used for the 10/20/30-pocket checks.
 - Milestone review: `codex review --uncommitted` before the milestone commit (D1). It does not accept custom
   instructions together with `--uncommitted` (CLI 0.142.0); it reads `AGENTS.md` → `CLAUDE.md` instead.
 
@@ -69,6 +73,33 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-11 (late) — M3: the wheel
+
+- **Built (`src/play/`):**
+  - `GamePage` (`/game`): top bar with progress, scores and sound switches, language, End game with a confirmation.
+  - `Wheel`: an SVG with a rim, pockets, bowl and hub; pocket numbers and type icons; played pockets grey and
+    reopenable; the pointer.
+  - `wheelGeometry.js`: tested; it includes the one-question ring.
+  - `Legend` with how many of each type are left; `RankingPanel` with shared places, hidden with the scores.
+  - A first `QuestionCard`: type band, number, question, back to the wheel.
+  - `useGame`: the game in state, saved after every action, with `now` stamped on each action.
+  - Setup's Start and the main page's Continue now open `/game`.
+- **Decided:** D44–D49.
+- **Verified in the browser:**
+  - A real spin: the hub reads "Aylanmoqda" and is locked; it lands on the pocket the engine chose (pocket under
+    the pointer = the opened card, checked by rotation maths); the card opens with focus.
+  - Escape closes the card, and the pocket turns grey. Space spins. A reload with a card open reopens the same card,
+    with the wheel resting on its pocket.
+  - Scores hide and show. Clicking a grey pocket reopens it.
+  - All played: "Savollar tugadi" (disabled), End game turns primary, and the hint says so.
+  - End game: confirmation with focus on Cancel; the game ends; the main page shows no Continue.
+  - Screenshots of 10, 20 and 30 pockets at 1920×1080, 1366×768 and 1280×720; uz and ru; 3 to 8 teams. No scrolling at any size.
+  - A one-question wheel draws a full ring.
+  - Fixed on the way: a bowl too large for the pocket ring; the pointer covering pocket numbers; icons too close to numbers.
+- **Checks:** `npm run check` passes: 119 keys, 92 tests, lint, build.
+- **Not verified:** the Codex review (F8); 30-pocket numbers from the back of a real classroom (F13); the interface text (F10).
+- **Next:** M4, the full card: timer in three colours and the tone, reveal, hand-ins, verdicts with the extra suggestion, live scores.
 
 ### 2026-11-11 (night) — M2: main page, setup, questions
 

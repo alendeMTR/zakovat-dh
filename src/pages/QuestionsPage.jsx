@@ -83,8 +83,7 @@ export default function QuestionsPage() {
       setStartError("questions.startError.storage");
       return;
     }
-    // M3 opens the wheel here (/game). Until then the main page shows the new game under "Continue".
-    navigate("/");
+    navigate("/game");
   };
 
   return (

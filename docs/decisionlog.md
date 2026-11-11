@@ -219,3 +219,28 @@ finished games is M6, for signed-in teachers.
 
 **D43. Until M3, "Start game" opens the main page, where the new game shows under "Continue".** *agent*
 "Continue" links to `/game`, which M3 builds. Until then it opens the not-found page.
+**Superseded 2026-11-11 by M3:** "Start game" and "Continue" open the wheel.
+
+## 2026-11-11 — M3 (the wheel)
+
+**D44. The wheel's hub is the spin button, labelled "Aylantirish"; no logo in the centre.** *agent*
+(The brief left the logo in the centre to the agent.) Why: a labelled hub tells the teacher where to click. A logo there
+would look like decoration and hide the control. The PDP mark can still go on the hub later, beside the label, if the owner wants it.
+
+**D45. Wheel layout: navy rim, pockets coloured by type, white bowl, navy hub; a white pointer at the top.** *agent*
+Pocket numbers turn with the wheel; the one under the pointer is upright. Direktor and sandiqcha pockets also show
+their icon (D24). Number size follows pocket width: 64 units for 10 pockets, 35 for 30. Numbers stay clear of the
+pointer's tip.
+
+**D46. A spin always turns forward 5–6 turns, about 4 s, and stops inside the chosen pocket, never on an edge.** *agent*
+The engine picks the pocket (`pickPocket`); the animation only shows it. After landing, the pocket is outlined for half a
+second, then its card opens. While the card is open the pocket keeps its colour; it turns grey when the card closes.
+
+**D47. Space spins the wheel (when no control has focus and no dialog is open).** *agent*
+Why: the teacher can spin from the keyboard without aiming at the hub. Presentation clickers (Page Down) are not mapped,
+to avoid accidental spins; this can be added if teachers ask for it.
+
+**D48. The game screen keeps the language switch in its top bar.** *agent*
+Why: a teacher in a mixed class may switch mid-game. The switch changes only the interface, never the questions (D21).
+
+**D49. Until M5, "End game" (after its confirmation) opens the main page.** *agent* (fixlist F12)
