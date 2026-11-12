@@ -8,18 +8,22 @@
 ## 1. Where it stands
 
 - **M0–M5 are done and committed: the core game works end to end in the browser, with no accounts.** The plan is approved (D27).
-- **F14, F17–F21 (2026-11-11) and F22–F24 (2026-11-12) are fixed and committed.** Pushed to GitHub on 2026-11-12 (F4); nothing is deployed.
+- **F14, F17–F21 (2026-11-11) and F22–F24 (2026-11-12) are fixed and committed.** Pushed to GitHub and deployed on Vercel by the owner on 2026-11-12 (F4).
 - **2026-11-12 (evening): the owner's design feedback round is built and verified but NOT committed** (F25, D72–D79):
   the clock stops when every team is judged, played questions leave the wheel through a result dialog, new game-screen
   panels, a podium on the results page, a new main page, a setup summary, a delete confirmation, a larger type scale.
   Waiting on the owner: a look at the screens (F25) and one question (F26).
   **Committed as `089ee5e`.** Then the PDP mark the owner sent went into the header, the game bar and the tab icon
   (D80, F1), committed separately. **The owner pushed both to GitHub** (`alendeMTR/zakovat-dh`, `main` at `614f311`).
-  **That repo is public; D2 says private** (F4). Vercel is not set up yet.
-- **Nothing substantial is left on the agent's side.** Preview 1 needs the rest of F4 (Vercel; GitHub is done), M6 needs F2
+  **That repo is public; D2 says private** (F4). The owner reports Vercel set up and deployed (URL not recorded).
+  M7's cost plan (question bank, caps, Batch) is proposed and waits on the owner (F29); NVIDIA's free API was ruled
+  out (F3 note).
+  Then the type scale came down halfway (D81: the owner found D79 a little too big; levels stay distinct), and the
+  setup summary is aligned by a grid row instead of a fixed margin. Not committed.
+- **Nothing substantial is left on the agent's side.** Preview 1 is deployed (F4; the agent has not loaded it), M6 needs F2
   (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
   the agent took both as far as it can and wrote what it found in their rows.
-- Decisions: `docs/decisionlog.md` D1–D80. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- Decisions: `docs/decisionlog.md` D1–D81. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (written 2026-11-11, **brought up to date 2026-11-12 for the deploy**): what the owner
   tests — including §2C, one line per fix from the two bug commits, in his terms — what not to flag yet, the
   manual setup steps, and how Codex can take over. §4.2 is now a step-by-step Vercel checklist (Vite preset,

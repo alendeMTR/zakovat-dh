@@ -109,7 +109,7 @@ a commit → a `handoff.md` entry stating what is done, what is verified, and wh
 | **M5** | End of game: End game, leaderboard with ties, breakdown with corrections, Continue game | The full flow script (§7.4) passes in the browser |
 | → | **Preview 1** (needs F4): the core game, no sign-in. The owner tries it in a classroom (F6) | The owner's list in `fixlist.md` |
 | **M6** | Accounts (needs F2): Google sign-in, saved sets, finished games, history on the main page, owner-only rules | A set saved in one browser loads in another; a second account cannot read it |
-| **M7** | AI (needs F3): `api/generate.js`, token check, daily limit, structured output, review step; for a sandiqcha, the object as input | uz and ru sets generated on the preview; the limit holds; the key is not in the client bundle |
+| **M7** | AI (needs F3): `api/generate.js`, token check, daily limit, structured output, review step; for a sandiqcha, the object as input. **Proposed 2026-11-12 (F29, waiting on the owner):** a shared question bank filled before the API is called, a school-wide monthly cap, and end-of-cycle Batch generation | uz and ru sets generated on the preview; the limit holds; the key is not in the client bundle |
 | → | **Preview 2**, then **Production** on the owner's OK | — |
 
 **Commits:** the agent commits locally at the end of each milestone. Nothing is pushed until F4 is settled, and nothing goes to Production without the owner's OK.

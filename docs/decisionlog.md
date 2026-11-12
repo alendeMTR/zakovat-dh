@@ -461,6 +461,7 @@ The existing `ConfirmDialog` (styled, built on `<dialog>`, Cancel focused first 
 quotes the first 90 characters of the question. The browser's `confirm()` is not used anywhere in the app.
 
 **D79. The type scale is larger everywhere, and the breakdown table has a clear hierarchy.** *owner*
+**Changed 2026-11-12 by D81:** the sizes came down halfway (the owner found them a little too big); the structure stays.
 The owner: "too small… didn't even understand the structure of the table, names of teams are the same size as scores."
 The UI root is now 17–20 px (was 16–20) and every step of the scale is raised (the label floor from 15 to 16 px on a
 laptop). On the stage a new floor, `--st-small` (2 units: 15 px at 768, 22 px at 1080), replaces the 1.4–1.7-unit
@@ -475,3 +476,13 @@ given, never redrawn, from `public/pdp-mark.png`: beside "PDP School" in every p
 bar (32–48 px, in --u), and as the browser tab icon and touch icon. Its alt text is empty because the school's name
 follows it as text. The 114×41 webp from school.pdp.uz is no longer needed. If PDP later sends an SVG, it replaces the
 PNG in the same place (lighter, and sharp at any size); nothing else changes.
+
+**D81. The type scale settles between the first one and D79: distinct levels, not large text.** *owner* — changes D79
+The owner, after D79: "fonts are a little too big everywhere. I meant they should be distinct and readable." The UI
+root is 16–19 px (D79: 17–20). Body text is 17 px on a laptop and 20 px at 1080; headings step up by about a quarter
+each (17 → 21 → 26 → 36 px on a laptop, display 52), so a heading never reads as body text; the label floor stays at
+15 px. On the stage: `--st-small` 1.9 units, `--st-label` 2.1, `--st-team` 2.6 (as before D79), `--st-score` 3.4.
+D79's structural changes stay: the breakdown's headed and framed columns, the counts as icons, the stage floor.
+The setup summary now lines up with the first panel through a grid row for the step links and the title, instead of a
+fixed margin that broke whenever the title's size changed. Checked at 1920×1080, 1366×768 and 1280×720: every screen
+fits as before, nothing is cut, and the 8-team question is 42 px at 1280×720 (it was 40).

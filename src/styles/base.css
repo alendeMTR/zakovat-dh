@@ -12,8 +12,8 @@
 }
 
 html {
-  /* 17px on laptops, 20px on 1080-high screens (raised 2026-11-12: the owner found the text too small). */
-  font-size: clamp(17px, calc(var(--u) * 1.85), 20px);
+  /* 16px on laptops, 19px on 1080-high screens (D81: between the first scale and the D79 one). */
+  font-size: clamp(16px, calc(var(--u) * 1.8), 19px);
   -webkit-text-size-adjust: 100%;
 }
 

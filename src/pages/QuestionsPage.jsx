@@ -96,9 +96,11 @@ export default function QuestionsPage() {
     <div className="page">
       <AppHeader />
       <main className="wizard wizard--split">
-        <div className="wizard__main">
+        <div className="wizard__head">
           <WizardSteps current="questions" />
           <h1 className="wizard__title">{t("questions.title")}</h1>
+        </div>
+        <div className="wizard__main">
 
           <section className="panel" aria-labelledby="set-lang-title">
             <fieldset className="field">

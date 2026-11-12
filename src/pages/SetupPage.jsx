@@ -40,9 +40,11 @@ export default function SetupPage() {
     <div className="page">
       <AppHeader />
       <main className="wizard wizard--split">
-        <div className="wizard__main">
+        <div className="wizard__head">
           <WizardSteps current="setup" />
           <h1 className="wizard__title">{t("setup.title")}</h1>
+        </div>
+        <div className="wizard__main">
 
           <section className="panel" aria-labelledby="teams-title">
             <h2 id="teams-title" className="panel__title">{t("setup.teams")}</h2>
