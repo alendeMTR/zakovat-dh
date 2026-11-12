@@ -24,6 +24,14 @@
   font-size: var(--fs-ui);
 }
 
+/* The owner's mark (D80): a navy square with the white S, shown whole with softened corners. */
+.app-header__mark {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--r-sm);
+}
+
 .app-header__school {
   font-weight: var(--fw-strong);
 }

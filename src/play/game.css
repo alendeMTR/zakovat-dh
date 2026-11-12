@@ -24,8 +24,18 @@
 
 .game__brand {
   justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
   font-weight: var(--fw-strong);
   text-decoration: none;
+}
+
+.game__mark {
+  flex: none;
+  width: max(32px, calc(var(--u) * 4.4));
+  height: max(32px, calc(var(--u) * 4.4));
+  border-radius: calc(var(--u) * 0.8);
 }
 
 .game__progress {

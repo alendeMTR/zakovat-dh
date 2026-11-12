@@ -129,7 +129,10 @@ export default function GamePage() {
   return (
     <div className="game">
       <header className="game__bar">
-        <Link to="/" className="game__brand">{t("app.school")}</Link>
+        <Link to="/" className="game__brand">
+          <img className="game__mark" src="/pdp-mark.png" alt="" width="40" height="40" />
+          {t("app.school")}
+        </Link>
         <p className="game__progress num">
           {t("game.progress", { played: game.played.length, total: game.pockets.length })}
         </p>

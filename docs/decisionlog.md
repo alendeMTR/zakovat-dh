@@ -143,6 +143,7 @@ The largest size that fits the card, never below a floor readable from the back 
 Why: a sandiqcha question is a short story and overflows at a single "large" size.
 
 **D26. Logo: the owner asks PDP for the SVG; until then, the official 114×41 webp at its native size.** *owner*
+**Changed 2026-11-12 by D80:** the owner sent the round mark as a PNG; it is the logo now.
 Why: the only full logo on school.pdp.uz is a small raster file; the vector there is the round mark only.
 
 **D27. `docs/plan.md` approved as written.** *owner*
@@ -467,3 +468,10 @@ sizes, and labels, team names and scores grew. The breakdown: team names head th
 with the team's place and total under them; team columns are framed; rows alternate; each question shows its type by
 name; the totals row says "Jami ball" and is large. The 8-team question card still fits 1280×720 without scrolling,
 with the question at 40 px (D51).
+
+**D80. The PDP mark the owner sent is the logo: in the header, the game bar and the tab icon.** *owner* — changes D26
+On 2026-11-12 the owner sent the school's round mark (the white S on navy) as a 640×640 PNG, 180 KB. It is used as
+given, never redrawn, from `public/pdp-mark.png`: beside "PDP School" in every page header (40 px) and in the game's top
+bar (32–48 px, in --u), and as the browser tab icon and touch icon. Its alt text is empty because the school's name
+follows it as text. The 114×41 webp from school.pdp.uz is no longer needed. If PDP later sends an SVG, it replaces the
+PNG in the same place (lighter, and sharp at any size); nothing else changes.

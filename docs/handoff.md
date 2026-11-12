@@ -13,10 +13,12 @@
   the clock stops when every team is judged, played questions leave the wheel through a result dialog, new game-screen
   panels, a podium on the results page, a new main page, a setup summary, a delete confirmation, a larger type scale.
   Waiting on the owner: a look at the screens (F25) and one question (F26).
+  **Committed as `089ee5e`.** Then the PDP mark the owner sent went into the header, the game bar and the tab icon
+  (D80, F1), committed separately. Not pushed: the owner does the push to GitHub.
 - **Nothing substantial is left on the agent's side.** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2
   (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
   the agent took both as far as it can and wrote what it found in their rows.
-- Decisions: `docs/decisionlog.md` D1–D79. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- Decisions: `docs/decisionlog.md` D1–D80. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (written 2026-11-11, **brought up to date 2026-11-12 for the deploy**): what the owner
   tests — including §2C, one line per fix from the two bug commits, in his terms — what not to flag yet, the
   manual setup steps, and how Codex can take over. §4.2 is now a step-by-step Vercel checklist (Vite preset,

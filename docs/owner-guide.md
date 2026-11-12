@@ -148,7 +148,6 @@ Start the dev server as before and try these in order. Each line says what to do
 
 | What you will see | Why | Comes with |
 |---|---|---|
-| "PDP School" as plain text in the header; no logo, no tab icon | Logo files wait for your OK to download (or the SVG from PDP) | F1, D26 |
 | No sign-in, no saved question sets, no game history beyond the last game | Accounts are milestone M6 | M6 (needs F2) |
 | No "AI" tab in the questions step | AI generation is milestone M7 | M7 (needs F3) |
 | Russian type names "Обычный вопрос / Вопрос директора / Чёрный ящик" (paste labels "Обычный / Директор / Ящик") | Placeholders; the Russian names are your choice | F9, D42 |
@@ -305,8 +304,7 @@ variable Vercel will ever need, and only at M7.
 
 ### 4.5 Smaller items
 
-- **F1 logo:** ask PDP School's marketing for the logo as SVG. Until then, tell Claude "OK to download the logo files"
-  (three small files from school.pdp.uz).
+- **F1 logo:** done with the mark you sent (12 Nov, D80). Optional: an SVG of it from PDP would be lighter.
 - **F9, F10:** read the drafts (section 2D) and send corrections.
 - **F5, the missing reference image:** `references/04-sandiqcha-question-example.png` is named in `PROMPT.md` but was
   never in the folder, and it is in no commit. Nothing uses it: D11 already settles the sandiqcha rule and says that

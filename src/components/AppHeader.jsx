@@ -4,10 +4,10 @@ import LanguageSwitch from "./LanguageSwitch.jsx";
 import "./app-header.css";
 
 /**
- * The bar at the top of every UI page: the school and the product, optional links to sections of the
- * page, and the language switch.
- * The PDP School logo goes in the brand slot once the official file is in public/ (fixlist F1, D26).
- * Until then the slot holds the school's name as plain text, not a drawn logo.
+ * The bar at the top of every UI page: the school's mark and name, the product, optional links to
+ * sections of the page, and the language switch.
+ * The mark is the owner's file, `public/pdp-mark.png`, used as given (D80; never redrawn). Its alt is
+ * empty because the school's name follows it as text.
  *
  * links: [{ href, label }] — in-page anchors (the main page uses them)
  */
@@ -17,6 +17,7 @@ export default function AppHeader({ links = [] }) {
     <header className="app-header">
       <div className="app-header__inner">
         <Link to="/" className="app-header__brand">
+          <img className="app-header__mark" src="/pdp-mark.png" alt="" width="40" height="40" />
           <span className="app-header__school">{t("app.school")}</span>
           <span className="app-header__sep" aria-hidden="true" />
           <span className="app-header__product">{t("app.name")}</span>
