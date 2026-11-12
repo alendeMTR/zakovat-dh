@@ -48,7 +48,7 @@ export default function BreakdownPage() {
   };
 
   return (
-    <div className="page breakdown-page">
+    <div className="page breakdown-page backdrop backdrop--dots">
       <AppHeader />
       <main className="breakdown">
         <header className="breakdown__head">

@@ -40,6 +40,11 @@
   /* ── Wheel ──────────────────────────────────────────────── */
   --pocket-used: #c9ccdd;    /* Played question (badges, the empty wheel). Ink on it 9.7:1 */
 
+  /* ── Background patterns (D83, after axeno.uz): brand blue, faint enough never to compete with text ── */
+  --pattern-line: color-mix(in srgb, var(--primary) 7%, transparent);
+  --pattern-dot: color-mix(in srgb, var(--primary) 17%, transparent);
+  --pattern-ring: color-mix(in srgb, var(--primary) 10%, transparent);
+
   /* ── Places 1–3 (results, ranking). Navy text on the fills; the -ink shades on the tints.
      Measured 2026-11-12: ink on gold 8.1:1, silver 9.3:1, bronze 5.7:1; each -ink on its tint 5.0–5.3:1.
      The place number always shows too, so the colour is never the only signal (D24). ── */

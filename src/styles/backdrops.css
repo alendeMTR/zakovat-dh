@@ -1,0 +1,103 @@
+/* Page backgrounds after axeno.uz (D83, owner): faint brand-blue patterns behind the content, never under it.
+   Each sits in a layer at z-index -1 inside an isolated page, so cards, panels and text always paint on top.
+   Colours come from tokens only (--pattern-*). Nothing here prints. */
+
+.backdrop {
+  position: relative;
+  isolation: isolate;
+}
+
+.backdrop::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Squared paper that fades out downwards (Axeno's about, privacy and puzzles pages): the setup steps. */
+.backdrop--grid::before {
+  background-image:
+    linear-gradient(var(--pattern-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, black 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, black 45%, transparent 100%);
+}
+
+/* A dot field that fades towards two corners (Axeno's results and progress pages): results and breakdown. */
+.backdrop--dots::before {
+  background-image: radial-gradient(circle, var(--pattern-dot) 1.2px, transparent 1.4px);
+  background-size: 28px 28px;
+  -webkit-mask-image:
+    radial-gradient(ellipse 70% 65% at 8% 12%, black 0%, transparent 65%),
+    radial-gradient(ellipse 55% 50% at 92% 88%, black 0%, transparent 62%);
+  mask-image:
+    radial-gradient(ellipse 70% 65% at 8% 12%, black 0%, transparent 65%),
+    radial-gradient(ellipse 55% 50% at 92% 88%, black 0%, transparent 62%);
+}
+
+/* Rings and spokes around the wheel (Axeno's diagnostics "radar"), centred on the wheel itself, so the wheel
+   reads as the middle of the stage. Twelve spokes, like the drawing on the main page. Behind the side panels,
+   which are opaque, so it shows only in the air around the wheel. */
+.game {
+  isolation: isolate;
+}
+
+.wheel::before {
+  content: "";
+  position: absolute;
+  inset: -30%; /* half its side is 0.8 of the wheel's: the rim sits at 62.5% of that half */
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle closest-side,
+      transparent 0 66.7%,
+      var(--pattern-ring) 66.7% 67%,
+      transparent 67% 75.7%,
+      var(--pattern-ring) 75.7% 76%,
+      transparent 76% 85.7%,
+      var(--pattern-ring) 85.7% 86%,
+      transparent 86%
+    ),
+    repeating-conic-gradient(var(--pattern-ring) 0deg 0.35deg, transparent 0.35deg 30deg);
+  /* Two masks, both must pass: a ring that fades outwards, and a band level with the wheel (the wheel spans 19%
+     to 81% of this box). So the pattern shows only beside the wheel, never behind the top bar or the hint line. */
+  -webkit-mask-image:
+    radial-gradient(circle closest-side, transparent 60%, black 64%, transparent 92%),
+    linear-gradient(to bottom, transparent 17%, black 30%, black 70%, transparent 83%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(circle closest-side, transparent 60%, black 64%, transparent 92%),
+    linear-gradient(to bottom, transparent 17%, black 30%, black 70%, transparent 83%);
+  mask-composite: intersect;
+}
+
+/* A dotted surface (Axeno's question cards) behind the wheel's result. The dots fade out towards the middle,
+   where the number and the text are, so they never sit under a letter at full strength. */
+.backdrop-dotted {
+  position: relative;
+  isolation: isolate;
+}
+
+.backdrop-dotted::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--pattern-dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 35%, black 100%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 35%, black 100%);
+}
+
+@media print {
+  .backdrop::before,
+  .wheel::before {
+    display: none;
+  }
+}

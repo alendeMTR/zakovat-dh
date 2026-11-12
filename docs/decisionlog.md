@@ -503,3 +503,24 @@ extra 20 s), a question that takes 10 s to read leaves about 10 s of extra windo
 the extra window in setup.
 Checked in the browser at 1920×1080, 1366×768 and 1280×720: Enter opened the card at 1:00 already counting, a team
 key recorded a hand-in 3 s in, a reopened question kept its stopped clock and hand-in, and Reset left Start.
+
+**D83. Faint background patterns taken from Axeno, one per kind of page.** *owner* (the request) / *agent* (the
+choice) — **Spec change** (the brief: "no decorative colors, banners or illustrations"; D76 already moved the main page)
+The owner asked to add background details from axeno.uz and to take from the Axeno repository what suits this
+platform. The Axeno repo (read only) uses five techniques; four were taken, each where its shape means something here:
+- **Rings and spokes around the wheel** (Axeno's diagnostics "radar"): three rings just outside the rim and twelve
+  spokes, shown only beside the wheel. Two masks keep it out of the top bar and the hint line, and the side panels
+  are opaque, so no line ever runs behind text. The question card stays plain.
+- **A dot field fading to two corners** (Axeno's own results and progress pages): the results page and the breakdown.
+  On the results page a soft gold light rises behind the podium as the winner's step lands (off with reduced motion).
+- **Squared paper fading downwards** (Axeno's about, privacy and puzzles pages): the two setup steps and the
+  not-found page, matching the squared paper already on the main page (D76).
+- **A dotted surface** (Axeno's question cards): behind the wheel's result, fading out towards the middle where the
+  number and the text are.
+Not taken: Axeno's maths symbols and network drawing (the main page already has the wheel as its picture).
+Everything is drawn in faint brand blue (gold on the podium) from new tokens `--pattern-line`, `--pattern-dot`,
+`--pattern-ring`, in one file, `src/styles/backdrops.css`; the patterns sit in layers behind the content
+(`isolation` + `z-index: -1`), and none of them prints.
+Checked at 1920×1080, 1366×768 and 1280×720: game screen states, results with 2, 4 and 8 teams, the setup steps with
+the delete dialog, and the breakdown — every layout check passes as before, and the screenshots show no pattern under
+any text.

@@ -88,7 +88,7 @@ export default function ResultsPage() {
   ].filter(Boolean);
 
   return (
-    <div className="page results-page">
+    <div className="page results-page backdrop backdrop--dots">
       <AppHeader />
       <main className="results">
         <header className="results__head">

@@ -50,7 +50,7 @@ export default function SpinResult({ result, onOpen, onKeep }) {
               <X aria-hidden="true" />
             </button>
           </header>
-          <div className="spin-result__body">
+          <div className="spin-result__body backdrop-dotted">
             <p className="spin-result__no num">{t("game.pocket", { n: result.no })}</p>
             <p className="spin-result__type">
               <Icon aria-hidden="true" className="spin-result__type-icon" />

@@ -51,6 +51,8 @@
 
 /* ── Podium ─────────────────────────────────────────────────────────── */
 .podium {
+  position: relative;
+  isolation: isolate;
   list-style: none;
   display: grid;
   grid-auto-flow: column;
@@ -59,6 +61,23 @@
   gap: calc(var(--u) * 1.4);
   padding: 0 calc(var(--u) * 1);
   border-bottom: 2px solid var(--line-strong);
+}
+
+/* A soft gold light behind the podium (after Axeno's glow panels, D83); it comes up as the winner's step lands. */
+.podium::before {
+  content: "";
+  position: absolute;
+  inset: -12% -6% 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 55% 75% at 50% 100%, color-mix(in srgb, var(--gold) 40%, transparent), transparent 70%);
+  animation: results-glow 900ms ease-out both;
+  animation-delay: 1900ms;
+}
+
+@keyframes results-glow {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .podium__step {
@@ -378,6 +397,7 @@ thead .board__score {
 
 /* The global rule shortens durations, not delays: switch the reveal off outright. */
 @media (prefers-reduced-motion: reduce) {
+  .podium::before,
   .podium__who,
   .podium__block,
   .podium__block::after,

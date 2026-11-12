@@ -93,7 +93,7 @@ export default function QuestionsPage() {
   };
 
   return (
-    <div className="page">
+    <div className="page backdrop backdrop--grid">
       <AppHeader />
       <main className="wizard wizard--split">
         <div className="wizard__head">

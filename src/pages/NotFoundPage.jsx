@@ -6,7 +6,7 @@ import "./home.css";
 export default function NotFoundPage() {
   const { t } = useI18n();
   return (
-    <div className="page">
+    <div className="page backdrop backdrop--grid">
       <AppHeader />
       <main className="home">
         <h1 className="home__title">{t("notFound.title")}</h1>

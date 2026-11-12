@@ -37,7 +37,7 @@ export default function SetupPage() {
   const unit = <span>{t("common.seconds")}</span>;
 
   return (
-    <div className="page">
+    <div className="page backdrop backdrop--grid">
       <AppHeader />
       <main className="wizard wizard--split">
         <div className="wizard__head">
