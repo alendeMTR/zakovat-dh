@@ -173,6 +173,28 @@ describe("the timer through the reducer", () => {
     expect(g.rounds[1].handIns.t1).toBe(15000);
   });
 
+  it("starts a new question's clock when its card opens (D82)", () => {
+    const g = reduce(newGame(), { type: "OPEN_QUESTION", pocketNo: 1, now: 5000 });
+    expect(g.rounds[1].timer).toEqual({ startedAt: 5000, accumulatedMs: 0 });
+    // Start is then a no-op, and a hand-in counts from the opening.
+    expect(reduce(g, { type: "START_TIMER", now: 9000 })).toBe(g);
+    expect(reduce(g, { type: "HAND_IN", teamId: "t1", now: 12000 }).rounds[1].handIns.t1).toBe(7000);
+  });
+
+  it("does not restart a reopened question's clock, and Reset leaves the clock idle (D82, D34, D32)", () => {
+    const played = play(
+      newGame(),
+      { type: "OPEN_QUESTION", pocketNo: 1, now: 0 },
+      { type: "HAND_IN", teamId: "t1", now: 4000 },
+      { type: "CLOSE_QUESTION", now: 10000 },
+    );
+    const reopened = reduce(played, { type: "OPEN_QUESTION", pocketNo: 1, now: 60000 });
+    expect(reopened.rounds[1].timer).toEqual({ startedAt: null, accumulatedMs: 10000 });
+    expect(reopened.rounds[1].handIns).toEqual({ t1: 4000 });
+    const reset = reduce(reopened, { type: "RESET_TIMER", now: 61000 });
+    expect(reset.rounds[1].timer).toEqual({ startedAt: null, accumulatedMs: 0 });
+  });
+
   it("stops the clock once every team has a verdict, and not before (D72)", () => {
     const g = play(
       newGame(),

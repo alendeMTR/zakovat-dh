@@ -239,7 +239,7 @@ export default {
   "home.how.questions.title": "Savollar",
   "home.how.questions.text": "Savollarni matn qilib joylang, bittalab yozing yoki namuna to'plamni oling.",
   "home.how.play.title": "G'ildirak va taymer",
-  "home.how.play.text": "G'ildirak savolni tanlaydi. Vaqtni boshlang: jamoalar javobni qog'ozga yozib topshiradi, siz topshirish vaqtini belgilaysiz.",
+  "home.how.play.text": "G'ildirak savolni tanlaydi. Savol ochilishi bilan vaqt boshlanadi: jamoalar javobni qog'ozga yozib topshiradi, siz topshirish vaqtini belgilaysiz.",
   "home.how.results.title": "Baholash va natija",
   "home.how.results.text": "Javobni ko'rsating va har bir jamoani baholang. Ballar o'zi hisoblanadi; oxirida reyting va savollar tahlili chiqadi.",
   "home.types.title": "Savol turlari va ballar",

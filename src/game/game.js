@@ -98,7 +98,14 @@ export const currentRound = (game) => (game.current === null ? null : game.round
 export const currentQuestion = (game) =>
   game.current === null ? null : game.pockets.find((p) => p.no === game.current).question;
 
-const newRound = () => ({ timer: { ...NEW_TIMER }, revealed: false, handIns: {}, verdicts: {} });
+// D82 (owner): a new question's clock starts the moment its card opens, at the action's time. Without a time
+// (engine tests that build a round by hand) the clock waits for START_TIMER, as Reset also leaves it (D32).
+const newRound = (now) => ({
+  timer: Number.isFinite(now) ? { startedAt: now, accumulatedMs: 0 } : { ...NEW_TIMER },
+  revealed: false,
+  handIns: {},
+  verdicts: {},
+});
 
 const withRound = (game, pocketNo, change) => ({
   ...game,
@@ -127,7 +134,7 @@ export function reduce(game, action) {
         ...game,
         current: pocketNo,
         played: [...game.played, pocketNo],
-        rounds: { ...game.rounds, [pocketNo]: newRound() },
+        rounds: { ...game.rounds, [pocketNo]: newRound(action.now) },
       };
     }
 

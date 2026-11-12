@@ -1,5 +1,6 @@
 // The tone at zero (D14), made with Web Audio: no sound file to load.
-// Browsers start audio only after a user gesture, so `primeAudio` runs on the Start click.
+// Browsers start audio only after a user gesture, so `primeAudio` runs on the click or key that opens a card
+// (its clock starts then, D82) and on Start after a reset.
 
 let context = null;
 

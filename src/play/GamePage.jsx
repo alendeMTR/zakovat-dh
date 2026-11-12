@@ -18,6 +18,7 @@ import {
   spinRotation,
   wheelPockets,
 } from "./wheelGeometry.js";
+import { primeAudio } from "./tone.js";
 import { useGame } from "./useGame.js";
 import "./game.css";
 import "./side-panels.css";
@@ -70,6 +71,8 @@ export default function GamePage() {
   // The result dialog: open the question (it leaves the wheel when its card closes), or keep it.
   const openResult = useCallback(() => {
     if (!result) return;
+    // The clock starts as the card opens (D82); this click or key is the gesture that lets the zero tone play.
+    primeAudio();
     dispatch({ type: "OPEN_QUESTION", pocketNo: result.no });
     setResult(null);
     setSpinTarget(null);
@@ -110,6 +113,7 @@ export default function GamePage() {
       const shown = wheelPockets({ ...game, current: pocketNo });
       const index = shown.findIndex((p) => p.no === pocketNo);
       setRotation((current) => nearestTurn(restingRotation(index, shown.length), current));
+      primeAudio();
       dispatch({ type: "OPEN_QUESTION", pocketNo });
     },
     [game, dispatch],

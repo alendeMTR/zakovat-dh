@@ -66,9 +66,9 @@ Report each problem as: what you did, what you expected, what happened, and the 
    than the time), scores and sound switches, points (open "Ballar").
 2. Questions: paste text with one mistake first (a question without "Javob:"), then fixed; add one question by hand
    (try a Zakovat sandiqchasi); add the sample set; edit, delete, clear the list; try to go past 30 questions.
-3. Start → wheel: spin with the hub and with Space; played pockets turn grey; click a grey pocket to reopen it;
+3. Start → wheel: spin with the hub and with Space; a played question leaves the wheel; reopen it from the list on the left;
    "Ballar" and "Ovoz" switches; UZ / RU.
-4. Question card: Start, Pause, Reset; a tap on a team row or keys 1–8 when a slip arrives (a second tap undoes it);
+4. Question card: the clock is already running when it opens; Pause, Reset (then Start); a tap on a team row or keys 1–8 when a slip arrives (a second tap undoes it);
    "Javobni ko'rsatish"; the verdicts ✓✓ / ✓ / ✕ (✓✓ is outlined as a suggestion for teams inside the extra window);
    reload the page while the timer runs; Escape back to the wheel.
 5. "O'yinni yakunlash" → leaderboard (make a tie on purpose) → "Savollar tahlili" → correct one mark → back to the
@@ -132,6 +132,8 @@ Start the dev server as before and try these in order. Each line says what to do
    last question, and a short summary of that question. Switch "Ballar" off: only the team names remain. *(D74)*
 6. **Score every team on an open question** while the clock runs: the clock stops and says
    "To'xtatildi: barcha jamoalar baholandi". *(D72)*
+   **New, D82:** open a question: the clock is already counting, with no Start. Reopen a played one: its clock
+   stays where it stopped. "Qaytadan" brings Start back.
 7. **End the game.** Third place rises, then second, then first, the scores count up, then the table and three facts
    (fastest correct answer, hardest question, most extra bonuses). *(D75)*
 8. **Savollar tahlili.** Team names head the columns with their place and total; the totals row is large. *(D79)*

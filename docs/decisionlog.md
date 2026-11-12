@@ -88,6 +88,7 @@ Why: the reference wheel (`references/02`) shows one of each among 30 pockets.
 Hidden until the teacher clicks "Show answer"; the button is available at any time.
 
 **D14. Timer.** *agent*
+**Changed 2026-11-12 by D82** (owner): the clock starts by itself when a new question's card opens.
 Starts on the teacher's click, after the question is read aloud. Pause, resume, reset. At zero: one short tone
 (mute switch), the clock stays at 0:00 in the warning colour. Late hand-ins are marked late and can still be judged.
 Defaults: 60 s per question, extra window in the first 20 s, warning colour in the last 10 s.
@@ -486,3 +487,19 @@ D79's structural changes stay: the breakdown's headed and framed columns, the co
 The setup summary now lines up with the first panel through a grid row for the step links and the title, instead of a
 fixed margin that broke whenever the title's size changed. Checked at 1920×1080, 1366×768 and 1280×720: every screen
 fits as before, nothing is cut, and the 8-team question is 42 px at 1280×720 (it was 40).
+
+**D82. A new question's clock starts the moment its card opens.** *owner* — game rule, **changes D14**
+The owner: "when the question is shown time should start going automatically." In the engine, `OPEN_QUESTION` for
+a pocket not played before starts the round's clock at that action's time; Start is then not needed, and a hand-in
+counts from the opening. Details settled by the agent:
+- A **reopened** question (D34) keeps its stopped clock and its hand-ins; reopening never restarts it, so its times
+  stay true. The teacher can press Resume.
+- **Reset** still leaves the clock idle with Start (D32): the way out when a card opened before the class was ready.
+- The click or key that opens the card unlocks sound, so the zero tone still plays (browsers allow sound only after
+  a gesture; the Start click used to give it).
+**Trade-off, flagged to the owner:** D14 chose a manual start because an automatic one eats the reading time. Reading
+a question aloud now counts against the teams, and against the extra-bonus window most: with the defaults (60 s,
+extra 20 s), a question that takes 10 s to read leaves about 10 s of extra window. The owner can lengthen the time or
+the extra window in setup.
+Checked in the browser at 1920×1080, 1366×768 and 1280×720: Enter opened the card at 1:00 already counting, a team
+key recorded a hand-in 3 s in, a reopened question kept its stopped clock and hand-in, and Reset left Start.

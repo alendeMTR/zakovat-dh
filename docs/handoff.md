@@ -19,11 +19,12 @@
   M7's cost plan (question bank, caps, Batch) is proposed and waits on the owner (F29); NVIDIA's free API was ruled
   out (F3 note).
   Then the type scale came down halfway (D81: the owner found D79 a little too big; levels stay distinct), and the
-  setup summary is aligned by a grid row instead of a fixed margin. Not committed.
+  setup summary is aligned by a grid row instead of a fixed margin (committed `0c02a5b`). Then D82 (owner): a new
+  question's clock starts when its card opens; reopen keeps it stopped; Reset leaves Start. Not committed.
 - **Nothing substantial is left on the agent's side.** Preview 1 is deployed (F4; the agent has not loaded it), M6 needs F2
   (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
   the agent took both as far as it can and wrote what it found in their rows.
-- Decisions: `docs/decisionlog.md` D1–D81. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- Decisions: `docs/decisionlog.md` D1–D82. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (written 2026-11-11, **brought up to date 2026-11-12 for the deploy**): what the owner
   tests — including §2C, one line per fix from the two bug commits, in his terms — what not to flag yet, the
   manual setup steps, and how Codex can take over. §4.2 is now a step-by-step Vercel checklist (Vite preset,
