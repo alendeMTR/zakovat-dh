@@ -1,11 +1,166 @@
-/* Setup and Questions: one centred column of panels. */
+/* Setup and Questions: the form, and beside it on wide screens the game summary (D77). */
 
 .wizard {
   display: grid;
-  gap: var(--sp-5);
-  width: min(880px, 100%);
+  grid-template-columns: minmax(0, 54rem) minmax(18rem, 24rem);
+  justify-content: center;
+  align-items: start;
+  gap: var(--sp-6);
+  width: 100%;
   margin: 0 auto;
-  padding: 0 var(--sp-4) var(--sp-8);
+  padding: var(--sp-6) var(--sp-6) var(--sp-8);
+}
+
+.wizard__main {
+  display: grid;
+  gap: var(--sp-5);
+  min-width: 0;
+}
+
+/* The summary stays in view while the form scrolls. */
+.summary {
+  position: sticky;
+  top: var(--sp-5);
+  display: grid;
+  gap: var(--sp-5);
+  max-height: calc(100vh - 2 * var(--sp-5));
+  overflow-y: auto;
+  margin-top: 8.6rem; /* level with the first panel: under the step links and the title */
+  padding: var(--sp-5) var(--sp-5) var(--sp-6);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-panel);
+}
+
+.summary__title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-strong);
+}
+
+.summary__duration {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--primary-tint);
+}
+
+.summary__duration-icon {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-top: 0.15rem;
+  color: var(--primary);
+}
+
+.summary__label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+  text-align: left;
+}
+
+.summary__big {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-strong);
+  line-height: 1.2;
+}
+
+.summary__hint {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.summary__list {
+  display: grid;
+}
+
+.summary__row {
+  display: grid;
+  gap: var(--sp-1);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.summary__row:first-child {
+  padding-top: 0;
+}
+
+.summary__row dt {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+}
+
+.summary__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.summary__row dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-ui);
+}
+
+.summary__value {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-strong);
+}
+
+.summary__names {
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.summary__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.summary__muted {
+  color: var(--ink-muted);
+}
+
+.summary__points {
+  list-style: none;
+  display: grid;
+  margin-top: var(--sp-2);
+}
+
+.summary__points li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-strong);
+}
+
+.summary__points li:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .wizard {
+    grid-template-columns: minmax(0, 54rem);
+  }
+
+  .summary {
+    position: static;
+    margin-top: 0;
+  }
 }
 
 .wizard__title {

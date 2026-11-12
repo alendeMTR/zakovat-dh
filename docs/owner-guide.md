@@ -113,11 +113,35 @@ something else, that is worth reporting.
 8. **Confirmations announce themselves correctly.** Nothing to see: this one only matters to a screen reader,
    which used to read "O'yin yakunlansinmi?" out as the timer-reset question. No test needed. *(F20)*
 
+### C2. New on 12 November (evening): your design feedback, built — not committed yet
+
+Start the dev server as before and try these in order. Each line says what to do and what you should see.
+
+1. **Main page.** A white header with three links, a title on the left, the drawn wheel behind it on the right, and
+   below: how a game runs, the three question types with their points, and the keys. With a game in progress, its
+   card sits on the right of the title. *(D76)*
+2. **Setup and Questions.** A "game summary" column on the right follows what you type: teams, time, questions by
+   type, points, and an estimated length (each question's time plus one minute). *(D77)*
+3. **Delete a question** with the bin icon: a dialog asks first and quotes the question. Cancel keeps it. *(D78)*
+4. **Spin.** When the wheel stops, a box shows the question number and type. "Savolni ochish" (or Enter) opens it;
+   "G'ildirakda qoldirish" (or Escape) leaves it on the wheel unplayed. Close an opened card: its pocket leaves the
+   wheel and the others close up. *(D73)* **One question for you, F26:** should the box also offer "remove without
+   playing", to drop a bad question mid-game?
+5. **Side panels.** Left: progress, types left, and the played questions — click one to reopen it. Right: the
+   ranking with gold, silver and bronze places, ✓ and ✓✓ counts, arrows for places moved and "+3" for points on the
+   last question, and a short summary of that question. Switch "Ballar" off: only the team names remain. *(D74)*
+6. **Score every team on an open question** while the clock runs: the clock stops and says
+   "To'xtatildi: barcha jamoalar baholandi". *(D72)*
+7. **End the game.** Third place rises, then second, then first, the scores count up, then the table and three facts
+   (fastest correct answer, hardest question, most extra bonuses). *(D75)*
+8. **Savollar tahlili.** Team names head the columns with their place and total; the totals row is large. *(D79)*
+9. **Text size** is larger on every screen. If anything now feels too large on your laptop, say which screen. *(D79)*
+
 ### D. Text to read and approve
 
 | # | What | File |
 |---|---|---|
-| F10 | All interface text, Uzbek and Russian (drafts) — **175 keys as of 12 Nov**, three of them new or reworded this week: the long-question warning, the settings refusal at Start, and the card's key line at 0:00 | `src/i18n/uz.js`, `src/i18n/ru.js` |
+| F10 | All interface text, Uzbek and Russian (drafts) — **262 keys as of 12 Nov (evening)** — about 90 new from the design round (C2), all draft;, three of them new or reworded this week: the long-question warning, the settings refusal at Start, and the card's key line at 0:00 | `src/i18n/uz.js`, `src/i18n/ru.js` |
 | F9 | The two sample sets (drafts), and the Russian names of the three types | `src/game/sampleSets.js` |
 
 ## 3. Do not flag these yet: known, planned, or placeholders

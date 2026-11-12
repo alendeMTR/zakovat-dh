@@ -3,7 +3,8 @@
 
 .game {
   --bar-h: max(56px, calc(var(--u) * 8));
-  --wheel-size: min(calc(var(--u) * 80), calc(100vw - 2 * var(--u) * 3));
+  /* 76 units: room for a side panel of 40+ units at each edge with 6 units of air to the wheel. */
+  --wheel-size: min(calc(var(--u) * 76), calc(100vw - 2 * var(--u) * 3));
   height: 100vh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -42,8 +43,9 @@
 .game__stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: calc(var(--u) * 3);
+  align-items: start; /* the panels' tops line up with the wheel's */
+  align-content: center;
+  gap: calc(var(--u) * 6);
   padding: 0 calc(var(--u) * 3) calc(var(--u) * 2);
   min-height: 0;
 }
@@ -58,119 +60,4 @@
   font-size: var(--st-label);
   color: var(--ink-muted);
   text-align: center;
-}
-
-.game__side {
-  align-self: center;
-  min-width: 0;
-}
-
-.game__side--left {
-  justify-self: end;
-}
-
-.game__side--right {
-  justify-self: start;
-}
-
-.stage-panel__title {
-  font-size: var(--st-label);
-  font-weight: var(--fw-medium);
-  color: var(--ink-muted);
-  margin-bottom: calc(var(--u) * 1.6);
-}
-
-/* Legend. */
-.legend__list {
-  list-style: none;
-  display: grid;
-  gap: calc(var(--u) * 1.6);
-}
-
-.legend__row {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--u) * 1.4);
-}
-
-.legend__swatch {
-  flex: none;
-  width: calc(var(--u) * 4.4);
-  height: calc(var(--u) * 4.4);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: var(--surface);
-}
-
-.legend__swatch--oddiy { background: var(--type-oddiy); }
-.legend__swatch--direktor { background: var(--type-direktor); }
-.legend__swatch--sandiqcha { background: var(--type-sandiqcha); }
-.legend__swatch--played { background: var(--pocket-used); }
-
-.legend__icon {
-  width: 58%;
-  height: 58%;
-}
-
-.legend__text {
-  display: grid;
-}
-
-.legend__name {
-  font-size: var(--st-label);
-  font-weight: var(--fw-medium);
-  line-height: 1.2;
-}
-
-.legend__count {
-  font-size: calc(var(--u) * 1.7);
-  color: var(--ink-muted);
-}
-
-/* Ranking. */
-.ranking {
-  width: min(calc(var(--u) * 42), 100%);
-  padding: calc(var(--u) * 2.4) calc(var(--u) * 2.6);
-  border-radius: calc(var(--u) * 1.6);
-  background: var(--surface);
-  box-shadow: var(--shadow-panel);
-}
-
-.ranking__list {
-  list-style: none;
-  display: grid;
-  gap: calc(var(--u) * 0.6);
-}
-
-.ranking__row {
-  display: grid;
-  grid-template-columns: calc(var(--u) * 3.6) minmax(0, 1fr) auto;
-  align-items: center;
-  gap: calc(var(--u) * 1.2);
-  padding: calc(var(--u) * 0.8) 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.ranking__row:last-child {
-  border-bottom: 0;
-}
-
-.ranking__place {
-  font-size: var(--st-label);
-  color: var(--ink-muted);
-  font-weight: var(--fw-medium);
-}
-
-.ranking__name {
-  font-size: var(--st-team);
-  font-weight: var(--fw-medium);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ranking__score {
-  font-size: var(--st-score);
-  font-weight: var(--fw-strong);
 }

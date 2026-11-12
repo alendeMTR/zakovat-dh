@@ -215,7 +215,7 @@
   align-items: center;
   gap: calc(var(--u) * 0.8);
   margin-bottom: calc(var(--u) * 0.6);
-  font-size: calc(var(--u) * 1.7);
+  font-size: var(--st-small);
   color: var(--ink-muted);
 }
 
@@ -271,7 +271,7 @@
 .team-row__key {
   flex: none;
   width: calc(var(--u) * 2.4);
-  font-size: calc(var(--u) * 1.6);
+  font-size: calc(var(--u) * 1.8);
   color: var(--ink-muted);
   text-align: center;
 }
@@ -304,7 +304,7 @@
 }
 
 .team-row__time {
-  font-size: max(13px, calc(var(--u) * 1.7));
+  font-size: max(15px, var(--st-small));
   color: var(--ink-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -403,6 +403,6 @@
 .qcard__keys {
   padding: calc(var(--u) * 0.6) calc(var(--u) * 4) calc(var(--u) * 1);
   background: var(--surface-alt);
-  font-size: max(12px, calc(var(--u) * 1.4));
+  font-size: max(14px, calc(var(--u) * 1.7));
   color: var(--ink-muted);
 }

@@ -1,4 +1,5 @@
-/* Leaderboard: read from the back of the room, so it is sized in --u like the game screens. */
+/* Results (D58, D75): read from the back of the room, so sized in --u like the game screens.
+   Podium in gold, silver and bronze, rising third → second → first; then the table and the facts. */
 
 .results-page .stage-btn {
   text-decoration: none;
@@ -6,143 +7,392 @@
 
 .results {
   flex: 1;
-  width: min(calc(var(--u) * 120), 100%);
+  width: min(calc(var(--u) * 168), 100%);
   margin: 0 auto;
-  padding: calc(var(--u) * 1) calc(var(--u) * 3) calc(var(--u) * 2);
+  padding: calc(var(--u) * 2.4) calc(var(--u) * 3) calc(var(--u) * 2.4);
   display: grid;
-  align-content: start;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: calc(var(--u) * 2.4);
 }
 
 .results__head {
-  display: grid;
-  gap: calc(var(--u) * 0.8);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 1.6) calc(var(--u) * 3);
 }
 
 .results__title {
-  font-size: calc(var(--u) * 5.6);
-  font-weight: var(--fw-medium);
+  font-size: calc(var(--u) * 5);
+  font-weight: var(--fw-strong);
   line-height: 1.1;
 }
 
 .results__meta {
-  font-size: var(--st-label);
+  margin-top: calc(var(--u) * 0.6);
+  font-size: var(--st-small);
   color: var(--ink-muted);
 }
 
-.board {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 calc(var(--u) * 0.8);
+.results__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 1.2);
 }
 
-.board thead th {
-  font-size: calc(var(--u) * 1.7);
+.results__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: end;
+  gap: calc(var(--u) * 4);
+  min-height: 0;
+}
+
+/* ── Podium ─────────────────────────────────────────────────────────── */
+.podium {
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: calc(var(--u) * 1.4);
+  padding: 0 calc(var(--u) * 1);
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.podium__step {
+  --medal: var(--pocket-used);
+  --medal-tint: var(--surface-alt);
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--u) * 1.4);
+  min-width: 0;
+}
+
+.podium__step--gold { --medal: var(--gold); --medal-tint: var(--gold-tint); }
+.podium__step--silver { --medal: var(--silver); --medal-tint: var(--silver-tint); }
+.podium__step--bronze { --medal: var(--bronze); --medal-tint: var(--bronze-tint); }
+
+.podium__who {
+  display: grid;
+  justify-items: center;
+  max-width: 100%;
+  text-align: center;
+  animation: results-up 500ms var(--ease) both;
+  animation-delay: calc(var(--delay) + 350ms);
+}
+
+.podium__name {
+  max-width: 100%;
+  font-size: calc(var(--u) * 3);
+  font-weight: var(--fw-strong);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium__score {
+  margin-top: calc(var(--u) * 0.6);
+  font-size: calc(var(--u) * 6);
+  font-weight: var(--fw-strong);
+  line-height: 1;
+}
+
+.podium__unit {
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+}
+
+.podium__step--h1 .podium__name {
+  font-size: calc(var(--u) * 3.6);
+}
+
+.podium__step--h1 .podium__score {
+  font-size: calc(var(--u) * 7.6);
+}
+
+.podium__block {
+  position: relative;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: calc(var(--u) * 2.4);
+  border-top: calc(var(--u) * 0.8) solid var(--medal);
+  border-radius: calc(var(--u) * 1.6) calc(var(--u) * 1.6) 0 0;
+  background: var(--medal-tint);
+  overflow: hidden;
+  transform-origin: bottom;
+  animation: results-rise 650ms cubic-bezier(0.2, 0.9, 0.3, 1.12) both;
+  animation-delay: var(--delay);
+}
+
+.podium__step--h1 .podium__block { height: calc(var(--u) * 28); }
+.podium__step--h2 .podium__block { height: calc(var(--u) * 20); }
+.podium__step--h3 .podium__block { height: calc(var(--u) * 14); }
+
+/* One light sweep across the winner's step after it lands. */
+.podium__step--h1 .podium__block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--surface) 70%, transparent) 50%, transparent 65%);
+  transform: translateX(-110%);
+  animation: results-shine 1100ms ease-in-out both;
+  animation-delay: calc(var(--delay) + 700ms);
+}
+
+.podium__medal {
+  width: calc(var(--u) * 8);
+  height: calc(var(--u) * 8);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--medal);
+  color: var(--ink);
+  font-size: calc(var(--u) * 4);
+  font-weight: var(--fw-strong);
+  box-shadow: 0 0 0 calc(var(--u) * 0.6) var(--surface);
+}
+
+.podium__step--h1 .podium__medal {
+  width: calc(var(--u) * 10);
+  height: calc(var(--u) * 10);
+  font-size: calc(var(--u) * 5);
+}
+
+/* ── The full table ─────────────────────────────────────────────────── */
+.board {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: calc(var(--u) * 2.2) calc(var(--u) * 2.6);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--u) * 1.8);
+  background: var(--surface);
+  box-shadow: var(--shadow-panel);
+  overflow: auto;
+}
+
+.board__title {
+  margin-bottom: calc(var(--u) * 1);
+  font-size: var(--st-small);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.board__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.board__table thead th {
+  padding: 0 calc(var(--u) * 1) calc(var(--u) * 0.8);
+  border-bottom: 1px solid var(--line);
+  font-size: max(14px, calc(var(--u) * 1.8));
   font-weight: var(--fw-medium);
   color: var(--ink-muted);
   text-align: left;
-  padding: 0 calc(var(--u) * 2);
+}
+
+.board__row {
+  animation: results-up 400ms var(--ease) both;
+  animation-delay: calc(var(--delay) + var(--row) * 70ms);
 }
 
 .board__row td,
 .board__row th {
-  background: var(--surface);
-  padding: calc(var(--u) * 1.4) calc(var(--u) * 2);
-  vertical-align: middle;
+  padding: calc(var(--u) * 1) calc(var(--u) * 1);
+  line-height: 1.2;
+  border-bottom: 1px solid var(--line);
   text-align: left;
+  vertical-align: middle;
 }
 
-.board__row td:first-child {
-  border-radius: calc(var(--u) * 1.2) 0 0 calc(var(--u) * 1.2);
-}
-
-.board__row td:last-child {
-  border-radius: 0 calc(var(--u) * 1.2) calc(var(--u) * 1.2) 0;
-}
-
-/* First place, shared on a tie: a tinted row with a blue edge, no decoration beyond that. */
-.board__row--first td,
-.board__row--first th {
-  background: var(--primary-tint);
-}
-
-.board__row--first td:first-child {
-  box-shadow: inset calc(var(--u) * 0.6) 0 0 var(--primary);
+.board__row:last-child td,
+.board__row:last-child th {
+  border-bottom: 0;
 }
 
 .board__place {
-  width: calc(var(--u) * 10);
-  font-size: calc(var(--u) * 4.4);
-  font-weight: var(--fw-strong);
-  text-align: center !important;
+  width: calc(var(--u) * 6.4);
 }
 
-thead .board__place {
-  font-size: calc(var(--u) * 1.7);
+.board__medal {
+  width: calc(var(--u) * 4.6);
+  height: calc(var(--u) * 4.6);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: var(--st-label);
+  font-weight: var(--fw-strong);
+  color: var(--ink-muted);
 }
+
+.board__medal--gold { background: var(--gold); color: var(--ink); }
+.board__medal--silver { background: var(--silver); color: var(--ink); }
+.board__medal--bronze { background: var(--bronze); color: var(--ink); }
 
 .board__team {
   font-weight: var(--fw-regular);
 }
 
-/* The grid lives inside the cell: a table cell with display:grid stops being a cell. */
-.board__team-inner {
-  display: grid;
-  gap: calc(var(--u) * 0.4);
-}
-
 .board__name {
-  font-size: calc(var(--u) * 3.4);
+  display: block;
+  font-size: var(--st-team);
   font-weight: var(--fw-medium);
-  line-height: 1.15;
+  line-height: 1.2;
   overflow-wrap: anywhere;
 }
 
 .board__counts {
-  font-size: calc(var(--u) * 1.8);
+  display: block;
+  font-size: max(14px, calc(var(--u) * 1.8));
   color: var(--ink-muted);
 }
 
 .board__score {
-  width: calc(var(--u) * 14);
-  font-size: calc(var(--u) * 5);
+  width: calc(var(--u) * 10);
+  font-size: calc(var(--u) * 4);
   font-weight: var(--fw-strong);
   text-align: right !important;
 }
 
 thead .board__score {
-  font-size: calc(var(--u) * 1.7);
+  font-size: max(14px, calc(var(--u) * 1.8));
 }
 
-.board--compact {
-  border-spacing: 0 calc(var(--u) * 0.5);
+/* Six or more teams: tighter rows, so all eight fit one 720-high screen. */
+.board__table--compact .board__row td,
+.board__table--compact .board__row th {
+  padding-top: calc(var(--u) * 0.35);
+  padding-bottom: calc(var(--u) * 0.35);
 }
 
-.board--compact .board__row td,
-.board--compact .board__row th {
-  padding-top: calc(var(--u) * 0.6);
-  padding-bottom: calc(var(--u) * 0.6);
+.board__table--compact .board__name {
+  font-size: calc(var(--u) * 2.4);
 }
 
-.board--compact tbody .board__place {
-  font-size: calc(var(--u) * 3.4);
+.board__table--compact .board__counts {
+  display: none;
 }
 
-.board--compact .board__name {
-  font-size: calc(var(--u) * 2.8);
+.board__table--compact .board__medal {
+  width: calc(var(--u) * 3.8);
+  height: calc(var(--u) * 3.8);
 }
 
-.board--compact .board__counts {
-  font-size: calc(var(--u) * 1.5);
+.board__table--compact tbody .board__score {
+  font-size: calc(var(--u) * 3.2);
 }
 
-.board--compact tbody .board__score {
-  font-size: calc(var(--u) * 3.8);
+/* ── Three facts about the game ─────────────────────────────────────── */
+.insights {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--u) * 40)), 1fr));
+  gap: calc(var(--u) * 2);
+  animation: results-up 500ms var(--ease) both;
+  animation-delay: var(--delay);
 }
 
-.results__actions {
+.insight {
   display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: calc(var(--u) * 1.6);
+  align-items: center;
+  gap: calc(var(--u) * 1.8);
+  min-width: 0;
+  padding: calc(var(--u) * 1.4) calc(var(--u) * 2.2);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--u) * 1.6);
+  background: var(--surface);
+}
+
+.insight__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 5);
+  height: calc(var(--u) * 5);
+  border-radius: 50%;
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+.insight__icon svg {
+  width: calc(var(--u) * 2.8);
+  height: calc(var(--u) * 2.8);
+}
+
+.insight__body {
+  display: grid;
+  min-width: 0;
+}
+
+.insight__label {
+  font-size: max(14px, calc(var(--u) * 1.8));
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.insight__value {
+  font-size: var(--st-team);
+  font-weight: var(--fw-strong);
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insight__detail {
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+}
+
+@keyframes results-rise {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes results-up {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 1.4));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes results-shine {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(110%); }
+}
+
+/* The global rule shortens durations, not delays: switch the reveal off outright. */
+@media (prefers-reduced-motion: reduce) {
+  .podium__who,
+  .podium__block,
+  .podium__block::after,
+  .board__row,
+  .insights {
+    animation: none !important;
+  }
+
+  .podium__step--h1 .podium__block::after {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .results__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

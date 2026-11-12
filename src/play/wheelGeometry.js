@@ -68,12 +68,39 @@ export function numberSize(count) {
 export const restingRotation = (index, count) => -pocketAngle(index, count);
 
 /**
- * The pocket the wheel rests on when the game screen opens: the one whose card is open, or
- * else the last one played. Before this it was always the last played, so after a reload with a
- * reopened pocket (D34) the pointer sat on one pocket while the card and the highlight were on
- * another (fixlist F23). Null when nothing has been played yet.
+ * The pockets drawn on the wheel, in number order: every pocket not played yet, plus the one whose
+ * card is open. A played pocket leaves the wheel when its card closes (D73, owner; replaces D23).
+ * Numbers stay with their questions; only the positions close up.
  */
-export const restingPocket = (game) => game?.current ?? game?.played?.at(-1) ?? null;
+export function wheelPockets(game) {
+  return game.pockets
+    .filter((p) => !game.played.includes(p.no) || p.no === game.current)
+    .map((p) => ({ no: p.no, type: p.question.type }));
+}
+
+/**
+ * The rotation that puts the seam *before* pocket `index` under the pointer, so no pocket is named.
+ * Used when a pocket has just left the wheel and when the screen opens with no card open.
+ */
+export const seamRotation = (index, count) => -pocketAngle(index, count) + stepFor(count) / 2;
+
+/** `target` moved by whole turns to lie within half a turn of `current`, so the wheel does not race. */
+export const nearestTurn = (target, current) => target + 360 * Math.round((current - target) / 360);
+
+/**
+ * The pocket the wheel rests on when the game screen opens: the one whose card is open (F23, D69),
+ * else none — a played pocket is no longer on the wheel (D73). Null when no card is open.
+ */
+export const restingPocket = (game) => game?.current ?? null;
+
+/** Where the wheel rests when the game screen opens: on the open card's pocket, else on a seam. */
+export function initialRotation(game) {
+  const shown = wheelPockets(game);
+  if (shown.length === 0) return 0;
+  const resting = restingPocket(game);
+  const index = shown.findIndex((p) => p.no === resting);
+  return index >= 0 ? restingRotation(index, shown.length) : seamRotation(0, shown.length);
+}
 
 /**
  * The next rotation for a spin that ends with pocket `index` under the pointer.

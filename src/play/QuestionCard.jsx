@@ -117,7 +117,15 @@ export default function QuestionCard({ game, dispatch, onClose }) {
           </button>
         </header>
 
-        <Timer timer={round.timer} settings={settings} now={now} onStart={start} onPause={pause} onReset={reset} />
+        <Timer
+          timer={round.timer}
+          settings={settings}
+          now={now}
+          judged={teams.every((team) => team.id in round.verdicts)}
+          onStart={start}
+          onPause={pause}
+          onReset={reset}
+        />
 
         <div ref={boxRef} className="qcard__question">
           <p ref={textRef} className="qcard__text">{question.text}</p>

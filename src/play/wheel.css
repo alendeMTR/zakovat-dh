@@ -35,21 +35,9 @@
 .wheel__pocket--oddiy .wheel__sector { fill: var(--type-oddiy); }
 .wheel__pocket--direktor .wheel__sector { fill: var(--type-direktor); }
 .wheel__pocket--sandiqcha .wheel__sector { fill: var(--type-sandiqcha); }
-.wheel__pocket--played .wheel__sector { fill: var(--pocket-used); }
 
-.wheel__sector[role="button"] {
-  cursor: pointer;
-}
-
-.wheel__sector[role="button"]:hover {
-  fill: var(--line-strong);
-}
-
-.wheel__sector[role="button"]:focus-visible {
-  outline: none;
-  stroke: var(--primary);
-  stroke-width: 8;
-}
+/* Every question played: the ring stays, empty and grey, so the wheel still reads as the wheel. */
+.wheel__sector--empty { fill: var(--pocket-used); }
 
 .wheel__label {
   pointer-events: none;
@@ -65,14 +53,6 @@
 
 .wheel__icon {
   color: var(--surface);
-}
-
-.wheel__pocket--played .wheel__number {
-  fill: var(--ink);
-}
-
-.wheel__pocket--played .wheel__icon {
-  color: var(--ink);
 }
 
 /* The pocket the pointer landed on, and the open question. */
@@ -118,7 +98,7 @@
   padding: calc(var(--u) * 1);
   background: var(--ink);
   color: var(--surface);
-  font-size: max(14px, calc(var(--u) * 1.9));
+  font-size: max(15px, calc(var(--u) * 2.1));
   font-weight: var(--fw-medium);
   line-height: 1.15;
   text-align: center;

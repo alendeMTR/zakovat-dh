@@ -173,6 +173,35 @@ describe("the timer through the reducer", () => {
     expect(g.rounds[1].handIns.t1).toBe(15000);
   });
 
+  it("stops the clock once every team has a verdict, and not before (D72)", () => {
+    const g = play(
+      newGame(),
+      { type: "OPEN_QUESTION", pocketNo: 1 },
+      { type: "START_TIMER", now: 0 },
+      { type: "REVEAL" },
+      { type: "SET_VERDICT", pocketNo: 1, teamId: "t1", verdict: "correct", now: 5000 },
+      { type: "SET_VERDICT", pocketNo: 1, teamId: "t2", verdict: "wrong", now: 6000 },
+    );
+    expect(g.rounds[1].timer.startedAt).toBe(0); // one team still to judge: the clock runs
+    const all = reduce(g, { type: "SET_VERDICT", pocketNo: 1, teamId: "t3", verdict: "extra", now: 7000 });
+    expect(all.rounds[1].timer).toEqual({ startedAt: null, accumulatedMs: 7000 });
+    // Clearing a verdict afterwards leaves the clock stopped.
+    const cleared = reduce(all, { type: "SET_VERDICT", pocketNo: 1, teamId: "t3", verdict: "extra", now: 9000 });
+    expect(cleared.rounds[1].timer).toEqual({ startedAt: null, accumulatedMs: 7000 });
+  });
+
+  it("does not touch a clock that is already stopped when the last verdict lands (D72)", () => {
+    const g = play(
+      newGame(),
+      { type: "OPEN_QUESTION", pocketNo: 1 },
+      { type: "START_TIMER", now: 0 },
+      { type: "PAUSE_TIMER", now: 4000 },
+      { type: "REVEAL" },
+      ...["t1", "t2", "t3"].map((teamId) => ({ type: "SET_VERDICT", pocketNo: 1, teamId, verdict: "wrong", now: 9000 })),
+    );
+    expect(g.rounds[1].timer).toEqual({ startedAt: null, accumulatedMs: 4000 });
+  });
+
   it("resets the timer and the hand-ins but keeps the reveal and verdicts", () => {
     const g = play(
       newGame(),

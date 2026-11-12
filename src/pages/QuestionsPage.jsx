@@ -14,6 +14,7 @@ import { effectiveTeamNames, newQuestionId } from "../setup/draft.js";
 import { useDraft } from "../setup/useDraft.js";
 import AddQuestions from "./questions/AddQuestions.jsx";
 import QuestionList from "./questions/QuestionList.jsx";
+import WizardSummary from "./WizardSummary.jsx";
 import "./wizard.css";
 import "./questions/questions.css";
 
@@ -31,12 +32,16 @@ const START_ERROR = {
   questionEmpty: "questions.startError.questions",
 };
 
+/** The first words of a question, for the delete confirmation. */
+const excerpt = (text, max = 90) => (text.length > max ? `${text.slice(0, max).trimEnd()}…` : text);
+
 export default function QuestionsPage() {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [draft, update] = useDraft();
   const [confirm, setConfirm] = useState(null); // 'clear' | 'replace' | null
   const [startError, setStartError] = useState(null);
+  const [deleting, setDeleting] = useState(null); // the question waiting for its delete confirmation
 
   const clean = (text) => (draft.lang === "uz" ? normalizeUz(text) : text).trim();
 
@@ -90,66 +95,69 @@ export default function QuestionsPage() {
   return (
     <div className="page">
       <AppHeader />
-      <main className="wizard">
-        <WizardSteps current="questions" />
-        <h1 className="wizard__title">{t("questions.title")}</h1>
+      <main className="wizard wizard--split">
+        <div className="wizard__main">
+          <WizardSteps current="questions" />
+          <h1 className="wizard__title">{t("questions.title")}</h1>
 
-        <section className="panel" aria-labelledby="set-lang-title">
-          <fieldset className="field">
-            <legend id="set-lang-title" className="panel__title">{t("questions.lang")}</legend>
-            <div className="segmented">
-              {LANGUAGES.map((code) => (
-                <label key={code} className="segmented__option">
-                  <input
-                    type="radio"
-                    name="set-lang"
-                    value={code}
-                    checked={draft.lang === code}
-                    onChange={() => update((d) => ({ ...d, lang: code }))}
-                  />
-                  <span className="segmented__face">{t(`lang.${code}`)}</span>
-                </label>
-              ))}
+          <section className="panel" aria-labelledby="set-lang-title">
+            <fieldset className="field">
+              <legend id="set-lang-title" className="panel__title">{t("questions.lang")}</legend>
+              <div className="segmented">
+                {LANGUAGES.map((code) => (
+                  <label key={code} className="segmented__option">
+                    <input
+                      type="radio"
+                      name="set-lang"
+                      value={code}
+                      checked={draft.lang === code}
+                      onChange={() => update((d) => ({ ...d, lang: code }))}
+                    />
+                    <span className="segmented__face">{t(`lang.${code}`)}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="field__hint">{t("questions.langHint")}</p>
+            </fieldset>
+          </section>
+
+          <AddQuestions lang={draft.lang} onAdd={addQuestions} />
+
+          <QuestionList
+            questions={draft.questions}
+            onEdit={editQuestion}
+            onDelete={(id) => setDeleting(draft.questions.find((q) => q.id === id) ?? null)}
+            onClear={() => setConfirm("clear")}
+          />
+
+          <div className="wizard__footer wizard__footer--split">
+            <Link to="/new" className="btn btn--secondary">
+              <ArrowLeft size={18} aria-hidden="true" />
+              {t("steps.setup")}
+            </Link>
+            <div className="start">
+              {startError && (
+                <p className="field__error" role="alert">
+                  {startError.endsWith(".teams") || startError.endsWith(".settings") ? (
+                    <Link to="/new">{t(startError)}</Link>
+                  ) : (
+                    t(startError)
+                  )}
+                </p>
+              )}
+              <button
+                type="button"
+                className="btn btn--primary btn--large"
+                disabled={draft.questions.length === 0}
+                onClick={() => start(false)}
+              >
+                <Play size={20} aria-hidden="true" />
+                {t("questions.start")}
+              </button>
             </div>
-            <p className="field__hint">{t("questions.langHint")}</p>
-          </fieldset>
-        </section>
-
-        <AddQuestions lang={draft.lang} onAdd={addQuestions} />
-
-        <QuestionList
-          questions={draft.questions}
-          onEdit={editQuestion}
-          onDelete={deleteQuestion}
-          onClear={() => setConfirm("clear")}
-        />
-
-        <div className="wizard__footer wizard__footer--split">
-          <Link to="/new" className="btn btn--secondary">
-            <ArrowLeft size={18} aria-hidden="true" />
-            {t("steps.setup")}
-          </Link>
-          <div className="start">
-            {startError && (
-              <p className="field__error" role="alert">
-                {startError.endsWith(".teams") || startError.endsWith(".settings") ? (
-                  <Link to="/new">{t(startError)}</Link>
-                ) : (
-                  t(startError)
-                )}
-              </p>
-            )}
-            <button
-              type="button"
-              className="btn btn--primary btn--large"
-              disabled={draft.questions.length === 0}
-              onClick={() => start(false)}
-            >
-              <Play size={20} aria-hidden="true" />
-              {t("questions.start")}
-            </button>
           </div>
         </div>
+        <WizardSummary draft={draft} />
       </main>
 
       <ConfirmDialog
@@ -162,6 +170,18 @@ export default function QuestionsPage() {
         onConfirm={() => {
           update((d) => ({ ...d, questions: [] }));
           setConfirm(null);
+        }}
+      />
+      <ConfirmDialog
+        open={deleting !== null}
+        title={t("questions.deleteTitle")}
+        text={deleting ? t("questions.deleteText", { text: excerpt(deleting.text) }) : ""}
+        confirmLabel={t("common.delete")}
+        danger
+        onCancel={() => setDeleting(null)}
+        onConfirm={() => {
+          deleteQuestion(deleting.id);
+          setDeleting(null);
         }}
       />
       <ConfirmDialog

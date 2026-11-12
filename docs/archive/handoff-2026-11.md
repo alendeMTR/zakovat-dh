@@ -2,6 +2,36 @@
 
 > Session Log entries moved out of `docs/handoff.md` (newest five stay there). Newest first, unedited.
 
+### 2026-11-11 (late night) — M4: the question card
+
+- **Built (`src/play/`):**
+  - `QuestionCard`: type band with the way back; `Timer`; the question fitted to its space (`useFitText`); the answer
+    and its reveal; team rows (`TeamRow`); a keys line.
+  - `Timer`: clock icon, digits, an elapsed bar with the extra window marked, a phase line, Start / Pause / Resume / Reset.
+  - `tone.js`: two Web Audio beeps at zero. `useNow`: ticks while the clock runs.
+  - The card now covers the stage only; the top bar stays usable.
+- **Decided:** D50–D56.
+- **Verified in the browser (real clicks and keys):**
+  - 2-team round at 1920×1080 (30 s, extra 10 s): phases green → navy → red, each with its phase line.
+    Key "2" at 3 s showed "0:03 · qo'shimcha"; key "1" at 17 s showed "0:17". At zero: "Vaqt tugadi", only Reset left.
+    Reveal: "Javob: Kolibri"; verdicts unlocked; ✓✓ suggested only for the extra-window team. Verdicts gave +3 and +2;
+    changing a verdict to ✕ took the total back to 0.
+  - 8-team round at 1366×768 (14 s): Space started the timer and key "3" recorded a hand-in. A **reload mid-timer**
+    resumed (0:12 → 0:10 a second and a half later; card open; hand-in kept). The tone fired once at zero after the
+    reload (two oscillators counted). Late hand-ins read "kech"; a second "6" removed team 6's hand-in. Reveal showed
+    "Qutida: Taroq"; sandiqcha points 3 and 4.
+  - The longest sample question (124 characters) fits at every size with 8 teams: 46 px at 1366, 45.6 at 1280,
+    71 (the maximum) at 1920. The card stays inside the screen.
+  - Scores hidden from the top bar while the card is open: totals disappear, then come back.
+  - Russian interface: labels and keys line; the question keeps its set's language.
+  - Fixed on the way: Pause still showing at 0:00; "+0" for wrong verdicts; team names cut by long status text at
+    1280; a 372-character question clipped at top and bottom (it now scrolls, F14); sound after a reload
+    (any tap or key now unlocks it).
+- **Checks:** `npm run check` passes: 148 keys, 92 tests, lint, build.
+- **Not verified:** the Codex review (F8); tone volume in a classroom (F15); the interface text (F10).
+- **Next:** M5: End game opens the leaderboard (shared places), the breakdown with corrections, and the way back to
+  the main page; the full flow script (plan §7.4).
+
 ### 2026-11-11 (late) — M3: the wheel
 
 - **Built (`src/play/`):**

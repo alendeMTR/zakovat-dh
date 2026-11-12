@@ -132,6 +132,7 @@ Why: PDP School's own site uses Latin; mixed apostrophes break search and some f
 The leaderboard always shows scores. Why: with one screen (D4) "hidden from students" also hides them from the teacher.
 
 **D23. Wheel: one pocket per question; used pockets turn grey and stay.** *agent*
+**Superseded 2026-11-12 by D73** (owner): a played pocket leaves the wheel when its card closes.
 Why: removing pockets would reshuffle the wheel's geometry after every spin and move the numbers. The brief allowed either.
 
 **D24. Each question type has its icon and name as well as its colour.** *agent*
@@ -364,6 +365,7 @@ inventing a new idea; the owner can veto it, in which case the fallback is to dr
 whatever was typed.
 
 **D69. The wheel rests on the pocket whose card is open, not on the last one played.** *agent* (fixlist F23; builds D34, D46)
+**Changed 2026-11-12 by D73:** with no card open the wheel rests on a seam; the last played pocket is no longer on the wheel.
 `restingPocket(game)` in `wheelGeometry.js`, used by `GamePage`'s initial rotation. Why: after reopening an earlier
 pocket and reloading, the pointer named one pocket while the card and the highlight named another — on a projector
 that is the screen contradicting itself in front of the class.
@@ -383,3 +385,85 @@ reachable by legal actions is ever set aside by the loader. A second harness thr
 `parsePaste` and checks that anything it accepts, `createGame` accepts too. Both pass. Why keep them out of the repo:
 they are slow and they are a review tool, not a specification; the behaviours they pinned down that matter are in
 the committed tests.
+
+## 2026-11-12 — owner's design feedback round
+
+The owner's feedback (2026-11-12): the platform looked empty, the text was too small, the main page should follow
+Axeno (a header, a background drawing, no centred generic block), the ranking needed details, the legend sat too
+close to the wheel, a picked question should leave the wheel with a keep-or-remove choice, deleting a question should
+ask first in a styled dialog, the clock should stop once every team is scored, and the results page should use gold,
+silver and bronze with an animation. "Everything is on you, treat it as feedback." Decisions marked *owner* below are
+the owner's request; how they are built is the agent's call and can be overruled.
+
+**D72. The clock stops once every team on the open question has a verdict.** *owner* — game rule (builds D33)
+The owner's words: "time should stop when every team's scores have been typed." In `reduce`, the `SET_VERDICT` that
+gives the last team on the open card its verdict also stops a running clock, at that action's time. Clearing a verdict
+afterwards does not restart it; the teacher can press Resume before zero. The phase line then reads "To'xtatildi:
+barcha jamoalar baholandi" instead of "Pauza", so it is not taken for a pause. Why it is safe: D33 kept the clock
+running for late slips, and once every team is judged there is no slip left to time.
+
+**D73. A played question leaves the wheel; the spin ends in a result dialog: open it, or keep it on the wheel.** *owner*
+— **supersedes D23** ("used pockets turn grey and stay")
+- After landing, a dialog after the "The result is…" box of popular wheel apps shows the pocket number large, its type
+  (colour band, icon, name) and a line for that type (the director asks it; bring the box out). Two actions:
+  **Savolni ochish** (opens the card; focused, so Enter or Space opens it) and **G'ildirakda qoldirish** (nothing is
+  recorded, the pocket stays, the teacher spins again — for example, the director has not arrived). × and Escape keep it.
+- An opened pocket leaves the wheel when its card closes; the rest close up and keep their numbers. The pointer then
+  rests on the seam where it was, so no pocket looks picked. With every question played the ring is empty and grey.
+- **How "keep or remove" was read (agent; the owner can redirect):** "remove" is opening the question, since a picked
+  question is played and then leaves. There is no "remove without playing" (dropping a bad question mid-game): that
+  would need a new stored state, so it is left as a question for the owner (fixlist F26).
+- The stored game does not change: "kept" is simply not opened. D34 stays: a played question is reopened from the list
+  in the left panel (D74) and is back on the wheel while its card is open. D69 changes with it: with no card open the
+  wheel rests on a seam, not on the last played pocket, which is no longer drawn.
+
+**D74. The game screen is three blocks of equal height: questions panel, wheel, ranking panel.** *agent*
+The panels stand at the outer edges, level with the wheel (76 units, down from 80), with 6 units of air between
+(owner: the legend sat too close to the wheel). Left, "Savollar": played out of total with a bar; each type with how
+many are left of how many; the played questions, newest first, each with how many teams got it right and a button
+that reopens it. Right, "Reyting": place (gold, silver, bronze once a team has points), name, right answers and extra
+bonuses as the card's own ✓ and ✓✓ icons, the places moved and points earned on the last question, the score, and a
+footer on the last question (how many right, the fastest correct hand-in). Six or more teams use tighter rows. With
+scores hidden (D22) the panel lists the teams only, with a note on how to show scores, so the screen keeps its shape
+and nothing about the standings shows. Pure helpers in `scoring.js`: `focusPocket`, `roundPoints`, `placeMoves`,
+`roundSummary` (tested).
+
+**D75. The results page: a podium in gold, silver and bronze, revealed third → second → first.** *owner* (colours,
+animation) / *agent* (design)
+Reference: the staggered podium reveal that quiz platforms use and their users ask for (a Kahoot community request,
+Crowdpurr's winner reveal, a published podium-animation walkthrough; searched 2026-11-12). The steps rise one after
+another, the scores count up, one light sweep crosses the winner's step, then the full table and three facts appear:
+the fastest correct answer, the hardest question, the most extra bonuses (`gameInsights`, tested). Step height and
+colour follow the **place**, so teams sharing a place stand level (D16). With reduced motion everything is in place at
+once. The page still fits one 720-high screen with eight teams (D58). Medal tokens `--gold`, `--silver`, `--bronze`
+(fills, with navy text) and their `-tint` and `-ink` shades; contrast measured in `tokens.css`. The breakdown and the
+ranking panel use the same medals.
+
+**D76. The main page follows axeno.uz: a header, a left-aligned hero over a drawing of the wheel, then real content.**
+*owner* — **Spec change** (the brief: "one primary button… little else"; "no banners or illustrations")
+The owner asked for it on 2026-11-12. The header carries the school and product names, links to the sections below
+and the language switch (the logo still waits on F1). The hero: a plain title ("Sinfda Zakovat o'tkazing"), one
+sentence on how the game works, the one primary action "Yangi o'yin", and three facts (2–8 teams, up to 30 questions,
+3 types). The background is the game's own wheel, drawn with the same geometry in faint brand blue — not a stock
+illustration. The unfinished or last game shows as a card beside the text. Below, on squared paper as on Axeno: how a
+game runs (four steps), the three question types with their rules and default points, the keyboard keys, and a footer
+line saying the game is kept in this browser. One primary action stays, as the brief wanted.
+
+**D77. The setup and questions steps get a live "game summary" column, with an estimated length.** *agent*
+Beside the form on screens over 1100 px: teams, time, questions by type, points, and roughly how long the game will
+take — each question's time plus one minute for reading, the reveal and grading (`estimateMinutes`, tested). Why: the
+teacher plans a 45-minute lesson, and the page was a narrow column with empty sides. The minute is an estimate; the
+owner can tune it after a real lesson (fixlist F27).
+
+**D78. Deleting a question from the list asks first, in the app's own dialog.** *owner*
+The existing `ConfirmDialog` (styled, built on `<dialog>`, Cancel focused first so Enter never deletes by accident)
+quotes the first 90 characters of the question. The browser's `confirm()` is not used anywhere in the app.
+
+**D79. The type scale is larger everywhere, and the breakdown table has a clear hierarchy.** *owner*
+The owner: "too small… didn't even understand the structure of the table, names of teams are the same size as scores."
+The UI root is now 17–20 px (was 16–20) and every step of the scale is raised (the label floor from 15 to 16 px on a
+laptop). On the stage a new floor, `--st-small` (2 units: 15 px at 768, 22 px at 1080), replaces the 1.4–1.7-unit
+sizes, and labels, team names and scores grew. The breakdown: team names head their columns in bold at heading size,
+with the team's place and total under them; team columns are framed; rows alternate; each question shows its type by
+name; the totals row says "Jami ball" and is large. The 8-team question card still fits 1280×720 without scrolling,
+with the question at 40 px (D51).

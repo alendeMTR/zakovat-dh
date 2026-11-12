@@ -68,3 +68,76 @@ export function breakdownRows(game) {
     return { pocketNo, question, marks };
   });
 }
+
+// ── Live and end-of-game details (the ranking panel and the results page, D74, D75) ──
+
+const isCorrect = (verdict) => verdict === "correct" || verdict === "extra";
+
+/** The question the live ranking reports on: the open card's, else the last one played; null before the first. */
+export const focusPocket = (game) => game.current ?? game.played.at(-1) ?? null;
+
+/** Points each team earned on one question: { [teamId]: n }. */
+export function roundPoints(game, pocketNo) {
+  const round = game.rounds[pocketNo];
+  const question = questionAt(game, pocketNo);
+  return Object.fromEntries(
+    game.teams.map((team) => {
+      const verdict = round?.verdicts[team.id];
+      return [team.id, verdict && question ? pointsFor(game.settings, question.type, verdict) : 0];
+    }),
+  );
+}
+
+/**
+ * Places each team moved because of one question: { [teamId]: n }, positive = up.
+ * The ranking without that question's verdicts against the ranking with them (shared places, D16).
+ */
+export function placeMoves(game, pocketNo) {
+  const before = new Map(
+    ranking({ ...game, played: game.played.filter((no) => no !== pocketNo) }).map((row) => [row.team.id, row.place]),
+  );
+  return Object.fromEntries(ranking(game).map((row) => [row.team.id, before.get(row.team.id) - row.place]));
+}
+
+/** One question's result: how many teams were judged and right, and the fastest correct hand-in. */
+export function roundSummary(game, pocketNo) {
+  const round = game.rounds[pocketNo];
+  const verdicts = round?.verdicts ?? {};
+  const handIns = round?.handIns ?? {};
+  let fastest = null;
+  for (const team of game.teams) {
+    const ms = handIns[team.id];
+    if (!isCorrect(verdicts[team.id]) || ms === undefined) continue;
+    if (fastest === null || ms < fastest.ms) fastest = { team, ms };
+  }
+  return {
+    judged: game.teams.filter((team) => team.id in verdicts).length,
+    correct: game.teams.filter((team) => isCorrect(verdicts[team.id])).length,
+    total: game.teams.length,
+    fastest,
+  };
+}
+
+/**
+ * Three facts for the results page, each null when the game gives no answer:
+ * - fastest: the quickest correct hand-in of the game { team, ms, pocketNo } (first played wins a tie);
+ * - hardest: the judged question the fewest teams got right { pocketNo, question, correct, judged };
+ * - extras: the team or teams with the most extra bonuses { teams, n }, when anyone earned one.
+ */
+export function gameInsights(game) {
+  let fastest = null;
+  let hardest = null;
+  for (const pocketNo of game.played) {
+    const summary = roundSummary(game, pocketNo);
+    if (summary.fastest && (fastest === null || summary.fastest.ms < fastest.ms)) {
+      fastest = { ...summary.fastest, pocketNo };
+    }
+    if (summary.judged > 0 && (hardest === null || summary.correct < hardest.correct)) {
+      hardest = { pocketNo, question: questionAt(game, pocketNo), correct: summary.correct, judged: summary.judged };
+    }
+  }
+  const totals = teamTotals(game);
+  const most = Math.max(0, ...game.teams.map((team) => totals[team.id].extra));
+  const extras = most > 0 ? { teams: game.teams.filter((team) => totals[team.id].extra === most), n: most } : null;
+  return { fastest, hardest, extras };
+}

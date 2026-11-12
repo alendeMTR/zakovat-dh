@@ -1,0 +1,427 @@
+/* The game screen's side panels (D74): as tall as the wheel and level with it, at the outer edges of
+   the screen, so the wheel stands alone in the middle (owner, 2026-11-12: the legend sat too close). */
+
+.game__side {
+  min-width: 0;
+  height: var(--wheel-size);
+  display: flex;
+}
+
+.game__side--left {
+  justify-content: flex-start;
+}
+
+.game__side--right {
+  justify-content: flex-end;
+}
+
+.side-panel {
+  width: min(100%, calc(var(--u) * 46));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--u) * 2.6) calc(var(--u) * 2.8);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--u) * 1.8);
+  background: var(--surface);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+}
+
+.side-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: calc(var(--u) * 1.6);
+  margin-bottom: calc(var(--u) * 1.4);
+}
+
+.side-panel__title {
+  font-size: calc(var(--u) * 3);
+  font-weight: var(--fw-strong);
+  line-height: 1.1;
+}
+
+.side-panel__meta {
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.side-panel__sub {
+  margin: calc(var(--u) * 2.4) 0 calc(var(--u) * 1.2);
+  font-size: var(--st-small);
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.side-panel__empty {
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+/* Progress: played out of all; the numbers are in the head beside the title. */
+.progress {
+  flex: none;
+  height: calc(var(--u) * 1);
+  border-radius: var(--r-pill);
+  background: var(--surface-alt);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+
+.progress__fill {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  border-radius: inherit;
+  transition: width var(--t-card) var(--ease);
+}
+
+/* Legend: what each colour means, and how many of each are left. */
+.legend__list {
+  list-style: none;
+  display: grid;
+  gap: calc(var(--u) * 1.2);
+}
+
+.legend__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
+}
+
+.legend__text {
+  display: grid;
+  min-width: 0;
+}
+
+.legend__swatch {
+  width: calc(var(--u) * 4);
+  height: calc(var(--u) * 4);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--surface);
+}
+
+.legend__swatch--oddiy { background: var(--type-oddiy); }
+.legend__swatch--direktor { background: var(--type-direktor); }
+.legend__swatch--sandiqcha { background: var(--type-sandiqcha); }
+
+.legend__icon {
+  width: 58%;
+  height: 58%;
+}
+
+.legend__name {
+  font-size: var(--st-label);
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend__count {
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* Played questions, newest first. Each one reopens its card (D34). */
+.history {
+  list-style: none;
+  display: grid;
+  align-content: start;
+  gap: calc(var(--u) * 0.8);
+  min-height: 0;
+  margin-right: calc(var(--u) * -1);
+  padding-right: calc(var(--u) * 1);
+  padding-bottom: calc(var(--u) * 2.4);
+  overflow-y: auto;
+  /* A long list fades out at the panel's edge instead of stopping mid-item; it scrolls. */
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - var(--u) * 3), transparent);
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--u) * 3), transparent);
+}
+
+.history__item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "no text reopen"
+    "no result reopen";
+  align-items: center;
+  gap: calc(var(--u) * 0.2) calc(var(--u) * 1.2);
+  padding: calc(var(--u) * 1) calc(var(--u) * 1.2);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--u) * 1.2);
+  text-align: left;
+}
+
+.history__item:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.history__item:disabled {
+  cursor: default;
+}
+
+.history__no {
+  grid-area: no;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 0.4);
+  min-width: calc(var(--u) * 6.4);
+  padding: calc(var(--u) * 0.6) calc(var(--u) * 0.8);
+  border-radius: calc(var(--u) * 0.8);
+  color: var(--surface);
+  font-size: var(--st-label);
+  font-weight: var(--fw-strong);
+}
+
+.history__no--oddiy { background: var(--type-oddiy); }
+.history__no--direktor { background: var(--type-direktor); }
+.history__no--sandiqcha { background: var(--type-sandiqcha); }
+
+.history__icon {
+  width: calc(var(--u) * 2);
+  height: calc(var(--u) * 2);
+}
+
+.history__text {
+  grid-area: text;
+  font-size: var(--st-small);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history__result {
+  grid-area: result;
+  font-size: max(14px, calc(var(--u) * 1.8));
+  color: var(--ink-muted);
+}
+
+.history__reopen {
+  grid-area: reopen;
+  width: calc(var(--u) * 2.4);
+  height: calc(var(--u) * 2.4);
+  color: var(--ink-muted);
+}
+
+.history__item:disabled .history__reopen {
+  visibility: hidden;
+}
+
+/* Ranking. Columns: place · team · last question · score. */
+.rank__cols,
+.rank__row {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 5.6) minmax(0, 1fr) auto calc(var(--u) * 6);
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
+}
+
+.rank__cols {
+  padding-bottom: calc(var(--u) * 0.8);
+  border-bottom: 1px solid var(--line);
+  font-size: max(14px, calc(var(--u) * 1.8));
+  color: var(--ink-muted);
+}
+
+.rank__cols-last,
+.rank__cols-score {
+  text-align: right;
+}
+
+.rank__list {
+  list-style: none;
+  display: grid;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* The name has the whole first line; the counts and what the last question changed share the second. */
+.rank__row {
+  grid-template-areas:
+    "place name name score"
+    "place counts change score";
+  row-gap: calc(var(--u) * 0.1);
+  padding: calc(var(--u) * 1.1) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rank__place {
+  grid-area: place;
+  width: calc(var(--u) * 4.4);
+  height: calc(var(--u) * 4.4);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: var(--st-label);
+  font-weight: var(--fw-strong);
+  color: var(--ink-muted);
+}
+
+.rank__place--gold { background: var(--gold); color: var(--ink); }
+.rank__place--silver { background: var(--silver); color: var(--ink); }
+.rank__place--bronze { background: var(--bronze); color: var(--ink); }
+
+.rank__name {
+  grid-area: name;
+  min-width: 0;
+  font-size: var(--st-team);
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank__counts {
+  grid-area: counts;
+  display: flex;
+  gap: calc(var(--u) * 1.4);
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.rank__count {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.4);
+}
+
+.rank__count svg {
+  width: calc(var(--u) * 2);
+  height: calc(var(--u) * 2);
+  stroke-width: 2.4;
+  color: var(--good);
+}
+
+.rank__change {
+  grid-area: change;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(var(--u) * 0.6);
+  font-size: var(--st-small);
+  font-weight: var(--fw-strong);
+}
+
+.rank__move {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rank__move svg {
+  width: calc(var(--u) * 2.2);
+  height: calc(var(--u) * 2.2);
+  stroke-width: 2.6;
+}
+
+.rank__move--up { color: var(--good); }
+.rank__move--down { color: var(--bad); }
+
+.rank__gained {
+  padding: calc(var(--u) * 0.2) calc(var(--u) * 0.8);
+  border-radius: var(--r-pill);
+  background: var(--good-tint);
+  color: var(--good);
+}
+
+.rank__score {
+  grid-area: score;
+  font-size: var(--st-score);
+  font-weight: var(--fw-strong);
+  line-height: 1;
+  text-align: right;
+}
+
+.rank__last {
+  margin-top: auto;
+}
+
+.rank__last .side-panel__sub {
+  margin-top: calc(var(--u) * 1.6);
+  margin-bottom: calc(var(--u) * 0.6);
+}
+
+.rank__last-line {
+  font-size: var(--st-small);
+  line-height: 1.4;
+}
+
+/* Six or more teams: tighter rows, so eight fit beside the wheel at any size. */
+.rank--compact .rank__row {
+  padding: calc(var(--u) * 0.3) 0;
+}
+
+.rank--compact .rank__change {
+  line-height: 1.1;
+}
+
+.rank--compact .rank__gained {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.rank--compact .rank__name {
+  font-size: calc(var(--u) * 2.5);
+  line-height: 1.15;
+}
+
+.rank--compact .rank__counts {
+  display: none;
+}
+
+.rank--compact .rank__row {
+  row-gap: 0;
+}
+
+/* Scores hidden (D22): the teams only. */
+.rank__plain {
+  list-style: none;
+  display: grid;
+}
+
+.rank__plain-row {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 4.4) minmax(0, 1fr);
+  align-items: center;
+  gap: calc(var(--u) * 1.2);
+  padding: calc(var(--u) * 1) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rank__plain-no {
+  font-size: var(--st-label);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.rank__hidden {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--u) * 1);
+  margin-top: auto;
+  padding-top: calc(var(--u) * 2);
+  font-size: var(--st-small);
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.rank__hidden-icon {
+  flex: none;
+  width: calc(var(--u) * 2.6);
+  height: calc(var(--u) * 2.6);
+}

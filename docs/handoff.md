@@ -9,10 +9,14 @@
 
 - **M0–M5 are done and committed: the core game works end to end in the browser, with no accounts.** The plan is approved (D27).
 - **F14, F17–F21 (2026-11-11) and F22–F24 (2026-11-12) are fixed and committed.** Nothing is pushed or deployed.
+- **2026-11-12 (evening): the owner's design feedback round is built and verified but NOT committed** (F25, D72–D79):
+  the clock stops when every team is judged, played questions leave the wheel through a result dialog, new game-screen
+  panels, a podium on the results page, a new main page, a setup summary, a delete confirmation, a larger type scale.
+  Waiting on the owner: a look at the screens (F25) and one question (F26).
 - **Nothing substantial is left on the agent's side.** Preview 1 needs F4 (GitHub and Vercel), M6 needs F2
   (Firebase), M7 needs F3 (API key), and the Codex review needs F8. F5 and F7 are now ⏸ with the owner too:
   the agent took both as far as it can and wrote what it found in their rows.
-- Decisions: `docs/decisionlog.md` D1–D71. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
+- Decisions: `docs/decisionlog.md` D1–D79. Older Session Log entries: `docs/archive/handoff-2026-11.md`.
 - **`docs/owner-guide.md`** (written 2026-11-11, **brought up to date 2026-11-12 for the deploy**): what the owner
   tests — including §2C, one line per fix from the two bug commits, in his terms — what not to flag yet, the
   manual setup steps, and how Codex can take over. §4.2 is now a step-by-step Vercel checklist (Vite preset,
@@ -32,7 +36,7 @@
 | `constants.js` | Types, verdicts, limits, default settings and points (D9, D14, D17) |
 | `game.js` | `createGame` (validation, shuffled numbered pockets), `reduce(game, action)`, `pickPocket` |
 | `timer.js` | Elapsed / remaining from timestamps, `timerPhase` (colours), `handInStatus`, clock text |
-| `scoring.js` | `pointsFor`, `teamTotals`, `ranking` (shared places), `breakdownRows` |
+| `scoring.js` | `pointsFor`, `teamTotals`, `ranking` (shared places), `breakdownRows`; for the panels and results: `focusPocket`, `roundPoints`, `placeMoves`, `roundSummary`, `gameInsights` |
 | `paste.js` | `parsePaste` → `{ questions, errors }`, `formatPaste`, `normalizeUz` (ASCII case folding, D70) |
 | `storage.js` | `saveGame` / `loadGame` / `clearGame` in `localStorage`; unreadable or broken data set aside (D64) |
 | `sampleSets.js` | The uz and ru sample sets (draft, F9) |
@@ -91,6 +95,41 @@ share of the screen, not on its pixels. UI screens (main, setup, questions) use 
 ---
 
 ## 4. Session Log
+
+### 2026-11-12 (evening) — the owner's design feedback round (D72–D79, F25–F28)
+
+The owner sent design feedback in one message and four follow-ups while the work ran: the platform looked empty;
+the main page should follow Axeno; the ranking needed details; the legend sat too close to the wheel; a picked
+question should leave the wheel with a keep-or-remove dialog; then a styled confirmation before deleting a question;
+the clock to stop once every team is scored; gold, silver and bronze with an animation on the results page; and
+larger text everywhere, with a readable breakdown table. **Nothing is committed, pushed or deployed; no Codex review.**
+
+- **Engine (pure, tested):** `SET_VERDICT` stops the clock when the last team on the open card is judged (D72).
+  `scoring.js` gained `focusPocket`, `roundPoints`, `placeMoves`, `roundSummary`, `gameInsights`; `draft.js` gained
+  `estimateMinutes`; `wheelGeometry.js` gained `wheelPockets`, `seamRotation`, `nearestTurn`, `initialRotation`, and
+  `restingPocket` no longer falls back to the last played pocket. The stored game's shape did not change.
+- **Game screen (D73, D74):** `SpinResult.jsx` (the result dialog), `QuestionsPanel.jsx` (replaces `Legend.jsx`),
+  `RankingPanel.jsx` rewritten, `Wheel.jsx` simplified (no reopen on the wheel, an empty grey ring at the end),
+  `side-panels.css`. Wheel 76 units. A played question is reopened from the left panel.
+- **Results (D75):** podium, count-up (`useCountUp.js`), three facts, medal tokens. **Breakdown (D79):** headers,
+  framed team columns, alternating rows, type names, a large labelled total.
+- **Main page (D76):** `AppHeader` is now a white bar with optional section links (used on every UI page); the home
+  page is a hero over a drawing of the wheel plus three sections and a footer. **Setup steps (D77):**
+  `WizardSummary.jsx`, two columns over 1100 px. **Delete (D78):** `ConfirmDialog` before a question is deleted.
+- **Type scale (D79):** root 17–20 px, every `--fs-*` raised, new stage floor `--st-small`.
+- **Verified** (headless Chrome over the DevTools protocol, real clicks and keys; driver and scripts in
+  `%TEMP%\zakovat-check\`: `game-flow.mjs`, `game-states.mjs`, `card-fit.mjs`, `results.mjs`, `home.mjs`,
+  `wizard.mjs`): every check listed in F25 passed at 1920×1080, 1366×768 and 1280×720; each screen's screenshots were
+  looked at. Fixed on the way: names cut in the ranking when a team had both a place change and points (the change
+  moved to the second line and the counts became ✓/✓✓ icons); eight teams overflowing the ranking at 1366 (tighter
+  compact rows); Russian "Место" running into "Команда"; the podium's step heights following position instead of
+  place on a tie; the results page 18 px too tall at 1280×720 with 8 teams; my `.steps` class colliding with the wizard's.
+- **Checks:** `npm run check` passes: 262 keys, 126 tests, lint, build.
+- **Not verified:** a projector (F28), print (F16), the Codex review (F8), and all new text is draft (F10).
+- **Next:** the owner looks at the screens (F25) and answers F26 (a third "remove without playing" action). Then
+  commit this round, and the deploy steps as before (F4, F2, F3, F8).
+- **Note for the next session:** the shell's heredocs break on apostrophes in this environment, and `python` is the
+  Windows Store stub. Write text with the Write tool and edit with Node scripts.
 
 ### 2026-11-12 (later) — owner guide brought up to date for the deploy
 
@@ -253,33 +292,3 @@ and screenshots at 1920×1080, 1366×768 and 1280×720 (the scratch driver lives
 - **Not verified:** the printed breakdown (F16); the Codex review (F8); the interface text (F10).
 - **Next:** everything after M5 needs the owner's accounts: Preview 1 (F4: GitHub and Vercel), M6 (F2: Firebase),
   M7 (F3: API key). Without them the agent can do F14 (flag long questions).
-
-### 2026-11-11 (late night) — M4: the question card
-
-- **Built (`src/play/`):**
-  - `QuestionCard`: type band with the way back; `Timer`; the question fitted to its space (`useFitText`); the answer
-    and its reveal; team rows (`TeamRow`); a keys line.
-  - `Timer`: clock icon, digits, an elapsed bar with the extra window marked, a phase line, Start / Pause / Resume / Reset.
-  - `tone.js`: two Web Audio beeps at zero. `useNow`: ticks while the clock runs.
-  - The card now covers the stage only; the top bar stays usable.
-- **Decided:** D50–D56.
-- **Verified in the browser (real clicks and keys):**
-  - 2-team round at 1920×1080 (30 s, extra 10 s): phases green → navy → red, each with its phase line.
-    Key "2" at 3 s showed "0:03 · qo'shimcha"; key "1" at 17 s showed "0:17". At zero: "Vaqt tugadi", only Reset left.
-    Reveal: "Javob: Kolibri"; verdicts unlocked; ✓✓ suggested only for the extra-window team. Verdicts gave +3 and +2;
-    changing a verdict to ✕ took the total back to 0.
-  - 8-team round at 1366×768 (14 s): Space started the timer and key "3" recorded a hand-in. A **reload mid-timer**
-    resumed (0:12 → 0:10 a second and a half later; card open; hand-in kept). The tone fired once at zero after the
-    reload (two oscillators counted). Late hand-ins read "kech"; a second "6" removed team 6's hand-in. Reveal showed
-    "Qutida: Taroq"; sandiqcha points 3 and 4.
-  - The longest sample question (124 characters) fits at every size with 8 teams: 46 px at 1366, 45.6 at 1280,
-    71 (the maximum) at 1920. The card stays inside the screen.
-  - Scores hidden from the top bar while the card is open: totals disappear, then come back.
-  - Russian interface: labels and keys line; the question keeps its set's language.
-  - Fixed on the way: Pause still showing at 0:00; "+0" for wrong verdicts; team names cut by long status text at
-    1280; a 372-character question clipped at top and bottom (it now scrolls, F14); sound after a reload
-    (any tap or key now unlocks it).
-- **Checks:** `npm run check` passes: 148 keys, 92 tests, lint, build.
-- **Not verified:** the Codex review (F8); tone volume in a classroom (F15); the interface text (F10).
-- **Next:** M5: End game opens the leaderboard (shared places), the breakdown with corrections, and the way back to
-  the main page; the full flow script (plan §7.4).

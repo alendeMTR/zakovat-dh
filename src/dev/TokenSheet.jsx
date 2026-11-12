@@ -13,7 +13,10 @@ const COLOURS = [
   ["--type-sandiqcha", "Zakovat sandiqchasi"],
   ["--good", "Extra window, correct"],
   ["--bad", "Little time left, wrong"],
-  ["--pocket-used", "Played pocket"],
+  ["--pocket-used", "Played question, empty wheel"],
+  ["--gold", "1st place"],
+  ["--silver", "2nd place"],
+  ["--bronze", "3rd place"],
   ["--line-strong", "Control border"],
 ];
 

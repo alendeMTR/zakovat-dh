@@ -7,7 +7,7 @@ import { useI18n } from "../i18n/I18nProvider.jsx";
  * the phase, so colour is never the only signal (D24). Colours: extra window (green), neutral (navy),
  * little time left and time up (red-pink).
  */
-export default function Timer({ timer, settings, now, onStart, onPause, onReset }) {
+export default function Timer({ timer, settings, now, judged = false, onStart, onPause, onReset }) {
   const { t } = useI18n();
   const phase = timerPhase(timer, settings, now);
   const remaining = remainingMs(timer, settings, now);
@@ -19,7 +19,8 @@ export default function Timer({ timer, settings, now, onStart, onPause, onReset 
   const done = phase === "done";
 
   let label = t(`timer.phase.${phase}`);
-  if (!running && started && !done) label = t("timer.paused");
+  // Stopped because every team has a verdict (D72): say so, so it is not read as a pause by mistake.
+  if (!running && started && !done) label = judged ? t("timer.judged") : t("timer.paused");
 
   return (
     <section className={`timer timer--${phase}`} aria-label={t("timer.label")}>

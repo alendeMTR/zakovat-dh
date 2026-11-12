@@ -67,6 +67,10 @@ Game {
 | 6 | **Leaderboard** `/game/results` | Places with ties (D16), scores, counts of correct and extra. "Show breakdown", "Main page". |
 | 7 | **Breakdown** `/game/breakdown` | One row per question in the order played: number, type, question, answer, each team's mark. Click a mark to correct it (D15). Totals row. Prints cleanly. |
 
+**Changed 2026-11-12 (owner's design round):** the main page (D76), the wheel's result dialog and played pockets
+leaving the wheel (D73, replaces D23), the game screen's side panels (D74), the results podium (D75), the setup
+summary (D77) and the breakdown's layout (D79). The table above is the original plan; the decisions win.
+
 Sign-in is a Google popup from the header, not a page. Saved sets are managed inside the Questions step.
 
 ## 5. Design direction

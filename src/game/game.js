@@ -185,7 +185,11 @@ export function reduce(game, action) {
       const verdicts = { ...round.verdicts };
       if (verdicts[teamId] === verdict) delete verdicts[teamId];
       else verdicts[teamId] = verdict;
-      return withRound(game, pocketNo, { verdicts });
+      // D72 (owner): once every team on the open question has a verdict, its clock stops — there is
+      // nobody left to time. Clearing a verdict afterwards does not restart it.
+      const allJudged = game.teams.every((team) => team.id in verdicts);
+      const stop = pocketNo === game.current && allJudged && isRunning(round.timer) && Number.isFinite(action.now);
+      return withRound(game, pocketNo, stop ? { verdicts, timer: stopTimer(round.timer, action.now) } : { verdicts });
     }
 
     case "TOGGLE_SCORES":

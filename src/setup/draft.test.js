@@ -3,6 +3,7 @@ import { SAMPLE_SETS } from "../game/sampleSets.js";
 import {
   DRAFT_BACKUP_KEY,
   DRAFT_KEY,
+  estimateMinutes,
   LONG_QUESTION_CHARS,
   effectiveTeamNames,
   hasErrors,
@@ -154,5 +155,19 @@ describe("loading the draft", () => {
     const blocked = { getItem: () => { throw new Error("denied"); } };
     expect(loadDraft("uz", blocked)).toEqual(newDraft("uz"));
     expect(loadDraft("uz", null)).toEqual(newDraft("uz"));
+  });
+});
+
+describe("estimated game length (D77)", () => {
+  it("adds a minute per question to the clock time and rounds up", () => {
+    expect(estimateMinutes(10, 60)).toBe(20);
+    expect(estimateMinutes(30, 45)).toBe(53); // 30 × 105 s = 52.5 min
+    expect(estimateMinutes(1, 10)).toBe(2);
+  });
+
+  it("gives nothing without questions or a usable time", () => {
+    expect(estimateMinutes(0, 60)).toBe(null);
+    expect(estimateMinutes(10, null)).toBe(null);
+    expect(estimateMinutes(10, NaN)).toBe(null);
   });
 });

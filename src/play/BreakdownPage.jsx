@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { ArrowLeft, House, Minus, Printer } from "lucide-react";
 import AppHeader from "../components/AppHeader.jsx";
-import { TypeIcon } from "../components/QuestionType.jsx";
-import { breakdownRows, teamTotals } from "../game/scoring.js";
+import { TypeChip } from "../components/QuestionType.jsx";
+import { breakdownRows, ranking, teamTotals } from "../game/scoring.js";
 import { formatElapsed } from "../game/timer.js";
 import { formatWhen } from "../i18n/format.js";
 import { useI18n } from "../i18n/I18nProvider.jsx";
@@ -13,6 +13,7 @@ import { useGame } from "./useGame.js";
 import "./breakdown.css";
 
 const ICON = Object.fromEntries(VERDICT_ICONS.map(({ key, Icon }) => [key, Icon]));
+const MEDAL = { 1: "gold", 2: "silver", 3: "bronze" };
 
 /**
  * The breakdown (brief: "like a graded test"; plan §4 screen 7): every question played, in the order
@@ -28,6 +29,7 @@ export default function BreakdownPage() {
 
   const rows = breakdownRows(game);
   const totals = teamTotals(game);
+  const places = Object.fromEntries(ranking(game).map((row) => [row.team.id, row.place]));
   const unplayed = game.pockets.length - game.played.length;
 
   const markLabel = (verdict) => (verdict ? t(`card.verdict.${verdict}`) : t("breakdown.none"));
@@ -82,11 +84,18 @@ export default function BreakdownPage() {
                 <th scope="col" className="sheet__no">{t("breakdown.no")}</th>
                 <th scope="col" className="sheet__question">{t("breakdown.question")}</th>
                 <th scope="col" className="sheet__answer">{t("breakdown.answer")}</th>
-                {game.teams.map((team) => (
-                  <th key={team.id} scope="col" className="sheet__team" title={team.name}>
-                    <span className="sheet__team-name">{team.name}</span>
-                  </th>
-                ))}
+                {game.teams.map((team) => {
+                  const place = places[team.id];
+                  return (
+                    <th key={team.id} scope="col" className="sheet__team" title={team.name}>
+                      <span className="sheet__team-name">{team.name}</span>
+                      <span className="sheet__team-meta num">
+                        <span className={`sheet__medal${MEDAL[place] ? ` sheet__medal--${MEDAL[place]}` : ""}`}>{place}</span>
+                        {t("breakdown.teamTotal", { n: totals[team.id].score })}
+                      </span>
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -94,14 +103,11 @@ export default function BreakdownPage() {
                 <tr key={row.pocketNo}>
                   <td className="sheet__no num">
                     {i + 1}
-                    <span className="sheet__pocket">({row.pocketNo})</span>
+                    <span className="sheet__pocket">{t("game.pocket", { n: row.pocketNo })}</span>
                   </td>
                   <td className="sheet__question">
-                    <span className="sheet__type">
-                      <TypeIcon type={row.question.type} size={16} />
-                      <span className="visually-hidden">{t(`type.${row.question.type}`)}: </span>
-                    </span>
-                    {row.question.text}
+                    <TypeChip type={row.question.type} />
+                    <span className="sheet__text">{row.question.text}</span>
                   </td>
                   <td className="sheet__answer">{row.question.answer}</td>
                   {game.teams.map((team) => {

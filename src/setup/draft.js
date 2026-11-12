@@ -160,3 +160,15 @@ export function newQuestionId() {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
   return `q-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
+
+/** Time per question spent outside the clock: reading it out, revealing the answer, judging (D77). */
+export const OVERHEAD_SEC = 60;
+
+/**
+ * Rough length of a game in whole minutes, rounded up: every question's time plus OVERHEAD_SEC.
+ * Null when there are no questions or the time is not a valid number yet (the teacher is typing).
+ */
+export function estimateMinutes(questionCount, timeSec) {
+  if (!questionCount || !Number.isFinite(timeSec) || timeSec <= 0) return null;
+  return Math.ceil((questionCount * (timeSec + OVERHEAD_SEC)) / 60);
+}
